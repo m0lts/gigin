@@ -25,7 +25,7 @@ export function RedirectToSignup() {
     return (
         <button className="redirect_button btn">
             <Link to="/signup" className="redirect_link">
-                New to Gigin?
+                New to Gigin? Click here.
             </Link>
         </button>
     )
@@ -35,7 +35,7 @@ export function RedirectToLogin() {
     return (
         <button className="redirect_button btn">
             <Link to="/login" className="redirect_link">
-                Already have an account?
+                Already have an account? Click here.
             </Link>
         </button>
     )
