@@ -54,23 +54,7 @@ export default function SignUpPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log('Form values:', formValues)
-        try {
-            const response = await fetch('http://localhost:5173/api/addMusician', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(formValues),
-            });
-      
-            if (response.ok) {
-              console.log('Form values sent successfully');
-            } else {
-              console.error('Error sending form values');
-            }
-          } catch (error) {
-            console.error('Error sending form values:', error);
-          }
+        
     };
 
     return (
