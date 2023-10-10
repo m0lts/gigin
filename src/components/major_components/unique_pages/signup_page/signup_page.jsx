@@ -51,11 +51,12 @@ export default function SignUpPage() {
     };
     
     // Handle form submission - send data to backend file.
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
         console.log('Form values:', formValues)
         
     };
+
 
     return (
         <section className="gateway_page_body">
