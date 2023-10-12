@@ -1,10 +1,16 @@
 import TopBanner from "../../sections/top_banner"
 
 export default function LandingPage() {
-    return (
-        <>
+
+    const userForename = localStorage.getItem('Forename');
+    const userSurname = localStorage.getItem('Surname');
+
+        return (
+            <>
             <TopBanner />
-            <h1>Landing Page</h1>
-        </>
-    )
+            {userForename && userSurname ? (<h1>Welcome, {userForename} {userSurname}</h1>) : (<h1>Welcome to Gigin</h1>)}
+            
+            </>
+        )
+
 }

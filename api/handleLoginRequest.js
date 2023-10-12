@@ -55,8 +55,11 @@ export default async function handler(request, response) {
             // Get password from formData
             const password = formData.password;
 
+            const userForename = musicianData.forename;
+            const userSurname = musicianData.surname;
+
             if (password === dbPassword) {
-                response.status(200).json({ message: 'Successfully logged in.' });
+                response.status(200).json({ userForename, userSurname, password });
             } else {
                 response.status(401).json({ error: 'Incorrect password' });
             }

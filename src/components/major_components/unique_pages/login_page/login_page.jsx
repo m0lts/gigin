@@ -60,8 +60,18 @@ export default function LogInPage() {
       
             // Handle relative responses and edit modal message.
             if (response.ok) {
+
+                // EDIT WITH COOKIES
+                const responseData = await response.json();
+                const userForename = responseData.userForename;
+                const userSurname = responseData.userSurname;
+
+                localStorage.setItem('Forename', userForename);
+                localStorage.setItem('Surname', userSurname);
+
                 // Redirect user to login page if sign up successful
                 window.location.href = '/';
+
               } else if (response.status === 400) {
                   setFormSubmitted(false);
                   setEmailError('Email not found.');
@@ -82,7 +92,7 @@ export default function LogInPage() {
         <section className="gateway_page_body">
             <header className="gateway_page_header">
                 <Link to="/">
-                    <img src="/src/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
+                    <img src="/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
                 </Link>
             </header>
             <main className="gateway_page_main">
