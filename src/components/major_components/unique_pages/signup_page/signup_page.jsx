@@ -1,10 +1,14 @@
 import { RedirectToLogin, SubmitButton } from "../../../minor_components/buttons"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function SignUpPage() {
+
+    // SET UP NAVIGATE
+    const navigate = useNavigate();
 
     // SET STATES
     // For data packet to be sent to database
@@ -103,7 +107,7 @@ export default function SignUpPage() {
             // Handle relative responses and edit modal message.
             if (response.ok) {
                 // Redirect user to login page if sign up successful
-                window.location.href = '/login';
+                navigate('/login');
               } else if (response.status === 400) {
                 // Email already taken
                 setEmailError('* Email already in use.');
@@ -123,7 +127,7 @@ export default function SignUpPage() {
         <section className="gateway_page_body">
             <header className="gateway_page_header">
                 <Link to="/">
-                    <img src="/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
+                    <img src="/src/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
                 </Link>
             </header>
             <main className="gateway_page_main">

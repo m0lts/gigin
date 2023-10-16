@@ -1,8 +1,12 @@
 import { RedirectToSignup, SubmitButton } from "../../../minor_components/buttons"
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 export default function LogInPage() {
+
+    // SET NAVIGATE
+    const navigate = useNavigate();
 
     // SET STATES
     // For data packet to be sent to database
@@ -70,7 +74,7 @@ export default function LogInPage() {
                 localStorage.setItem('Surname', userSurname);
 
                 // Redirect user to login page if sign up successful
-                window.location.href = '/';
+                navigate('/');
 
               } else if (response.status === 400) {
                   setFormSubmitted(false);
@@ -92,7 +96,7 @@ export default function LogInPage() {
         <section className="gateway_page_body">
             <header className="gateway_page_header">
                 <Link to="/">
-                    <img src="/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
+                    <img src="/src/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
                 </Link>
             </header>
             <main className="gateway_page_main">
