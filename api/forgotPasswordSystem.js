@@ -56,9 +56,10 @@ export default async function handler(request, response) {
                 createdAt: new Date(),
             }
 
-            // To be used when email system works
+            // To be used when email system works ******** dont send in link, just send token in email body
             const resetLink = `localhost:3000/resetpassword/${resetToken}`;
             console.log(resetLink);
+            // *****************
 
 
             // Insert email and password reset token into password_reset_tokens db collection

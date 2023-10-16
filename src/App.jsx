@@ -12,7 +12,7 @@ export default function App() {
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/resetpassword/:token" element={<ResetPassword />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
       </Routes>
   )
 }

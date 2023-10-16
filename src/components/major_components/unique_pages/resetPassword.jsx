@@ -1,15 +1,12 @@
 import { Link } from "react-router-dom"
 import { SubmitButton } from "../../minor_components/buttons"
-import { useState, useEffect } from "react"
-import { useParams } from 'react-router-dom'
+import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
 
 export default function ResetPassword() {
 
     const navigate = useNavigate();
 
-    // Retrieve token from URL
-    const { token } = useParams();
 
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [passwordError, setPasswordError] = useState('');
@@ -17,11 +14,15 @@ export default function ResetPassword() {
     const [formValues, setFormValues] = useState({
         password: '',
         verify_password: '',
-        token: token,
+        token: '',
     })
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+        setFormValues({
+            ...formValues,
+            [name]: value,
+            });
         
         // Password validation
         if (name === 'password') {
@@ -33,18 +34,10 @@ export default function ResetPassword() {
             setVerifyPasswordError(value === formValues.password ? '' : '* Passwords do not match');
         }
 
-        // Update formValues for password and verify_password only
-        if (name === 'password' || name === 'verify_password') {
-            setFormValues({
-            ...formValues,
-            [name]: value,
-            });
-        }
     }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
 
         // Check for errors
         if (passwordError || verifyPasswordError) {
@@ -71,6 +64,7 @@ export default function ResetPassword() {
                 navigate('/login');
             } else {
               console.error('Password reset failed:', response.statusText);
+              setFormSubmitted(false);
             }
           } catch (error) {
             console.error('An error occurred during password reset:', error);
@@ -96,6 +90,19 @@ export default function ResetPassword() {
                     </div>
                 ) : (
                     <form action="" className="gateway_page_form" onSubmit={handleSubmit}>
+                        <div className="gateway_page_token_input">
+                        {/* <label htmlFor="password">Password</label> */}
+                        <input 
+                        type="text" 
+                        id="token" 
+                        name="token" 
+                        placeholder="Unique Code" 
+                        required={true}
+                        className="gateway_page_form_input" 
+                        value={formValues.token}
+                        onChange={handleInputChange}
+                        />
+                        </div>
                     <div className="gateway_page_password_input">
                         {/* <label htmlFor="password">Password</label> */}
                         <input 
