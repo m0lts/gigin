@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom"
 import { SubmitButton } from "../../minor_components/buttons"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 export default function ForgotPassword() {
+
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -47,6 +50,7 @@ export default function ForgotPassword() {
             // Handle relative responses and edit modal message.
             if (response.ok) {
                 setSuccess(true);
+                navigate('/resetpassword');
               } else {
                 setFormSubmitted(false);
                 setSuccess(false);
