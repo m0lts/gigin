@@ -19,6 +19,8 @@ export default function LogInPage() {
     const [passwordError, setPasswordError] = useState('');
     // For submission modal
     const [formSubmitted, setFormSubmitted] = useState(false);
+    // For forgot password
+    const [forgotPassword, setForgotPassword] = useState(false);
 
     // SET FORM VALUES TO ENTERED VALUES
     const handleInputChange = async (event) => {
@@ -81,7 +83,8 @@ export default function LogInPage() {
                   setEmailError('Email not found.');
               } else if (response.status === 401) {
                   setFormSubmitted(false);
-                  setPasswordError('Incorrect Password.');
+                  setPasswordError('Incorrect password.');
+                  setForgotPassword(true);
               } else {
                 alert('Login failed, please try again later.');
                 setFormSubmitted(false);
@@ -134,6 +137,11 @@ export default function LogInPage() {
                         {passwordError && <div className="error-message">{passwordError}</div>}
                     </div>
                     <SubmitButton />
+                    {forgotPassword && <div className="forgot-password-message">
+                            <Link to='/forgotpassword' className="forgot-password-link">
+                                Forgot Password?
+                            </Link>
+                            </div>}
                 </form>
                 }
                 <RedirectToSignup />
