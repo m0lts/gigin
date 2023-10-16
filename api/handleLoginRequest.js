@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import bcrypt from 'bcrypt';
 
 const uri = process.env.MONGODB_URI;
 const options = {};
@@ -20,9 +21,7 @@ export default async function handler(request, response) {
 
         // Store DB name and collections in variables
         const db = mongoClient.db("gigin_test_accounts");
-        const musiciansCollection = db.collection("musicians");
-        const venuesCollection =  db.collection("venues");
-
+        const dbCollection = db.collection("user_accounts");
 
 
 
@@ -36,30 +35,26 @@ export default async function handler(request, response) {
             // Check if email is in either the musicians or venues collections
             const email = formData.email;
   
-            const musicianData = await musiciansCollection.findOne({ email });
-            const venueData = await venuesCollection.findOne({ email });
+            const userRecord = await dbCollection.findOne({ email });
 
-            if (!musicianData && !venueData) {
+            if (!userRecord) {
                 response.status(400).json({ error: "Email not found" });
                 return;
             }
 
-            let dbPassword;
-
-            if (musicianData) {
-                dbPassword = musicianData.password;
-            } else if (venueData) {
-                dbPassword = venueData.password;
-            }
+            // Assign password in database to dbPassword
+            const dbPassword = userRecord.password;
 
             // Get password from formData
             const password = formData.password;
 
-            const userForename = musicianData.forename;
-            const userSurname = musicianData.surname;
+            // Compare the hashed password with the provided password
+            const passwordMatch = await bcrypt.compare(password, dbPassword);
 
-            if (password === dbPassword) {
-                response.status(200).json({ userForename, userSurname, password });
+            if (passwordMatch) {
+                const userForename = userRecord.forename;
+                const userSurname = userRecord.surname;
+                response.status(200).json({ userForename, userSurname });
             } else {
                 response.status(401).json({ error: 'Incorrect password' });
             }

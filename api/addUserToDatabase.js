@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import bcrypt from 'bcrypt';
 
 const uri = process.env.MONGODB_URI;
 const options = {};
@@ -20,8 +21,7 @@ export default async function handler(request, response) {
 
         // Store DB name and collections in variables
         const db = mongoClient.db("gigin_test_accounts");
-        const musiciansCollection = db.collection("musicians");
-        const venuesCollection =  db.collection("venues");
+        const dbCollection = db.collection("user_accounts");
 
 
 
@@ -31,38 +31,25 @@ export default async function handler(request, response) {
             // Save data to formData variable
             const formData = request.body;
 
+            // Delete verify_password property
+            delete formData.verify_password;
 
+            // Hash the user's password
+            const hashedPassword = await bcrypt.hash(formData.password, 10);
+            // Update the formData with the hashed password
+            formData.password = hashedPassword;
 
             // Check if email already exists in either the musicians or venues collections
             const email = formData.email;
             // Return error to frontend if true
-            const musicianWithEmail = await musiciansCollection.findOne({ email });
-            const venueWithEmail = await venuesCollection.findOne({ email });
-            if (musicianWithEmail || venueWithEmail) {
+            const emailInDatabase = await dbCollection.findOne({ email });
+            if (emailInDatabase) {
                 response.status(400).json({ error: 'Email address taken.' });
                 return;
             }
 
-
-
-
-            // Clean data and enter into database
-            if (formData.selectedOption === 'musician') {
-                // If user has selected musician in radio input, remove venue_name from data packet
-                delete formData.venue_name;
-                // Send data to database - inset one document containing data
-                const result = await musiciansCollection.insertOne(formData);
-                response.status(201).json({ message: "Document created successfully in musicians collection", result });
-            } else if (formData.selectedOption === 'venue') {
-                // Same for musician_name if venue selected
-                delete formData.musician_name;
-                // Send data to database - inset one document containing data
-                const result = await venuesCollection.insertOne(formData);
-                response.status(201).json({ message: "Document created successfully in venues collection", result });
-            } else {
-                response.status(400).json({ error: "Invalid selectedOption" });
-                return;
-            }
+            const result = await dbCollection.insertOne(formData);
+            response.status(201).json({ message: "Account successfully created.", result });
 
 
             // Return error if neither musician or venue selected

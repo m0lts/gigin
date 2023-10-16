@@ -14,15 +14,14 @@ export default function SignUpPage() {
     const [formValues, setFormValues] = useState({
         forename: '',
         surname: '',
-        selectedOption: '',
-        musician_name: '',
-        venue_name: '',
+        userType: '',
+        showName: '',
         email: '',
         password: '',
         verify_password: '',
     });
     // For selected option logic
-    const [selectedOption, setSelectedOption] = useState('');
+    const [userType, setUserType] = useState('');
     // For validation errors
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -36,22 +35,21 @@ export default function SignUpPage() {
     // Handle radio buttons logic
     const handleRadioChange = (event) => {
         const { value } = event.target;
-        setSelectedOption(value);
+        setUserType(value);
       
         // Update the formValues with the selected option
         setFormValues({
           ...formValues,
-          [value === 'musician' ? 'venue_name' : 'musician_name']: '',
-          selectedOption: value,
+          userType: value,
         });
     };
-    // Update the formValues whenever selectedOption changes
+    // Update the formValues whenever userType changes
     useEffect(() => {
         setFormValues({
         ...formValues,
-        selectedOption: selectedOption,
+        userType: userType,
         });
-    }, [selectedOption]);
+    }, [userType]);
 
 
     
@@ -174,7 +172,7 @@ export default function SignUpPage() {
                                 value="musician" 
                                 required={true}
                                 className="signup_page_form_radio"
-                                checked={selectedOption === 'musician'} 
+                                checked={userType === 'musician'} 
                                 onChange={handleRadioChange} 
                                 />
                                 <label htmlFor="musician" className="signup_page_form_radio">Musician</label>
@@ -187,7 +185,7 @@ export default function SignUpPage() {
                                 value="venue" 
                                 required={true}
                                 className="signup_page_form_radio" 
-                                checked={selectedOption === 'venue'} 
+                                checked={userType === 'venue'} 
                                 onChange={handleRadioChange} 
                                 />
                                 <label htmlFor="venue" className="signup_page_form_radio">Venue</label>
@@ -195,29 +193,33 @@ export default function SignUpPage() {
                         </div>
                     </div>
                     <div className="gateway_page_name_input">
-                        <div className={selectedOption === 'musician' ? 'gateway_page_musician_name_input' : 'hidden'}>
+                        <div className={userType === 'musician' ? 'gateway_page_musician_name_input' : 'hidden'}>
                             {/* <label htmlFor="musician_name">Musician Name</label> */}
                             <input 
                             type="text" 
-                            id="musician_name" 
-                            name="musician_name" 
+                            // id="musician_name" 
+                            // name="musician_name" 
+                            id="showName" 
+                            name="showName" 
                             placeholder="Musician/Band Name" 
-                            required={selectedOption === 'musician'}
+                            required={userType === 'musician'}
                             className="gateway_page_form_input" 
-                            value={formValues.musician_name}
+                            value={formValues.showName}
                             onChange={handleInputChange}
                             />
                         </div>
-                        <div className={selectedOption === 'venue' ? 'gateway_page_venue_name_input' : 'hidden'}>
+                        <div className={userType === 'venue' ? 'gateway_page_venue_name_input' : 'hidden'}>
                             {/* <label htmlFor="venue_name">Venue Name</label> */}
                             <input 
                             type="text" 
-                            id="venue_name" 
-                            name="venue_name" 
+                            // id="venue_name" 
+                            // name="venue_name" 
+                            id="showName" 
+                            name="showName" 
                             placeholder="Venue Name" 
-                            required={selectedOption === 'venue'}
+                            required={userType === 'venue'}
                             className="gateway_page_form_input" 
-                            value={formValues.venue_name}
+                            value={formValues.showName}
                             onChange={handleInputChange}
                             />
                         </div>
