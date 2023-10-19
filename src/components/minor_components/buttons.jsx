@@ -1,16 +1,35 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons"
+import { faCircleUser, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom"
 
 
 export function LogInButton() {
-    return (
-        <button className="log_in_button btn">
-            <Link to="/login" className="log_in_link">
-                <FontAwesomeIcon icon={faCircleUser} size="1x" className="log_in_icon" /> Login
-            </Link>
-        </button>
-    )
+
+    const userLoggedIn = sessionStorage.getItem('Forename');
+
+    const handleLogOut = () => {
+        sessionStorage.removeItem('Forename');
+        sessionStorage.removeItem('Surname');
+        window.location.reload();
+    }
+
+    if (userLoggedIn) {
+        return (
+            <button className="log_in_button btn">
+                <Link className="log_in_link" onClick={handleLogOut}>
+                    <FontAwesomeIcon icon={faArrowRightFromBracket} size="1x" className="log_in_icon" /> Logout
+                </Link>
+            </button>
+        )
+    } else {
+        return (
+            <button className="log_in_button btn">
+                <Link to="/login" className="log_in_link">
+                    <FontAwesomeIcon icon={faCircleUser} size="1x" className="log_in_icon" /> Login
+                </Link>
+            </button>
+        )
+    }
 }
 
 export function ImAVenueButton() {

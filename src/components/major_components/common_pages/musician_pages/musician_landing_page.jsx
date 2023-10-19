@@ -2,8 +2,8 @@ import TopBanner from "../../sections/top_banner"
 
 export default function LandingPage() {
 
-    const userForename = localStorage.getItem('Forename');
-    const userSurname = localStorage.getItem('Surname');
+    const userForename = sessionStorage.getItem('Forename');
+    const userSurname = sessionStorage.getItem('Surname');
 
         return (
             <>

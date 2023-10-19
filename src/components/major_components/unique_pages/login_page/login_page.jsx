@@ -72,8 +72,8 @@ export default function LogInPage() {
                 const userForename = responseData.userForename;
                 const userSurname = responseData.userSurname;
 
-                localStorage.setItem('Forename', userForename);
-                localStorage.setItem('Surname', userSurname);
+                sessionStorage.setItem('Forename', userForename);
+                sessionStorage.setItem('Surname', userSurname);
 
                 // Redirect user to login page if sign up successful
                 navigate('/');
