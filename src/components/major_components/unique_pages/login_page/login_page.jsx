@@ -17,10 +17,12 @@ export default function LogInPage() {
     // For validation errors
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
-    // For submission modal
+    // For loading icon
     const [formSubmitted, setFormSubmitted] = useState(false);
-    // For forgot password
-    const [forgotPassword, setForgotPassword] = useState(false);
+
+    // Disable submit button code
+    const requiredFieldsFilled = loginFormValues.email && loginFormValues.password && !passwordError;
+
 
     // SET FORM VALUES TO ENTERED VALUES
     const handleInputChange = async (event) => {
@@ -67,24 +69,28 @@ export default function LogInPage() {
             // Handle relative responses and edit modal message.
             if (response.ok) {
 
-                // EDIT WITH COOKIES
+                // Assign user details to session storage
                 const responseData = await response.json();
-                const userForename = responseData.userForename;
-                const userSurname = responseData.userSurname;
+                sessionStorage.setItem('Forename', responseData.userRecord.forename);
+                sessionStorage.setItem('Surname', responseData.userRecord.surname);
+                sessionStorage.setItem('Type', responseData.userRecord.userType);
+                sessionStorage.setItem('Alias', responseData.userRecord.showName);
+                sessionStorage.setItem('Email', responseData.userRecord.email);
 
-                sessionStorage.setItem('Forename', userForename);
-                sessionStorage.setItem('Surname', userSurname);
-
-                // Redirect user to login page if sign up successful
-                navigate('/');
+                // Redirect user to relevant page depending on user type
+                
+                if (responseData.userRecord.userType === 'musician') {
+                    navigate('/');
+                } else {
+                    navigate('/venue');
+                }
 
               } else if (response.status === 400) {
                   setFormSubmitted(false);
-                  setEmailError('Email not found.');
+                  setEmailError('* No account associated with that email address. Please make an account or enter a different email.');
               } else if (response.status === 401) {
                   setFormSubmitted(false);
-                  setPasswordError('Incorrect password.');
-                  setForgotPassword(true);
+                  setPasswordError('* Password incorrect');
               } else {
                 alert('Login failed, please try again later.');
                 setFormSubmitted(false);
@@ -136,12 +142,12 @@ export default function LogInPage() {
                          />
                         {passwordError && <div className="error-message">{passwordError}</div>}
                     </div>
-                    <SubmitButton />
-                    {forgotPassword && <div className="forgot-password-message">
+                    <SubmitButton disabled={!requiredFieldsFilled} />
+                    <div className="forgot-password-message">
                             <Link to='/forgotpassword' className="forgot-password-link">
                                 Forgot Password?
                             </Link>
-                            </div>}
+                    </div>
                 </form>
                 }
                 <RedirectToSignup />

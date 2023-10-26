@@ -52,9 +52,7 @@ export default async function handler(request, response) {
             const passwordMatch = await bcrypt.compare(password, dbPassword);
 
             if (passwordMatch) {
-                const userForename = userRecord.forename;
-                const userSurname = userRecord.surname;
-                response.status(200).json({ userForename, userSurname });
+                response.status(200).json({ userRecord });
             } else {
                 response.status(401).json({ error: 'Incorrect password' });
             }

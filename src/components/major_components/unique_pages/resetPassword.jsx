@@ -9,6 +9,7 @@ export default function ResetPassword() {
 
 
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [tokenError, setTokenError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [verifyPasswordError, setVerifyPasswordError] = useState('');
     const [formValues, setFormValues] = useState({
@@ -16,6 +17,9 @@ export default function ResetPassword() {
         verify_password: '',
         token: '',
     })
+
+    // Disable submit button if true
+    const requiredFieldsFilled = formValues.password && formValues.verify_password && formValues.token && !passwordError && !verifyPasswordError;
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -63,8 +67,8 @@ export default function ResetPassword() {
                 setFormSubmitted(false);
                 navigate('/login');
             } else {
-              console.error('Password reset failed:', response.statusText);
-              setFormSubmitted(false);
+                setFormSubmitted(false);
+                setTokenError('* Unique code invalid.')
             }
           } catch (error) {
             console.error('An error occurred during password reset:', error);
@@ -102,6 +106,7 @@ export default function ResetPassword() {
                         value={formValues.token}
                         onChange={handleInputChange}
                         />
+                        {tokenError && <div className="error-message">{tokenError}</div>}
                         </div>
                     <div className="gateway_page_password_input">
                         {/* <label htmlFor="password">Password</label> */}
@@ -130,7 +135,7 @@ export default function ResetPassword() {
                         />
                         {verifyPasswordError && <div className="error-message">{verifyPasswordError}</div>}
                     </div>
-                    <SubmitButton />
+                    <SubmitButton disabled={!requiredFieldsFilled} />
                     </form>
                 )}
             </main>

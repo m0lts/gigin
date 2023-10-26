@@ -29,6 +29,9 @@ export default function SignUpPage() {
     // For submission modal
     const [formSubmitted, setFormSubmitted] = useState(false);
 
+    // Disable submit button code
+    const requiredFieldsFilled = formValues.forename && formValues.surname && formValues.userType && formValues.showName && formValues.email && formValues.password && formValues.verify_password && !verifyPasswordError;
+
 
 
     // RADIO BUTTONS LOGIC
@@ -64,7 +67,7 @@ export default function SignUpPage() {
         // Email validation
         if (name === 'email') {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            setEmailError(emailPattern.test(value) ? '' : '* Must be a valid email address');
+            setEmailError(emailPattern.test(value) ? '' : '* Please enter a valid email address');
         }
         // Password validation
         if (name === 'password') {
@@ -73,7 +76,7 @@ export default function SignUpPage() {
         }
         // Verify password validation
         if (name === 'verify_password' || name === 'password') {
-            setVerifyPasswordError(value === formValues.password ? '' : '* Passwords do not match');
+            setVerifyPasswordError(value === formValues.password ? '' : '* Passwords must match');
         }
     };
     
@@ -266,17 +269,10 @@ export default function SignUpPage() {
                         />
                         {verifyPasswordError && <div className="error-message">{verifyPasswordError}</div>}
                     </div>
-                    <SubmitButton />
+                    <SubmitButton disabled={!requiredFieldsFilled} />
                 </form>
                 }
                 <RedirectToLogin />
-                {/* {formSubmitted ? (
-                <div className="submission_modal">
-                    <div className="submission_modal_box">
-                        <p className="submission_modal_message">{modalMessage}</p>
-                    </div>
-                </div>
-                ) : null} */}
             </main>
         </section>
 

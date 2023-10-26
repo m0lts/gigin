@@ -1,16 +1,23 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleUser, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 
 export function LogInButton() {
+
+    const navigate = useNavigate();
 
     const userLoggedIn = sessionStorage.getItem('Forename');
 
     const handleLogOut = () => {
         sessionStorage.removeItem('Forename');
         sessionStorage.removeItem('Surname');
+        sessionStorage.removeItem('Type');
+        sessionStorage.removeItem('Alias');
+        sessionStorage.removeItem('Email');
+        navigate('/');
         window.location.reload();
+
     }
 
     if (userLoggedIn) {
@@ -60,6 +67,6 @@ export function RedirectToLogin() {
     )
 }
 
-export function SubmitButton() {
-    return <input type="submit" className="submit_button btn"/>
+export function SubmitButton({ disabled }) {
+    return <input type="submit" className={`submit_button btn ${disabled ? 'disabled' : ''}`} disabled={disabled} />
 }

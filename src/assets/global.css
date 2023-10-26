@@ -142,7 +142,16 @@
 .submit_button:active {
     border:1px solid var(--light-grey);
 }
-
+.submit_button.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.submit_button.disabled:hover {
+    background-color: var(--gigin-orange);
+}
+.submit_button.disabled:active {
+    border:none;
+}
 
 
 

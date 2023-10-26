@@ -14,6 +14,10 @@ export default function ForgotPassword() {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    // Disable submit button if true
+    const requiredFieldsFilled = formData.email && !emailError;
+
+
     const handleInputChange = (event) => {
         const emailInput = event.target.value;
 
@@ -50,7 +54,7 @@ export default function ForgotPassword() {
             // Handle relative responses and edit modal message.
             if (response.ok) {
                 setSuccess(true);
-                navigate('/resetpassword');
+                setFormSubmitted(false);
               } else {
                 setFormSubmitted(false);
                 setSuccess(false);
@@ -78,12 +82,8 @@ export default function ForgotPassword() {
                     </p>
                     )}
                 {success ? (
-                    <p className="gateway_page_message">If there is an account associated with that email address, you will receive an email with instructions on how to reset your password.
-                    <Link to='/'>
-                        Return home here.
-                    </Link>
-                    </p>
-                ) : formSubmitted ? (
+                    <p className="gateway_page_message">If there is an account associated with that email address, you will receive an email with instructions on how to reset your password.</p>
+                    ) : formSubmitted ? (
                     <div className="submission_processing">
                     <div className="loader"></div>
                     </div>
@@ -101,7 +101,7 @@ export default function ForgotPassword() {
                         />
                         {emailError && <div className="error-message">{emailError}</div>}
                     </div>
-                    <SubmitButton />
+                    <SubmitButton disabled={!requiredFieldsFilled} />
                     </form>
                 )}
             </main>
