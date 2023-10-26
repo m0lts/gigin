@@ -1,7 +1,7 @@
-import { RedirectToSignup, SubmitButton } from "../../../minor_components/buttons"
-import { Link } from "react-router-dom"
+import { RedirectToSignup, SubmitButton } from "../Features/Buttons"
+import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import './accounts.css'
 
 export default function LogInPage() {
 
@@ -58,7 +58,7 @@ export default function LogInPage() {
         }
 
         try {
-            const response = await fetch('/api/handleLoginRequest.js', {
+            const response = await fetch('/api/UserLogIn.js', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ export default function LogInPage() {
         <section className="gateway_page_body">
             <header className="gateway_page_header">
                 <Link to="/">
-                    <img src="/src/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
+                    <img src="/src/Assets/Interface/Logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
                 </Link>
             </header>
             <main className="gateway_page_main">
@@ -127,7 +127,7 @@ export default function LogInPage() {
                         className="gateway_page_form_input"
                         onChange={handleInputChange}
                          />
-                        {emailError && <div className="error-message">{emailError}</div>}
+                        {emailError && <div className="error_message">{emailError}</div>}
                     </div>
                     <div className="gateway_page_password_input">
                         {/* <label htmlFor="password">Password</label> */}
@@ -140,11 +140,11 @@ export default function LogInPage() {
                         className="gateway_page_form_input"
                         onChange={handleInputChange}
                          />
-                        {passwordError && <div className="error-message">{passwordError}</div>}
+                        {passwordError && <div className="error_message">{passwordError}</div>}
                     </div>
                     <SubmitButton disabled={!requiredFieldsFilled} />
-                    <div className="forgot-password-message">
-                            <Link to='/forgotpassword' className="forgot-password-link">
+                    <div className="forgot_password_message">
+                            <Link to='/forgotpassword' className="forgot_password_link">
                                 Forgot Password?
                             </Link>
                     </div>

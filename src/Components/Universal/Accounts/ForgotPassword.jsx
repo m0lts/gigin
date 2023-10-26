@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom"
-import { SubmitButton } from "../../minor_components/buttons"
+import { Link, useNavigate } from "react-router-dom"
+import { SubmitButton } from "../Features/Buttons"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import './accounts.css'
 
 export default function ForgotPassword() {
 
@@ -43,7 +43,7 @@ export default function ForgotPassword() {
         }
 
         try {
-            const response = await fetch('/api/forgotPasswordSystem.js', {
+            const response = await fetch('/api/ForgotPassword.js', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
         <section className="gateway_page_body">
             <header className="gateway_page_header">
                 <Link to="/">
-                    <img src="/src/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
+                    <img src="/src/Assets/Interface/Logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
                 </Link>
             </header>
             <main className="gateway_page_main">
@@ -99,7 +99,7 @@ export default function ForgotPassword() {
                         className="gateway_page_form_input"
                         onChange={handleInputChange}
                         />
-                        {emailError && <div className="error-message">{emailError}</div>}
+                        {emailError && <div className="error_message">{emailError}</div>}
                     </div>
                     <SubmitButton disabled={!requiredFieldsFilled} />
                     </form>

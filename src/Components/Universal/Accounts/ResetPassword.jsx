@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom"
-import { SubmitButton } from "../../minor_components/buttons"
+import { Link, useNavigate } from "react-router-dom"
+import { SubmitButton } from "../Features/Buttons"
 import { useState } from "react"
-import { useNavigate } from 'react-router-dom'
+import './accounts.css'
 
 export default function ResetPassword() {
 
@@ -53,7 +53,7 @@ export default function ResetPassword() {
         }
 
         try {
-            const response = await fetch('/api/resetPasswordSystem', {
+            const response = await fetch('/api/ResetPassword.js', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export default function ResetPassword() {
         <section className="gateway_page_body">
             <header className="gateway_page_header">
                 <Link to="/">
-                    <img src="/src/assets/images/logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
+                    <img src="/src/Assets/Interface/Logos/gigin-logo.PNG" alt="Gigin Logo" className="gateway_page_logo" />
                 </Link>
             </header>
             <main className="gateway_page_main">
@@ -106,7 +106,7 @@ export default function ResetPassword() {
                         value={formValues.token}
                         onChange={handleInputChange}
                         />
-                        {tokenError && <div className="error-message">{tokenError}</div>}
+                        {tokenError && <div className="error_message">{tokenError}</div>}
                         </div>
                     <div className="gateway_page_password_input">
                         {/* <label htmlFor="password">Password</label> */}
@@ -120,7 +120,7 @@ export default function ResetPassword() {
                         value={formValues.password}
                         onChange={handleInputChange}
                         />
-                        {passwordError && <div className="error-message">{passwordError}</div>}
+                        {passwordError && <div className="error_message">{passwordError}</div>}
                     </div>
                     <div className="gateway_page_verify_password_input">
                         {/* <label htmlFor="verify_password">Repeat Password</label> */}
@@ -133,7 +133,7 @@ export default function ResetPassword() {
                         className="gateway_page_form_input" 
                         onChange={handleInputChange}
                         />
-                        {verifyPasswordError && <div className="error-message">{verifyPasswordError}</div>}
+                        {verifyPasswordError && <div className="error_message">{verifyPasswordError}</div>}
                     </div>
                     <SubmitButton disabled={!requiredFieldsFilled} />
                     </form>

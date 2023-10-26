@@ -16,7 +16,6 @@ export default async function handler(request, response) {
 
         // Connect to MongoDB
         mongoClient = await (new MongoClient(uri, options)).connect();
-        console.log("Just Connected!");
 
         // Store DB name and collections in variables
         const db = mongoClient.db("gigin_test_accounts");
@@ -77,7 +76,6 @@ export default async function handler(request, response) {
         // Close database connection
         if (mongoClient) {
             await mongoClient.close();
-            console.log("MongoDB connection closed.");
         }
     }
 }
