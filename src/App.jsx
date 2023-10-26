@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router-dom"
-import MusicianHomePage from "./components/Musician/MusicianHomePage"
-import VenueHomePage from "./components/Venue/VenueHomePage"
-import LogInPage from "./components/Universal/Accounts/LogIn"
-import SignUpPage from "./components/Universal/Accounts/SignUp"
-import ForgotPassword from "./components/Universal/Accounts/ForgotPassword"
-import ResetPassword from "./components/Universal/Accounts/ResetPassword"
+import MusicianHomePage from "./Components/Musician/MusicianHomePage"
+import VenueHomePage from "./Components/Venue/VenueHomePage"
+import LogInPage from "./Components/Universal/Accounts/LogIn"
+import SignUpPage from "./Components/Universal/Accounts/SignUp"
+import ForgotPassword from "./Components/Universal/Accounts/ForgotPassword"
+import ResetPassword from "./Components/Universal/Accounts/ResetPassword"
 
 export default function App() {
   return (
