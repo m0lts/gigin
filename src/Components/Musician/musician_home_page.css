@@ -1,5 +1,4 @@
-main {
-    border: 1px solid black;
+.musician_homepage_main {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -15,6 +14,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 1;
 }
 .find_gig_form {
     display: flex;
@@ -44,6 +44,21 @@ main {
     color:grey;
     font-size: 0.8rem;
     font-weight: 400;
+}
+.find_gig_form_location_container {
+    position: relative;
+    display: inline-block;
+}
+.location_button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 10px;
+    background-color: #ccc;
+    border: none;
+    cursor: pointer;
+    background-color:var(--true-white);
 }
 .find_gig_form_radio_input {
     display: none;
@@ -94,8 +109,7 @@ main {
 
 
 .map_container {
-    border:1px solid blue;
-    min-height: 100vh;
+    height: 90vh;
     width:85%;
     justify-items: flex-end;
 }

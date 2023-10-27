@@ -1,7 +1,7 @@
 import { RedirectToLogin, SubmitButton } from "../Features/Buttons"
 import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
-import GooglePlacesAutocomplete from "react-google-places-autocomplete"
+import axios from 'axios'
 import './accounts.css'
 
 
@@ -93,6 +93,7 @@ export default function SignUpPage() {
     };
 
 
+
     // HANDLE FORM SUBMISSION
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -105,33 +106,33 @@ export default function SignUpPage() {
         } else {
             setFormSubmitted(true);
         }
-
-        try {
-            const response = await fetch('/api/UserSignUp.js', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(formValues),
-            });
-      
-            // Handle relative responses and edit modal message.
-            if (response.ok) {
-                // Redirect user to login page if sign up successful
-                navigate('/login');
-              } else if (response.status === 400) {
-                // Email already taken
-                setEmailError('* Email already in use.');
-                setFormSubmitted(false);
-              } else {
-                alert('Account creation failed, please try again later.');
-                setFormSubmitted(false);
-              }
-          } catch (error) {
-            console.error('Error submitting form:', error);
-          }
         
-    };
+
+            try {
+                const response = await fetch('/api/UserSignUp.js', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(formValues),
+                });
+          
+                // Handle relative responses and edit modal message.
+                if (response.ok) {
+                    // Redirect user to login page if sign up successful
+                    navigate('/login');
+                  } else if (response.status === 400) {
+                    // Email already taken
+                    setEmailError('* Email already in use.');
+                    setFormSubmitted(false);
+                  } else {
+                    alert('Account creation failed, please try again later.');
+                    setFormSubmitted(false);
+                  }
+              } catch (error) {
+                console.error('Error submitting form:', error);
+              }
+    }
 
 
     return (
