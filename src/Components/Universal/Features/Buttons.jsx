@@ -68,6 +68,14 @@ export function RedirectToLogin() {
     )
 }
 
+export function ControlCentreLink() {
+    return (
+        <button className="im_a_venue_button btn">
+            Control Centre
+        </button>
+    )
+}
+
 export function SubmitButton({ disabled }) {
     return <input type="submit" className={`submit_button btn ${disabled ? 'disabled' : ''}`} disabled={disabled} />
 }

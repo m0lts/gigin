@@ -1,0 +1,101 @@
+main {
+    border: 1px solid black;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.find_gig_box {
+    background-color: var(--light-grey);
+    border-radius: 25px;
+    padding-top:25px;
+    height:300px;
+    width:300px;
+    position: absolute;
+    left:25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.find_gig_form {
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    margin:25px 0;
+    width:75%;
+}
+.find_gig_form_input {
+    padding:10px;
+    border: none;
+    border-radius: 5px;
+    width:100%;
+    height:40px;
+    font-family: var(--font-family);
+}
+
+
+
+
+.find_gig_form_radio_container {
+    background-color: var(--true-white);
+    border-radius: 5px;
+    padding:10px;
+}
+.find_gig_form_radio_question {
+    color:grey;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+.find_gig_form_radio_input {
+    display: none;
+}
+.find_gig_form_radio_inputs_flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:10px 0;
+}
+.find_gig_form_radio_input_label {
+    text-align: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 10px 25px;
+    position: relative;
+    background-color: var(--light-grey);
+}
+.find_gig_form_radio_input_label:first-of-type {
+    border-top:1px solid var(--light-grey);
+    border-left:1px solid var(--light-grey);
+    border-bottom:1px solid var(--light-grey);
+    border-radius: 50px 0 0 50px;
+}
+.find_gig_form_radio_input_label:last-of-type {
+    border-top:1px solid var(--light-grey);
+    border-right:1px solid var(--light-grey);
+    border-bottom:1px solid var(--light-grey);
+    border-radius: 0 50px 50px 0;
+}
+.radio_option_1.radio_clicked {
+    background: var(--true-white);
+    border:1px solid var(--light-grey);
+    border-radius: 50px;
+    margin-right:-25px;
+    z-index:1;
+}
+.radio_option_2.radio_clicked {
+    background: var(--true-white);
+    border:1px solid var(--light-grey);
+    border-radius: 50px;
+    margin-left:-25px;
+    z-index:1;
+}
+
+
+
+
+
+.map_container {
+    border:1px solid blue;
+    min-height: 100vh;
+    width:85%;
+    justify-items: flex-end;
+}
