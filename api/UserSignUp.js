@@ -33,6 +33,13 @@ export default async function handler(request, response) {
             // Delete verify_password property
             delete formData.verify_password;
 
+            if (formData.userType === 'musician') {
+                delete formData.addressLine1;
+                delete formData.addressCity;
+                delete formData.addressPostCode;
+                delete formData.addressCountry;
+            }
+
             // Hash the user's password
             const hashedPassword = await bcrypt.hash(formData.password, 10);
             // Update the formData with the hashed password

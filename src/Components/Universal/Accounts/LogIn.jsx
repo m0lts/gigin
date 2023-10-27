@@ -74,8 +74,15 @@ export default function LogInPage() {
                 sessionStorage.setItem('Forename', responseData.userRecord.forename);
                 sessionStorage.setItem('Surname', responseData.userRecord.surname);
                 sessionStorage.setItem('Type', responseData.userRecord.userType);
-                sessionStorage.setItem('Alias', responseData.userRecord.showName);
-                sessionStorage.setItem('Email', responseData.userRecord.email);
+                if (responseData.userRecord.userType === 'musician') {
+                    sessionStorage.setItem('Alias', responseData.userRecord.showName);
+                    sessionStorage.setItem('Email', responseData.userRecord.email);
+                } else {
+                    sessionStorage.setItem('Venue Name', responseData.userRecord.showName);
+                    sessionStorage.setItem('Address', responseData.userRecord.addressLine1 + ', ' + responseData.userRecord.addressCity + ', ' + responseData.userRecord.addressPostCode + ', ' + responseData.userRecord.addressCountry);
+                    sessionStorage.setItem('Email', responseData.userRecord.email);
+                }
+
 
                 // Redirect user to relevant page depending on user type
                 

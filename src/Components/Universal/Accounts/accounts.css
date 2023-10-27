@@ -47,6 +47,11 @@
     border-radius: 5px;
     font-family: var(--font-family);
 }
+.gateway_page_venue_name_input {
+    display: flex;
+    flex-direction: column;
+    gap:25px;
+}
 
 
 /* Error messages */

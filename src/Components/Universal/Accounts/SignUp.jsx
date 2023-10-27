@@ -1,6 +1,7 @@
 import { RedirectToLogin, SubmitButton } from "../Features/Buttons"
 import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
+import GooglePlacesAutocomplete from "react-google-places-autocomplete"
 import './accounts.css'
 
 
@@ -20,6 +21,10 @@ export default function SignUpPage() {
         email: '',
         password: '',
         verify_password: '',
+        addressLine1: '',
+        addressCity: '',
+        addressPostCode: '',
+        addressCountry: '',
     });
     // For selected option logic
     const [userType, setUserType] = useState('');
@@ -27,6 +32,7 @@ export default function SignUpPage() {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [verifyPasswordError, setVerifyPasswordError] = useState('');
+    const [postCodeError, setPostCodeError] = useState('');
     // For submission modal
     const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -79,8 +85,12 @@ export default function SignUpPage() {
         if (name === 'verify_password' || name === 'password') {
             setVerifyPasswordError(value === formValues.password ? '' : '* Passwords must match');
         }
+        // Post code validation
+        if (name === 'addressPostCode') {
+            const ukPostCodePattern = /^[A-Za-z]{1,2}\d{1,2}\s*\d[A-Za-z]{2}$/;
+            setPostCodeError(ukPostCodePattern.test(value) ? '' : '* Please enter a valid post code');
+        }
     };
-    
 
 
     // HANDLE FORM SUBMISSION
@@ -201,8 +211,6 @@ export default function SignUpPage() {
                             {/* <label htmlFor="musician_name">Musician Name</label> */}
                             <input 
                             type="text" 
-                            // id="musician_name" 
-                            // name="musician_name" 
                             id="showName" 
                             name="showName" 
                             placeholder="Musician/Band Name" 
@@ -213,19 +221,72 @@ export default function SignUpPage() {
                             />
                         </div>
                         <div className={userType === 'venue' ? 'gateway_page_venue_name_input' : 'hidden'}>
-                            {/* <label htmlFor="venue_name">Venue Name</label> */}
-                            <input 
-                            type="text" 
-                            // id="venue_name" 
-                            // name="venue_name" 
-                            id="showName" 
-                            name="showName" 
-                            placeholder="Venue Name" 
-                            required={userType === 'venue'}
-                            className="gateway_page_form_input" 
-                            value={formValues.showName}
-                            onChange={handleInputChange}
-                            />
+                            <div>
+                                {/* <label htmlFor="venue_name">Venue Name</label> */}
+                                <input 
+                                type="text" 
+                                id="showName" 
+                                name="showName" 
+                                placeholder="Venue Name" 
+                                required={userType === 'venue'}
+                                className="gateway_page_form_input" 
+                                value={formValues.showName}
+                                onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                {/* <label htmlFor="addressLine1">Address Line 1</label> */}
+                                <input 
+                                type="text" 
+                                id="addressLine1" 
+                                name="addressLine1" 
+                                placeholder="Address Line 1" 
+                                required={userType === 'venue'}
+                                className="gateway_page_form_input" 
+                                value={formValues.addressLine1}
+                                onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                {/* <label htmlFor="addressCity">City</label> */}
+                                <input 
+                                type="text" 
+                                id="addressCity" 
+                                name="addressCity" 
+                                placeholder="City" 
+                                required={userType === 'venue'}
+                                className="gateway_page_form_input" 
+                                value={formValues.addressCity}
+                                onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                {/* <label htmlFor="addressPostCode">Post Code</label> */}
+                                <input 
+                                type="text" 
+                                id="addressPostCode" 
+                                name="addressPostCode" 
+                                placeholder="Post Code" 
+                                required={userType === 'venue'}
+                                className="gateway_page_form_input" 
+                                value={formValues.addressPostCode}
+                                onChange={handleInputChange}
+                                />
+                                {postCodeError && <div className="error_message">{postCodeError}</div>}
+                            </div>
+                            <div>
+                                {/* <label htmlFor="addressCountry">Country</label> */}
+                                <input 
+                                type="text" 
+                                id="addressCountry" 
+                                name="addressCountry" 
+                                placeholder="Country" 
+                                required={userType === 'venue'}
+                                className="gateway_page_form_input" 
+                                value={formValues.addressCountry}
+                                onChange={handleInputChange}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div className="gateway_page_email_input">
