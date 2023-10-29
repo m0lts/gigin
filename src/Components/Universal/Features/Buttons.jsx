@@ -71,7 +71,9 @@ export function RedirectToLogin() {
 export function ControlCentreLink() {
     return (
         <button className="im_a_venue_button btn">
-            Control Centre
+            <Link to="/controlcentre" className="header_link">
+                Control Centre
+            </Link>
         </button>
     )
 }

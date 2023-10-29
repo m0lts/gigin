@@ -5,6 +5,7 @@ import LogInPage from "./Components/Universal/Accounts/LogIn"
 import SignUpPage from "./Components/Universal/Accounts/SignUp"
 import ForgotPassword from "./Components/Universal/Accounts/ForgotPassword"
 import ResetPassword from "./Components/Universal/Accounts/ResetPassword"
+import ControlCentre from "./Components/Universal/Sections/ControlCentre"
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route path="/controlcentre" element={<ControlCentre />} />
       </Routes>
   )
 }
