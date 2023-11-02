@@ -17,7 +17,7 @@ export default function MusicianHomePage() {
         .then(response => response.json())
         .then(responseData => {
             const geocodeAddress = async (address) => {
-                const apiKey = 'AIzaSyD62YY50C-xucnsMC0aF3bcDGJMVGjtY2E'; // Replace with your Google API key
+                const apiKey = ""; //REPLACE WITH API KEY WHEN ENV.LOCAL SORTED
                 const addressString = `${address.addressLine1}, ${address.addressCity}, ${address.addressPostCode}, ${address.addressCountry}`;
                 const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressString)}&key=${apiKey}`);
                 const result = await response.json();
@@ -60,7 +60,7 @@ export default function MusicianHomePage() {
         // Create and render the map with markers and info windows when the data changes
         const initializeMap = (location) => {
           const loader = new Loader({
-            apiKey: "AIzaSyD62YY50C-xucnsMC0aF3bcDGJMVGjtY2E",
+            apiKey: "", //REPLACE WITH API KEY WHEN ENV.LOCAL SORTED
             version: "weekly"
           });
     

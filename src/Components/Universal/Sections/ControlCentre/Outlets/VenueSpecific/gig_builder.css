@@ -1,0 +1,26 @@
+.gig_builder {
+    border:3px solid red;
+}
+.gig_builder_progress {
+    border:1px solid blue;
+    padding:15px 25px;
+    width:100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap:50px;
+
+}
+.gig_builder_stages {
+    padding:10px;
+}
+
+.gig_builder_stage_title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color:var(--dark-grey);
+}
+
+.fc {
+    color:red;
+}

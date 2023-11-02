@@ -16,6 +16,7 @@ export function LogInButton() {
         sessionStorage.removeItem('Type');
         sessionStorage.removeItem('Alias');
         sessionStorage.removeItem('Email');
+        sessionStorage.removeItem('Address');
         navigate('/');
         window.location.reload();
 
