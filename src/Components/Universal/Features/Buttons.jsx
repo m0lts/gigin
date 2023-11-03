@@ -82,3 +82,4 @@ export function ControlCentreLink() {
 export function SubmitButton({ disabled }) {
     return <input type="submit" className={`submit_button btn ${disabled ? 'disabled' : ''}`} disabled={disabled} />
 }
+
