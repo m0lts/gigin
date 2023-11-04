@@ -58,7 +58,7 @@ export default function LogInPage() {
         }
 
         try {
-            const response = await fetch('/api/UserLogIn.js', {
+            const response = await fetch('/api/Accounts/UserLogIn.js', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

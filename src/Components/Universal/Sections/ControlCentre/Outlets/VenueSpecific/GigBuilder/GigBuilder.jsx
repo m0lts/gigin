@@ -1,13 +1,22 @@
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from "@fullcalendar/interaction"
 import { useState } from 'react'
-import { GigInfoStage, ViewConfirmStage } from './GigBuilderStages'
+import { useNavigate } from 'react-router-dom'
+import { CalendarStage, GigInfoStage, ViewConfirmStage } from './GigBuilderStages'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRightLong, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import './gig_builder.css'
 
 export default function GigBuilder() {
+
+    // Set up navigate
+    const navigate = useNavigate();
+
+    // State for data collected
+    const venueName = sessionStorage.getItem('Alias');
+    const venueAddress = sessionStorage.getItem('Address');
+    const [gigInformation, setGigInformation] = useState({
+        venueName: venueName,
+        venueAddress: venueAddress,
+    });
 
     // State for stage outlet logic
     const [buildStage, setBuildStage] = useState(0);
@@ -17,52 +26,70 @@ export default function GigBuilder() {
     // State for calendar date selected
     const [dateSelected, setDateSelected] = useState();
 
-    // Send date clicked to dateSelected state
-    const handleDateClick = (arg) => {
-        if (arg.dayEl && !arg.dayEl.classList.contains('fc-day-past')) {
-          if (dateSelected && dateSelected.dateStr === arg.dateStr) {
-            // Unselect the date if it's already selected
-            setDateSelected(null);
-            setNextButtonAvailable(false);
-            arg.dayEl.style.color = ''; // Reset text color
-            arg.dayEl.style.fontWeight = ''; // Reset font weight
-          } else {
-            // Check if another date is already selected, and unselect it if necessary
-            if (dateSelected) {
-              const prevSelectedEl = document.querySelector(`.fc-day[data-date="${dateSelected.dateStr}"]`);
-              if (prevSelectedEl) {
-                prevSelectedEl.style.color = ''; // Reset text color
-                prevSelectedEl.style.fontWeight = ''; // Reset font weight
-              }
-            }
-      
-            // Select the new date
-            setDateSelected(arg);
-            setNextButtonAvailable(true);
-            arg.dayEl.style.color = 'var(--gigin-orange)';
-            arg.dayEl.style.fontWeight = 700;
-          }
-        }
-      };
 
+    // Function to update nextButtonAvailable
+    const updateNextButtonAvailability = (isAvailable) => {
+        setNextButtonAvailable(isAvailable);
+    };
+    
+    const updateGigInfo = (info) => {
+        setGigInformation({ ...gigInformation, ...info });
+    }
 
     // Array of components to render below
     const buildStages = [
-        <FullCalendar
-            plugins={[ dayGridPlugin, interactionPlugin ]}
-            dateClick={handleDateClick}
-            initialView="dayGridMonth"
+        <CalendarStage 
+            updateButtonAvailability={updateNextButtonAvailability} 
+            dateSelected={dateSelected}
+            setDateSelected={setDateSelected}
+            updateGigInfo={updateGigInfo}
         />,
-        <GigInfoStage />,
-        <ViewConfirmStage />
+        <GigInfoStage
+            updateGigInfo={updateGigInfo}
+            updateButtonAvailability={updateNextButtonAvailability} 
+            gigInfo={gigInformation}
+        />,
+        <ViewConfirmStage
+            gigInformation={gigInformation}
+        />
     ];
 
     // Next button click logic
-    const handleNextButtonClick = () => {
-        if (buildStage < maxStage && dateSelected) {
-            setBuildStage(buildStage + 1);
+    const handleNextButtonClick = async () => {
+        if (buildStage < maxStage) {
+            if (buildStage === 0) {
+                if (dateSelected) {
+                    setBuildStage(buildStage + 1);
+                    setNextButtonAvailable(false);
+                }
+            } else if (buildStage === 1) {
+                if (gigInformation.musicGenres && gigInformation.selectedValue && gigInformation.gigStartTime && gigInformation.gigDuration && gigInformation.guideFee) {
+                    setNextButtonAvailable(true);
+                    setBuildStage(buildStage + 1);
+                }
+            } 
+        } else {
+            console.log(gigInformation);
+            try {
+                const response = await fetch('/api/Gigs/UploadGig.js', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(gigInformation),
+                });
+          
+                // Handle relative responses and edit modal message.
+                if (response.ok) {
+                    // Redirect user to login page if sign up successful
+                    navigate('/controlcentre');
+                  } else {
+                    alert('Gig post failed.');
+                  }
+              } catch (error) {
+                console.error('Error submitting form:', error);
+              }
         }
-        
     };
 
     // Top progress bar logic
@@ -97,7 +124,22 @@ export default function GigBuilder() {
                     {buildStages[buildStage]}
                 </div>
                 <div className='gig_builder_stages_next_button'>
-                    {buildStage < maxStage && <button onClick={handleNextButtonClick} className={`next_button ${nextButtonAvailable === false && 'disabled'}`} >Next <FontAwesomeIcon icon={faArrowRightLong} /></button>}
+                    {buildStage < maxStage ? (
+                    <button 
+                    onClick={handleNextButtonClick} 
+                    className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
+                    >
+                        Next <FontAwesomeIcon icon={faArrowRightLong} />
+                    </button>
+                    ) : (
+                        <button 
+                    onClick={handleNextButtonClick} 
+                    className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
+                    >
+                        Post gig
+                    </button>
+                    )
+                }
                 </div>
             </div>
         </section>

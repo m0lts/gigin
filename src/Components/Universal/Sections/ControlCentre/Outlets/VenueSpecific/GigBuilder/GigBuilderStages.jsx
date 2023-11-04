@@ -1,58 +1,116 @@
-import { useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from 'react'
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from "@fullcalendar/interaction"
 import './gig_builder.css'
 
-function TimeInput({ label, selectedTime, setSelectedTime, maxHour }) {
-    const hours = Array.from({ length: maxHour + 1 }, (_, i) => String(i).padStart(2, '0'));
-    const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
-  
-    const handleHourChange = (event) => {
-      setSelectedTime({ ...selectedTime, hour: event.target.value });
-    };
-  
-    const handleMinuteChange = (event) => {
-      setSelectedTime({ ...selectedTime, minute: event.target.value });
-    };
-  
-    return (
-      <div>
-        <label htmlFor="time">{label}:</label>
-        <select id="hour" name="hour" value={selectedTime.hour} onChange={handleHourChange}>
-          {hours.map((hour) => (
-            <option key={hour} value={hour}>
-              {hour}
-            </option>
-          ))}
-        </select>
-        <p>:</p>
-        <select id="minute" name="minute" value={selectedTime.minute} onChange={handleMinuteChange}>
-          {minutes.map((minute) => (
-            <option key={minute} value={minute}>
-              {minute}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  }
+export function CalendarStage({ updateButtonAvailability, dateSelected, setDateSelected, updateGigInfo }) {
 
-export function GigInfoStage() {
+    // Send date clicked to dateSelected state
+    const handleDateClick = (arg) => {
+        if (arg.dayEl && !arg.dayEl.classList.contains('fc-day-past')) {
+          if (dateSelected && dateSelected.dateStr === arg.dateStr) {
+            // Unselect the date if it's already selected
+            setDateSelected(null);
+            // Update gig info with the removed dateSelected
+            updateGigInfo({ dateSelected: null });
+            updateButtonAvailability(false);
+            arg.dayEl.style.color = ''; // Reset text color
+            arg.dayEl.style.fontWeight = ''; // Reset font weight
+          } else {
+            // Check if another date is already selected, and unselect it if necessary
+            if (dateSelected) {
+              const prevSelectedEl = document.querySelector(`.fc-day[data-date="${dateSelected.dateStr}"]`);
+              if (prevSelectedEl) {
+                prevSelectedEl.style.color = ''; // Reset text color
+                prevSelectedEl.style.fontWeight = ''; // Reset font weight
+              }
+            }
+      
+            // Select the new date
+            setDateSelected(arg);
+            // Update gig info with the new dateSelected
+            updateGigInfo({ dateSelected: arg });
+            updateButtonAvailability(true);
+            arg.dayEl.style.color = 'var(--gigin-orange)';
+            arg.dayEl.style.fontWeight = 700;
+          }
+        }
+      };
+
+    // Ensure that the dateSelected is styled correctly when re-visiting the component
+    useEffect(() => {
+        if (dateSelected) {
+        const selectedEl = document.querySelector(`.fc-day[data-date="${dateSelected.dateStr}"]`);
+        if (selectedEl) {
+            selectedEl.style.color = 'var(--gigin-orange)';
+            selectedEl.style.fontWeight = 700;
+        }
+        }
+    }, [dateSelected]);
+
+    return (
+        <FullCalendar
+            plugins={[ dayGridPlugin, interactionPlugin ]}
+            dateClick={handleDateClick}
+            initialView="dayGridMonth"
+        />
+    )
+}
+
+export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo }) {
 
     // Form data state
     const [formData, setFormData] = useState({
-        musicGenres: [], // An array to store genres
-        selectedValue: '', // To store the radio button selection
-        musicianArrivalTime: { hour: '00', minute: '00' }, // Time input
-        gigStartTime: { hour: '00', minute: '00' }, // Time input
-        gigDuration: { hour: '00', minute: '00' }, // Time input
-        guideFee: '', // Monetary input
-        description: '', // Textarea input
+        musicGenres: gigInfo.musicGenres || [''],
+        selectedValue: gigInfo.selectedValue || '',
+        musicianArrivalTime: gigInfo.musicianArrivalTime || { hour: '00', minute: '00' },
+        gigStartTime: gigInfo.gigStartTime || { hour: '00', minute: '00' },
+        gigDuration: gigInfo.gigDuration || { hour: '00', minute: '00' },
+        guideFee: gigInfo.guideFee || '',
+        description: gigInfo.description || '',
     });
 
+    // Time input code
+    function TimeInput({ label, selectedTime, setSelectedTime, maxHour }) {
+        const hours = Array.from({ length: maxHour + 1 }, (_, i) => String(i).padStart(2, '0'));
+        const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
+      
+        const handleHourChange = (event) => {
+          setSelectedTime({ ...selectedTime, hour: event.target.value });
+        };
+      
+        const handleMinuteChange = (event) => {
+          setSelectedTime({ ...selectedTime, minute: event.target.value });
+        };
+      
+        return (
+          <div>
+            <label htmlFor="time">{label}:</label>
+            <select id="hour" name="hour" value={selectedTime.hour} onChange={handleHourChange}>
+              {hours.map((hour) => (
+                <option key={hour} value={hour}>
+                  {hour}
+                </option>
+              ))}
+            </select>
+            <p>:</p>
+            <select id="minute" name="minute" value={selectedTime.minute} onChange={handleMinuteChange}>
+              {minutes.map((minute) => (
+                <option key={minute} value={minute}>
+                  {minute}
+                </option>
+              ))}
+            </select>
+          </div>
+        );
+      }
+
+    // Update formData with value from form
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-      
+    
+        // Special handling for time inputs (hour and minute)
         if (name.includes('hour') || name.includes('minute')) {
           const [prefix, timeType] = name.split('-');
           setFormData((prevData) => ({
@@ -62,22 +120,45 @@ export function GigInfoStage() {
               [timeType]: value,
             },
           }));
-        } else if (name.includes('musicGenres')) {
-          const genreIndex = Number(name.split('-')[1]);
-          const updatedGenres = [...formData.musicGenres];
-          updatedGenres[genreIndex] = value;
-          setFormData({
-            ...formData,
-            musicGenres: updatedGenres,
-          });
+        } else if (name.startsWith('musicGenres')) {
+            // Handling for genre select fields
+            const genreIndex = Number(name.split('-')[1]);
+            setFormData((prevData) => ({
+                ...prevData,
+                musicGenres: prevData.musicGenres.map((genre, index) => 
+                    index === genreIndex ? value : genre
+                ),
+            }));
         } else {
+          // For other inputs
           setFormData({
             ...formData,
             [name]: value,
           });
         }
-      };
+    };
 
+    // Music genres field addition and subtraction
+    const addSelectField = (event) => {
+        event.preventDefault();
+        setFormData((prevData) => ({
+          ...prevData,
+          musicGenres: [...prevData.musicGenres, ""],
+        }));
+    };
+    const removeSelectField = (event, index) => {
+    event.preventDefault();
+    setFormData((prevData) => {
+        const updatedGenres = [...prevData.musicGenres];
+        updatedGenres.splice(index, 1);
+        return {
+        ...prevData,
+        musicGenres: updatedGenres,
+        };
+    });
+    };
+
+    // Preferred music type radio buttons
     const handleRadioChange = (event) => {
         setFormData({
           ...formData,
@@ -85,32 +166,15 @@ export function GigInfoStage() {
         });
     };
 
-    const addSelectField = (event) => {
-        event.preventDefault();
-        setFormData((prevData) => ({
-          ...prevData,
-          musicGenres: [...prevData.musicGenres, ""],
-        }));
-      };
-      
-      const removeSelectField = (index, event) => {
-        event.preventDefault();
-        setFormData((prevData) => {
-          const updatedGenres = [...prevData.musicGenres];
-          updatedGenres.splice(index, 1);
-          return {
-            ...prevData,
-            musicGenres: updatedGenres,
-          };
-        });
-      };
+
 
   // Handle submit
   const handleSubmit = (event) => {
     event.preventDefault();
     // You can send the formData object to the database or perform other actions here
     // Example: sendFormDataToDatabase(formData);
-    console.log(formData); // For demonstration purposes
+    updateGigInfo(formData);
+    updateButtonAvailability(true);
   };
 
 
@@ -122,13 +186,13 @@ export function GigInfoStage() {
                     <label htmlFor="genre" className="gig_info_stage_form_label">
                         Genre:
                     </label>
-                    {formData.musicGenres.slice(1).map((genre, index) => (
+                    {formData.musicGenres.map((genre, index) => (
                         <div key={index} className="gig_info_stage_form_cont">
                         <select
                             id={`genre-${index}`}
                             name={`musicGenres-${index}`}
-                            className="gig_info_stage_form_input"
-                            value={formData.musicGenres[index]}
+                            className="gig_info_stage_form_select_genre"
+                            value={genre}
                             onChange={handleInputChange}
                         >
                             <option value="" disabled>Select a Genre</option>
@@ -147,13 +211,13 @@ export function GigInfoStage() {
                             {/* Add more options for other genres as needed */}
                         </select>
                         {index > 0 && (
-                            <button onClick={() => removeSelectField(index)} className="remove-button">
+                            <button onClick={(event) => removeSelectField(event, index)} className="gig_info_stage_form_remove_button">
                             Remove
                             </button>
                         )}
                         </div>
                     ))}
-                    <button onClick={addSelectField} className="add-button">
+                    <button onClick={addSelectField} className="gig_info_stage_form_add_button">
                         Add more
                     </button>
                 </div>
@@ -234,15 +298,27 @@ export function GigInfoStage() {
                                     - Specific directions/parking information etc"
                     />
                 </div>
-                <button onClick={handleSubmit}>Submit</button>
+                <button onClick={handleSubmit}>Save</button>
             </form>
         </section>
     )
 }
 
 
-export function ViewConfirmStage() {
+export function ViewConfirmStage({ gigInformation }) {
     return (
-        <h1>view / confirm stage</h1>
+        <div>
+        <h2>Confirm Your Gig Information</h2>
+        <ul>
+          <li>Date: {gigInformation.dateSelected ? gigInformation.dateSelected.date.toString() : 'N/A'}</li>
+          <li>Genres: {gigInformation.musicGenres}</li>
+          <li>Preferred music type: {gigInformation.selectedValue}</li>
+          <li>Musician arrival time: {gigInformation.musicianArrivalTime.hour}:{gigInformation.musicianArrivalTime.minute}</li>
+          <li>Gig start time: {gigInformation.gigStartTime.hour}:{gigInformation.gigStartTime.minute}</li>
+          <li>Gig duration: {gigInformation.gigDuration.hour}:{gigInformation.gigDuration.minute}</li>
+          <li>Guide fee: £{gigInformation.guideFee}</li>
+          <li>Description: {gigInformation.description}</li>
+        </ul>
+      </div>
     )
 }

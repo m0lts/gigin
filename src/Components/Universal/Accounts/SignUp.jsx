@@ -109,7 +109,7 @@ export default function SignUpPage() {
         
 
             try {
-                const response = await fetch('/api/UserSignUp.js', {
+                const response = await fetch('/api/Accounts/UserSignUp.js', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',

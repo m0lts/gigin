@@ -13,7 +13,7 @@ export default function MusicianHomePage() {
 
     useEffect(() => {
       // Make a GET request to your backend API
-      fetch('/api/GatherGigData')
+      fetch('/api/Gigs/GatherGigData')
         .then(response => response.json())
         .then(responseData => {
             const geocodeAddress = async (address) => {

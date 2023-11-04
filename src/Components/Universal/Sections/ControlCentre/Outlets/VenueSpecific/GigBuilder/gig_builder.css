@@ -125,6 +125,10 @@ tbody .fc-day:hover {
 /* GIG INFO */
 .gig_info_stage_form_genre_select_cont {
     display: flex;
-    
+
+}
+
+.genre_select_2 {
+    display:none;
 }
 
