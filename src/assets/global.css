@@ -38,7 +38,12 @@
     100% { transform: rotate(360deg); }
 }
   
-
+/* Form error messages */
+.error_message {
+    color:red;
+    font-size: 0.7rem;
+    margin-top:5px;
+}
 
 
 

@@ -23,11 +23,23 @@ export default async function handler(request, response) {
             // Save data to formData variable
             const formData = request.body;
 
-            const result = await dbCollection.insertOne(formData);
-            response.status(200).json({ message: "Gig successfully posted.", result });
+            // Check if a gig with the same time and date already exists
+            const existingGig = await dbCollection.findOne({
+                venueName: formData.venueName,
+                venueAddress: formData.venueAddress,
+                dateSelected: formData.dateSelected,
+                gigStartTime: formData.gigStartTime
+            });
 
-
-            // Return error if neither musician or venue selected
+            if (existingGig) {
+                // If a matching gig is found, return an error
+                response.status(400).json({ error: "Duplicate gig data. A gig with the same time and date already exists." });
+            } else {
+                // If no match is found, insert the new gig
+                const result = await dbCollection.insertOne(formData);
+                response.status(200).json({ message: "Gig successfully posted.", result });
+            }
+            
             } else {
                 response.status(405).json({ error: "Method Not Allowed" });
             }

@@ -52,11 +52,13 @@ export function CalendarStage({ updateButtonAvailability, dateSelected, setDateS
     }, [dateSelected]);
 
     return (
+      <section className="gig_calendar_stage">
         <FullCalendar
             plugins={[ dayGridPlugin, interactionPlugin ]}
             dateClick={handleDateClick}
             initialView="dayGridMonth"
         />
+      </section>
     )
 }
 
@@ -72,6 +74,9 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
         guideFee: gigInfo.guideFee || '',
         description: gigInfo.description || '',
     });
+
+    // Error states
+    const [formError, setFormError] = useState(false);
 
     // Time input code
     function TimeInput({ label, selectedTime, setSelectedTime, maxHour }) {
@@ -195,10 +200,14 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
   // Handle submit
   const handleSubmit = (event) => {
     event.preventDefault();
-    // You can send the formData object to the database or perform other actions here
-    // Example: sendFormDataToDatabase(formData);
-    updateGigInfo(formData);
-    updateButtonAvailability(true);
+
+    if (formData.musicGenres.length < 1 || formData.musicGenres[0] === '' || !formData.selectedValue || !formData.musicianArrivalTime || !formData.gigStartTime || !formData.gigDuration || !formData.guideFee) {
+      setFormError(true);
+    } else {
+      setFormError(false);
+      updateGigInfo(formData);
+      updateButtonAvailability(true);
+    }    
   };
 
 
@@ -298,17 +307,17 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                 <div className="gig_info_stage_form_cont">
                     <label htmlFor="guide_fee" className='gig_info_stage_form_label'>Guide Fee:</label>
                     <div className="gig_info_stage_form_monetary_input_container">
-                        <span>£</span>
-                        <input
-                        type="number"
-                        id="guide_fee"
-                        name="guideFee"
-                        className="gig_info_stage_form_input"
-                        value={formData.guideFee}
-                        onChange={handleInputChange}
-                        pattern="[0-9]*"
-                        />
-                        </div>
+                      <span>£</span>
+                      <input
+                      type="number"
+                      id="guide_fee"
+                      name="guideFee"
+                      className="gig_info_stage_form_input"
+                      value={formData.guideFee}
+                      onChange={handleInputChange}
+                      pattern="[0-9]*"
+                      />
+                    </div>
                 </div>
                 <div className="gig_info_stage_form_cont">
                     <label htmlFor="description" className='gig_info_stage_form_label'>Description:</label>
@@ -322,12 +331,14 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                           "Write any extra detail about the gig such as:\n" +
                           "- More details on the type of music\n" +
                           "- In-house equipment / what the musician may need to bring\n" +
-                          "- Time of arrival / load in for musicians\n" +
                           "- Specific directions/parking information etc"
                         }
                     />
                 </div>
                 <button className='gig_info_form_save_button' onClick={handleSubmit}>Save</button>
+                {formError && (
+                  <p className="error_message">* Please fill out all fields. If you want to input midnight (00:00) into a time field, please click on the drop-down and select the '00' options even if already selected. </p>
+                )}
             </form>
         </section>
     )

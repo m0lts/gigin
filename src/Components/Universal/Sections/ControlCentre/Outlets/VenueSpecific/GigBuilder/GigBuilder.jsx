@@ -26,6 +26,11 @@ export default function GigBuilder() {
     // State for calendar date selected
     const [dateSelected, setDateSelected] = useState();
 
+    // For submission 
+    const [formSubmitted, setFormSubmitted] = useState(false);
+    const [submissionLoader, setSubmissionLoader] = useState(false);
+    const [submissionMessage, setSubmissionMessage] = useState('');
+
 
     // Function to update nextButtonAvailable
     const updateNextButtonAvailability = (isAvailable) => {
@@ -69,6 +74,8 @@ export default function GigBuilder() {
                 }
             } 
         } else {
+            setFormSubmitted(true);
+            setSubmissionLoader(true);
             try {
                 const response = await fetch('/api/Gigs/UploadGig.js', {
                   method: 'POST',
@@ -80,10 +87,26 @@ export default function GigBuilder() {
           
                 // Handle relative responses and edit modal message.
                 if (response.ok) {
-                    // Redirect user to login page if sign up successful
-                    navigate('/controlcentre');
+                    setSubmissionLoader(false);
+                    setSubmissionMessage('Gig successfully posted! You are being redirected...');
+                    setTimeout(() => {
+                        setFormSubmitted(false);
+                        navigate('/controlcentre');
+                    }, 3000)
+                  } else if (response.status === 400) {
+                    setSubmissionLoader(false);
+                    setSubmissionMessage('You have already built a gig at this date and time. Please select a different date or time. You are being redirected...');
+                    setTimeout(() => {
+                        setFormSubmitted(false);
+                        setSubmissionMessage('');
+                    }, 5000)
                   } else {
-                    alert('Gig post failed.');
+                    setSubmissionLoader(false);
+                    setSubmissionMessage('Error posting gig, please try again. You are being redirected...')
+                    setTimeout(() => {
+                        setFormSubmitted(false);
+                        setSubmissionMessage('');
+                    }, 3000)
                   }
               } catch (error) {
                 console.error('Error submitting form:', error);
@@ -119,27 +142,35 @@ export default function GigBuilder() {
                 </li>
             </ul>
             <div className="gig_builder_stages">
-                <div className='gig_builder_stages_outlet'>
-                    {buildStages[buildStage]}
-                </div>
-                <div className='gig_builder_stages_next_button'>
-                    {buildStage < maxStage ? (
-                    <button 
-                    onClick={handleNextButtonClick} 
-                    className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
-                    >
-                        Next <FontAwesomeIcon icon={faArrowRightLong} />
-                    </button>
-                    ) : (
-                        <button 
-                    onClick={handleNextButtonClick} 
-                    className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
-                    >
-                        Post gig
-                    </button>
-                    )
-                }
-                </div>
+                {formSubmitted ? (
+                    <div className="gig_post_processing">
+                        {submissionLoader && <div className='gig_post_processing_loader_box'> <div className="loader"></div><p>Posting gig...</p> </div>}
+                        {submissionMessage && <p className='gig_post_message'>{submissionMessage}</p>}
+                    </div>
+                ) : (
+                    <div>
+                        <div className='gig_builder_stages_outlet'>
+                            {buildStages[buildStage]}
+                        </div>
+                        <div className='gig_builder_stages_next_button'>
+                            {buildStage < maxStage ? (
+                                <button 
+                                    onClick={handleNextButtonClick} 
+                                    className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
+                                >
+                                    Next <FontAwesomeIcon icon={faArrowRightLong} />
+                                </button>
+                            ) : (
+                                <button 
+                                    onClick={handleNextButtonClick} 
+                                    className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
+                                >
+                                    Post gig
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
         </section>
     )

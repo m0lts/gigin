@@ -51,8 +51,39 @@
     cursor: not-allowed;
     background-color: var(--gigin-orange-trans);
 }
+.gig_post_processing {
+    border:1px solid var(--medium-grey);
+    background-color: var(--light-grey);
+    border-radius: 25px;
+    width:50%;
+    height:200px;
+    margin: 50px auto;
+    padding:25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.gig_post_processing_loader_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:25px;
+    font-weight: 300;
+}
+.gig_post_message {
+    text-align: center;
+    font-weight: 300;
+}
+
+
 
 /* FULLCALENDAR STYLING */
+.fc {
+    max-height:600px;
+    max-width: 80%;
+    margin: 0 auto;
+}
 :root {
     --fc-border-color: #ffffff;
 }
@@ -283,6 +314,9 @@ tbody .fc-day:hover {
     color: var(--true-white);
     transition: all 100ms linear;
 }
+
+/* ERRORS */
+
 
 
 
