@@ -122,13 +122,210 @@ tbody .fc-day:hover {
     font-weight: 600;
 }
 
-/* GIG INFO */
-.gig_info_stage_form_genre_select_cont {
+/* GIG INFO FORM */
+.gig_info_stage_top_message {
+    margin-bottom: 15px;
+    font-size: 0.8rem;
+    color: var(--dark-grey);
+}
+.gig_info_stage_form_cont {
+    margin: 25px 0;
     display: flex;
-
+    align-items: center;
+    flex-wrap: wrap;
+}
+.gig_info_stage_form_cont:last-of-type {
+    align-items: flex-start;
+}
+.gig_info_stage_form_genre_cont {
+    display: flex;
+    margin:5px 0;
+}
+.gig_info_stage_form_label {
+    font-family: var(--font-family);
+    font-weight: 600;
+    margin-right: 15px;
+}
+/* GENRE SELECT */
+.gig_info_stage_form_select_genre {
+    padding: 3px;
+    border-radius: 5px;
+    font-family: var(--font-family);
+    margin-right: 5px;
+}
+.gig_info_stage_form_add_button, .gig_info_stage_form_remove_button {
+    border: none;
+    background-color: var(--true-white);
+    color:var(--gigin-orange);
+    font-size: 1.25rem;
+}
+.gig_info_stage_form_add_button {
+    margin: 0 5px;
+}
+.gig_info_stage_form_remove_button {
+    margin-right:5px;
 }
 
-.genre_select_2 {
-    display:none;
+.gig_info_stage_form_add_button:hover, .gig_info_stage_form_remove_button:hover {
+    color: var(--gigin-orange-trans);
+    cursor: pointer;
+}
+
+
+/* PREFERRED MUSIC TYPE */
+.gig_info_stage_form_radio_input {
+    display: none;
+}
+.gig_info_stage_form_radio_input_label {
+    text-align: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 10px 25px;
+    position: relative;
+    background-color: var(--light-grey);
+    border-radius: 5px;
+    margin:0 5px;
+    transition: all 100ms linear;
+    color: var(--off-black);
+}
+.gig_info_stage_form_radio_input_label:hover {
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    transition: all 100ms linear;
+}
+.gig_info_radio_option_1.radio_clicked {
+    background: var(--gigin-orange);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--true-white);
+    transition: all 100ms linear;
+}
+.gig_info_radio_option_2.radio_clicked {
+    background: var(--gigin-orange);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--true-white);
+    transition: all 100ms linear;
+}
+.gig_info_radio_option_3.radio_clicked {
+    background: var(--gigin-orange);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--true-white);
+    transition: all 100ms linear;
+}
+
+/* TIME INPUTS */
+.gig_info_stage_form_time_cont {
+    display: flex;
+    align-items: center;
+}
+.gig_info_stage_form_time_hours, .gig_info_stage_form_time_minutes {
+    border-color: var(--medium-grey);
+    border-radius: 5px;
+    padding:2px;
+    font-family: var(--font-family);
+}
+.gig_info_stage_form_time_divide {
+    margin: 0 5px;
+}
+.gig_info_stage_form_time_divide_text {
+    font-size: 0.8rem;
+    margin: 0 10px 0 5px;
+    color: var(--dark-grey);
+}
+
+/* GUIDE FEE */
+.gig_info_stage_form_monetary_input_container {
+    display: flex;
+    align-items: center;
+}
+.gig_info_stage_form_monetary_input_container span {
+    margin-right: 5px;
+}
+.gig_info_stage_form_monetary_input_container input {
+    border:1px solid var(--medium-grey);
+    border-radius: 5px;
+    height:25px;
+    padding:2px;
+    font-family: var(--font-family);
+}
+
+/* DESCRIPTION */
+.gig_info_description {
+    border:1px solid var(--medium-grey);
+    border-radius: 5px;
+    font-family: var(--font-family);
+    padding:2px;
+    min-height:100px;
+    min-width:400px;
+}
+
+/* SAVE BUTTON */
+.gig_info_form_save_button {
+    text-align: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 10px 20px;
+    position: relative;
+    background-color: var(--dark-grey);
+    border:none;
+    border-radius: 5px;
+    margin:0 5px;
+    transition: all 100ms linear;
+    color: var(--true-white);
+    font-weight: 500;
+}
+.gig_info_form_save_button:hover {
+    background: var(--gigin-orange);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    transition: all 100ms linear;
+}
+.gig_info_form_save_button:active {
+    background: var(--gigin-orange-trans);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--true-white);
+    transition: all 100ms linear;
+}
+
+
+
+/* GIG CONFIRMATION STAGE */
+.gig_confirm_stage {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width:80%;
+    margin:25px auto;
+}
+/* .gig_confirm_stage h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+} */
+.gig_confirm_stage_left_flex, .gig_confirm_stage_right_flex {
+    list-style: none;
+}
+.gig_confirm_stage_genres {
+    font-weight:300 !important;
+    text-transform: capitalize;
+}
+.gig_confirm_stage_left_flex li {
+    margin: 20px 0;
+    text-transform: capitalize;
+    font-weight: 300;
+    font-size: 1.1rem;
+}
+.gig_confirm_stage_left_flex li:last-of-type {
+    text-transform: none;
+}
+.gig_confirm_stage_left_flex li span {
+    font-weight: 600;
+}
+.gig_confirm_stage_right_venue_name {
+    margin:10px 0;
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+}
+.gig_confirm_stage_right_venue_address {
+    margin:10px 0;
+    font-size: 0.9rem;
+    text-align: center;
 }
 

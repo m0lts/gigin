@@ -69,7 +69,6 @@ export default function GigBuilder() {
                 }
             } 
         } else {
-            console.log(gigInformation);
             try {
                 const response = await fetch('/api/Gigs/UploadGig.js', {
                   method: 'POST',
