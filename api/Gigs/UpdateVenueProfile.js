@@ -18,14 +18,11 @@ export default async function handler(request, response) {
         if (request.method === "POST") {
             const formData = request.body;
 
-            const gigInformation = {
-                dateSelected: formData.dateSelected,
-                musicGenres: formData.musicGenres,
-                musicianArrivalTime: formData.musicianArrivalTime,
-                gigStartTime: formData.gigStartTime,
-                gigDuration: formData.gigDuration,
-                guideFee: formData.guideFee,
-                description: formData.description
+            const profileInformation = {
+                summary: formData.summary,
+                keyFeatures: formData.keyFeatures,
+                venueDescription: formData.venueDescription,
+                profilePictures: formData.profilePictures,
             }
 
             const existingGigProfile = await dbCollection.findOne({
@@ -33,37 +30,29 @@ export default async function handler(request, response) {
                 venueAddress: formData.venueAddress
             });
 
-            // If user has already uploaded a gig, append the 'gigs' array with the new gig. Else, create a new gig profile for the venue.
+            // If user already has a gig profile, update the profile. Else, create a new gig profile for the venue.
             if (existingGigProfile) {
-                const uploadGigData = await dbCollection.updateOne(
+                const uploadProfileData = await dbCollection.updateOne(
                     {
                         venueName: formData.venueName,
-                        venueAddress: formData.venueAddress
+                        venueAddress: formData.venueAddress,
                     },
                     {
-                        $push: {
-                            gigs: {
-                                information: gigInformation,
-                                applications: {},
-                                confirmedMusician: {}
-                            }
-                        }
+                        $set: {
+                            profileInfo: profileInformation,
+                        },
                     }
                 );
-                response.status(200).json({ message: "Gig data uploaded successfully", uploadGigData });
-            } else {
+                response.status(200).json({ message: "Profile data uploaded successfully", uploadProfileData });
+            }
+             else {
                 const createNewGigProfile = await dbCollection.insertOne({
                     venueName: formData.venueName,
                     venueAddress: formData.venueAddress,
-                    gigs: [{
-                        information: gigInformation,
-                        applications: {},
-                        confirmedMusician: {}
-                    }]
+                    profileInfo: profileInformation
                 });
-                response.status(200).json({ message: "Gig data uploaded successfully", createNewGigProfile });
+                response.status(200).json({ message: "Profile data uploaded successfully", createNewGigProfile });
             }
-        
             
             } else {
                 response.status(405).json({ error: "Method Not Allowed" });

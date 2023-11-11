@@ -28,11 +28,21 @@ export function CalendarStage({ updateButtonAvailability, dateSelected, setDateS
                 prevSelectedEl.style.fontWeight = ''; // Reset font weight
               }
             }
+
+            // Edit date format
+            const selectedDate = new Date(arg.dateStr);
+
+            const formattedDate = selectedDate.toLocaleDateString('en-US', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            });
       
             // Select the new date
             setDateSelected(arg);
             // Update gig info with the new dateSelected
-            updateGigInfo({ dateSelected: arg });
+            updateGigInfo({ dateSelected: { dateStr: arg.dateStr, dateLong: formattedDate } });
             updateButtonAvailability(true);
             arg.dayEl.style.color = 'var(--gigin-orange)';
             arg.dayEl.style.fontWeight = 700;
@@ -355,7 +365,7 @@ export function ViewConfirmStage({ gigInformation }) {
           {/* <h2>Confirm Your Gig Information</h2> */}
         {/* <div className='gig_confirm_stage_flex_cont'> */}
           <ul className='gig_confirm_stage_left_flex'>
-            <li>{gigInformation.dateSelected ? gigInformation.dateSelected.date.toString() : 'N/A'}</li>
+            <li>{gigInformation.dateSelected ? gigInformation.dateSelected.dateLong : 'N/A'}</li>
             <li>
               <span>{gigInformation.musicGenres.length > 1 ? 'Genres:' : 'Genre:'} </span>
               {gigInformation.musicGenres[0] ? (<span className='gig_confirm_stage_genres'>{gigInformation.musicGenres[0]}</span>) : ('')}
