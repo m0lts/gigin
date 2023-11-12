@@ -98,3 +98,81 @@
     align-items: center;
     padding:50px;
 }
+
+
+/* New layout */
+.accounts_body {
+    border:1px solid red;
+    width:100%;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.accounts_left_side {
+    border:1px solid var(--gigin-orange);
+    width:50%;
+}
+.accounts_right_side {
+    border:1px solid black;
+    width:50%;
+}
+.accounts_title {
+    padding:15px 0;
+    text-align: center;
+}
+
+
+/* Sign Up Page */
+.signup_page_filter_cont {
+    border: 1px solid red;
+}
+.signup_page_flex_cont {
+    display: flex;
+    justify-content: space-evenly;
+    padding:10px;
+}
+.signup_page_filter_question {
+    text-align: center;
+    margin:10px 0;
+    font-weight: 300;
+}
+.signup_page_radio_inputs {
+    display:none;
+}
+.signup_page_radio_labels {
+    text-align: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 10px 25px;
+    position: relative;
+    background-color: var(--light-grey);
+    border-radius: 5px;
+    margin:0 5px;
+    transition: all 100ms linear;
+    color: var(--off-black);
+}
+.signup_page_radio_labels:hover {
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    transition: all 100ms linear;
+}
+.signup_page_radio_labels.radio_clicked {
+    background: var(--gigin-orange);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--true-white);
+    transition: all 100ms linear;
+}
+.signup_page_radio_labels.radio_clicked {
+    background: var(--gigin-orange);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--true-white);
+    transition: all 100ms linear;
+}
+.signup_page_radio_labels.radio_clicked {
+    background: var(--gigin-orange);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--true-white);
+    transition: all 100ms linear;
+}
+
+

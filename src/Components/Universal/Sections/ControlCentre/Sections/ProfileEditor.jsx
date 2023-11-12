@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './profile_editor.css'
 
-export default function ProfileEditor({ venueName, venueAddress }) {
+export default function ProfileEditor() {
 
     const [formData, setFormData] = useState({
         venueName: venueName,
@@ -114,7 +114,7 @@ export default function ProfileEditor({ venueName, venueAddress }) {
         <h1 className="controlcentre_section_header">Profile Editor</h1>
         <div className="controlcentre_section_body profile_editor">
             <div className="profile_editor_top">
-                <h1>{venueName}</h1>
+                <h1>Hello</h1>
             </div>
             <form action="" className="profile_editor_middle">
             {Array.from({ length: 5 }, (_, index) => (

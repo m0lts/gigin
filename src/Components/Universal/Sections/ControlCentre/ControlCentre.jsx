@@ -13,9 +13,7 @@ import './controlcentre.css'
 export default function ControlCentre() {
 
     // User data from sessionStorage
-    const userName = sessionStorage.getItem('Forename') + ' ' + sessionStorage.getItem("Surname");
-    const venueName = sessionStorage.getItem('Alias');
-    const venueAddress = sessionStorage.getItem('Address');
+    const userName = sessionStorage.getItem('userName');
 
     // Page scroll behaviour
     const notificationRef = useRef(null);
@@ -79,55 +77,55 @@ export default function ControlCentre() {
     // User's profile data
     const [userProfilePicture, setUserProfilePicture] = useState('');
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        fetch('/api/Gigs/RetrieveUserSpecificGigData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                venueName,
-                venueAddress,
-            }),
-        })
-        .then(response => response.json())
-        .then(responseData => {
-            console.log(responseData)
-            const gigs = responseData.gigs || [];
+    //     fetch('/api/Gigs/RetrieveUserSpecificGigData', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             venueName,
+    //             venueAddress,
+    //         }),
+    //     })
+    //     .then(response => response.json())
+    //     .then(responseData => {
+    //         console.log(responseData)
+    //         const gigs = responseData.gigs || [];
 
-            const upcomingGigs = [];
-            const pastGigs = [];
+    //         const upcomingGigs = [];
+    //         const pastGigs = [];
 
-            const currentDate = new Date();
+    //         const currentDate = new Date();
             
-            gigs.forEach(gig => {
-                const gigDate = new Date(gig.information.dateSelected.dateStr);
-                const gigStartTime = new Date(gig.information.gigStartTime.hour, gig.information.gigStartTime.minute);
-                const gigEndTime = new Date(gigDate);
-                gigEndTime.setHours(gigEndTime.getHours() + parseInt(gig.information.gigDuration.hour));
-                gigEndTime.setMinutes(gigEndTime.getMinutes() + parseInt(gig.information.gigDuration.minute));
+    //         gigs.forEach(gig => {
+    //             const gigDate = new Date(gig.information.dateSelected.dateStr);
+    //             const gigStartTime = new Date(gig.information.gigStartTime.hour, gig.information.gigStartTime.minute);
+    //             const gigEndTime = new Date(gigDate);
+    //             gigEndTime.setHours(gigEndTime.getHours() + parseInt(gig.information.gigDuration.hour));
+    //             gigEndTime.setMinutes(gigEndTime.getMinutes() + parseInt(gig.information.gigDuration.minute));
 
-                if (gigDate > currentDate || (gigDate.getTime() === currentDate.getTime() && gigEndTime > currentDate)) {
-                    upcomingGigs.push(gig);
-                } else {
-                    pastGigs.push(gig);
-                }
-            });
+    //             if (gigDate > currentDate || (gigDate.getTime() === currentDate.getTime() && gigEndTime > currentDate)) {
+    //                 upcomingGigs.push(gig);
+    //             } else {
+    //                 pastGigs.push(gig);
+    //             }
+    //         });
 
-            // Do something with the categorized gigs (e.g., set state variables)
-            setUpcomingGigs(upcomingGigs);
-            setPastGigs(pastGigs);
+    //         // Do something with the categorized gigs (e.g., set state variables)
+    //         setUpcomingGigs(upcomingGigs);
+    //         setPastGigs(pastGigs);
 
-            const profile = responseData.profile;
-            setUserProfilePicture(profile.profilePictures[0]);
+    //         const profile = responseData.profile;
+    //         setUserProfilePicture(profile.profilePictures[0]);
 
 
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-    }, []);
+    //     })
+    //     .catch(error => {
+    //         console.error('Error fetching data:', error);
+    //     });
+    // }, []);
 
 
 
@@ -215,16 +213,14 @@ export default function ControlCentre() {
                 >
                     <SavedArtists />
                 </div>
-                <div 
+                {/* <div 
                 className="controlcentre_sections"
                 ref={profileEditorRef}
                 id="profile_editor"
                 >
                     <ProfileEditor 
-                    venueName={venueName}
-                    venueAddress={venueAddress}
                     />
-                </div>
+                </div> */}
             </section>
         </main>
 

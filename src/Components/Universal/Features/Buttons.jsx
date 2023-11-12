@@ -33,7 +33,7 @@ export function LogInButton() {
     } else {
         return (
             <button className="log_in_button btn">
-                <Link to="/login" className="log_in_link">
+                <Link to="/account" className="log_in_link">
                     <FontAwesomeIcon icon={faCircleUser} size="1x" className="log_in_icon" /> Login
                 </Link>
             </button>
@@ -52,7 +52,7 @@ export function ImAVenueButton() {
 export function RedirectToSignup() {
     return (
         <button className="redirect_button btn">
-            <Link to="/signup" className="redirect_link">
+            <Link to="/account/signup" className="redirect_link">
                 New to Gigin? Click here.
             </Link>
         </button>
@@ -62,7 +62,7 @@ export function RedirectToSignup() {
 export function RedirectToLogin() {
     return (
         <button className="redirect_button btn">
-            <Link to="/login" className="redirect_link">
+            <Link to="/account" className="redirect_link">
                 Already have an account? Click here.
             </Link>
         </button>

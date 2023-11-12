@@ -12,31 +12,41 @@ export default async function handler(request, response) {
     let mongoClient;
 
     try {
-
-        // Connect to MongoDB
         mongoClient = await (new MongoClient(uri, options)).connect();
 
-        // Store DB name and collections in variables
-        const db = mongoClient.db("gigin_test_accounts");
-        const dbCollection = db.collection("user_accounts");
+        const db = mongoClient.db("gigin");
+        const musicianCollection = db.collection("musician_accounts");
+        const venueCollection = db.collection("venue_accounts");
+        const promoterCollection = db.collection("promoter_accounts");
+        const gigGoerCollection = db.collection("gigGoer_accounts");
         const passwordResetCollection = db.collection("password_reset_tokens");
 
 
         if (request.method === "POST") {
-            // Save data to formData variable
             const receivedData = request.body;
             const email = receivedData.email;
 
-            // Check if email is on database
-            const userRecord = await dbCollection.findOne({ email });
+            let account = null;
+            let accountType = null;
 
-            // End logic if user does not exist
-            if (!userRecord) {
+            if (!account && (account = await musicianCollection.findOne({ email }))) {
+                accountType = "musician";
+            }
+            if (!account && (account = await venueCollection.findOne({ email }))) {
+                accountType = "venue";
+            }
+            if (!account && (account = await promoterCollection.findOne({ email }))) {
+                accountType = "promoter";
+            }
+            if (!account && (account = await gigGoerCollection.findOne({ email }))) {
+                accountType = "gigGoer";
+            }
+
+            if (!account) {
                 response.status(400).json({ error: "Email not found" });
                 return;
             }
 
-            // Generate random token
             const generateRandomToken = (length) => {
                 const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
                 let token = '';
@@ -49,20 +59,20 @@ export default async function handler(request, response) {
             const resetToken = generateRandomToken(10);
 
             // Create object to enter into document
-            const dataToEnter = {
+            const resetPasswordData = {
                 email: email,
                 token: resetToken,
                 createdAt: new Date(),
             }
 
             // To be used when email system works ******** dont send in link, just send token in email body
-            const resetLink = `localhost:3000/resetpassword/${resetToken}`;
-            console.log(resetLink);
+            // const resetLink = `localhost:3000/resetpassword/${resetToken}`;
+            // console.log(resetLink);
             // *****************
 
 
             // Insert email and password reset token into password_reset_tokens db collection
-            const result = await passwordResetCollection.insertOne(dataToEnter);
+            const result = await passwordResetCollection.insertOne(resetPasswordData);
             response.status(200).json({ message: "Password reset email sent.", result });
 
 
