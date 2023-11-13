@@ -19,15 +19,13 @@ export default async function handler(request, response) {
             const receivedData = request.body;
             const userID = receivedData.userID;
 
-            const query = { userID };
-            const venueProfile = await dbCollection.findOne(query);
+            const venueProfile = await dbCollection.findOne({ userID });
 
             if (venueProfile) {
                 // EDIT WHEN PROFILES ARE BUILT AND ENTERED INTO DATABASE
                 // Extract the gigs array from the document
 
-
-                // Send the gigs array back to the front end
+                response.status(200).json({ venueProfile });
 
             } else {
                 response.status(201).json({ message: "User hasn't created a profile yet."});

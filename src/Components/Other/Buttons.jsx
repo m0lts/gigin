@@ -8,15 +8,13 @@ export function LogInButton() {
 
     const navigate = useNavigate();
 
-    const userLoggedIn = sessionStorage.getItem('Forename');
+    const userLoggedIn = sessionStorage.getItem('userId');
 
     const handleLogOut = () => {
-        sessionStorage.removeItem('Forename');
-        sessionStorage.removeItem('Surname');
-        sessionStorage.removeItem('Type');
-        sessionStorage.removeItem('Alias');
-        sessionStorage.removeItem('Email');
-        sessionStorage.removeItem('Address');
+        sessionStorage.removeItem('userName');
+        sessionStorage.removeItem('userId');
+        sessionStorage.removeItem('userType');
+        sessionStorage.removeItem('userAddress');
         navigate('/');
         window.location.reload();
 

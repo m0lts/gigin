@@ -78,9 +78,9 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
     const [formData, setFormData] = useState({
         gigGenres: gigInfo.gigGenres || [''],
         gigMusicType: gigInfo.gigMusicType || '',
-        musicianArrivalTime: gigInfo.musicianArrivalTime || { hour: '00', minute: '00' },
-        gigStartTime: gigInfo.gigStartTime || { hour: '00', minute: '00' },
-        gigDuration: gigInfo.gigDuration || { hour: '00', minute: '00' },
+        gigArrivalTime: gigInfo.gigArrivalTime || '00:00',
+        gigStartTime: gigInfo.gigStartTime || '00:00',
+        gigDuration: gigInfo.gigDuration || '',
         gigFee: gigInfo.gigFee || '',
         gigExtraInformation: gigInfo.gigExtraInformation || '',
     });
@@ -91,15 +91,24 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
     // Time input code
     function TimeInput({ label, selectedTime, setSelectedTime }) {
       const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
-      const minutes = Array.from({ length: 12 }, (_, i) => String(i * 15).padStart(2, '0'));
+      const shortMinutes = Array.from({ length: 4 }, (_, i) => String(i * 15).padStart(2, '0'));
+      const longMinutes = Array.from({ length: 21 }, (_, i) => String(i * 15).padStart(2, '0'));
     
-      const handleHourChange = (event) => {
+        const handleHourChange = (event) => {
         const newHour = event.target.value;
-        const newTime = `${newHour}:${selectedTime.split(':')[1]}`;
+        const currentMinute = typeof selectedTime === 'string' ? selectedTime.split(':')[1] : '00';
+        const newTime = `${newHour}:${currentMinute}`;
         setSelectedTime(newTime);
       };
-    
+
       const handleMinuteChange = (event) => {
+        const newMinute = event.target.value;
+        const currentHour = typeof selectedTime === 'string' ? selectedTime.split(':')[0] : '00';
+        const newTime = `${currentHour}:${newMinute}`;
+        setSelectedTime(newTime);
+      };
+
+      const handleGigDurationChange = (event) => {
         const newMinute = event.target.value;
         const newTime = `${newMinute}`;
         setSelectedTime(newTime);
@@ -114,10 +123,10 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                 id="minute"
                 name="minute"
                 value={selectedTime}
-                onChange={handleMinuteChange}
+                onChange={handleGigDurationChange}
                 className='gig_info_stage_form_time_minutes'
               >
-                {minutes.map((minute) => (
+                {longMinutes.map((minute) => (
                   <option key={minute} value={minute}>
                     {minute}
                   </option>
@@ -130,7 +139,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
               <select
                 id="hour"
                 name="hour"
-                value={selectedTime.split(':')[0]}
+                value={typeof selectedTime === 'string' ? selectedTime.split(':')[0] : selectedTime}
                 onChange={handleHourChange}
                 className='gig_info_stage_form_time_hours'
               >
@@ -144,11 +153,11 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
               <select
                 id="minute"
                 name="minute"
-                value={selectedTime.split(':')[1]}
+                value={typeof selectedTime === 'string' ? selectedTime.split(':')[1] : selectedTime}
                 onChange={handleMinuteChange}
                 className='gig_info_stage_form_time_minutes'
               >
-                {minutes.map((minute) => (
+                {shortMinutes.map((minute) => (
                   <option key={minute} value={minute}>
                     {minute}
                   </option>
@@ -165,7 +174,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
         const { name, value } = event.target;
     
         // Special handling for time inputs (hour and minute)
-        if (name.includes('hour') || name.includes('minute')) {
+        if (name.includes('hour')) {
           const [prefix, timeType] = name.split('-');
           setFormData((prevData) => ({
             ...prevData,
@@ -226,7 +235,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (formData.gigGenres.length < 1 || formData.gigGenres[0] === '' || !formData.gigMusicType || !formData.musicianArrivalTime || !formData.gigStartTime || !formData.gigDuration || !formData.guideFee) {
+    if (formData.gigGenres.length < 1 || formData.gigGenres[0] === '' || !formData.gigMusicType || !formData.gigArrivalTime || !formData.gigStartTime || !formData.gigDuration || !formData.gigFee) {
       setFormError(true);
     } else {
       setFormError(false);
@@ -321,7 +330,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                     </label>
                 </div>
                 <div className="gig_info_stage_form_cont">
-                    <TimeInput label="Musician Arrival Time (24hrs)" selectedTime={formData.musicianArrivalTime} setSelectedTime={(time) => handleInputChange({ target: { name: 'musicianArrivalTime', value: time } })} maxHour={23} />
+                    <TimeInput label="Musician Arrival Time (24hrs)" selectedTime={formData.gigArrivalTime} setSelectedTime={(time) => handleInputChange({ target: { name: 'gigArrivalTime', value: time } })} maxHour={23} />
                 </div>
                 <div className="gig_info_stage_form_cont">
                     <TimeInput label="Gig Start Time (24hrs)" selectedTime={formData.gigStartTime} setSelectedTime={(time) => handleInputChange({ target: { name: 'gigStartTime', value: time } })} maxHour={23} />
@@ -370,12 +379,33 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
 }
 
 
-export function ViewConfirmStage({ gigInformation }) {
+export function ViewConfirmStage({ gigInformation, updateGigInfo }) {
+
+  const gigAddress = gigInformation.gigAddress;
+
+  const [changeAddress, setChangeAddress] = useState(false);
+  const [addressError, setAddressError] = useState('');
+
+
+  const showChangeAddress = (event) => {
+    event.preventDefault();
+    setChangeAddress(true);
+  }
+
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+        updateGigInfo({
+            ...gigInformation,
+            gigAddress: value,
+        });
+  }
+
+  const saveChangedAddress = (event) => {
+    event.preventDefault();
+  }
 
     return (
         <section className='gig_confirm_stage'>
-          {/* <h2>Confirm Your Gig Information</h2> */}
-        {/* <div className='gig_confirm_stage_flex_cont'> */}
           <ul className='gig_confirm_stage_left_flex'>
             <li>{gigInformation.gigDate ? gigInformation.gigDate.long : 'N/A'}</li>
             <li>
@@ -387,16 +417,38 @@ export function ViewConfirmStage({ gigInformation }) {
               {gigInformation.gigGenres[4] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.gigGenres[4]}</span>) : ('')}              
             </li>
             <li><span>Preferred music type: </span>{gigInformation.gigMusicType}</li>
-            <li><span>Musician arrival time: </span>{gigInformation.musicianArrivalTime.hour}:{gigInformation.musicianArrivalTime.minute}</li>
-            <li><span>Gig start time: </span>{gigInformation.gigStartTime.hour}:{gigInformation.gigStartTime.minute}</li>
-            <li><span>Gig duration: </span>{gigInformation.gigDuration.hour}:{gigInformation.gigDuration.minute}</li>
+            <li><span>Musician arrival time: </span>{gigInformation.gigArrivalTime}</li>
+            <li><span>Gig start time: </span>{gigInformation.gigStartTime}</li>
+            <li><span>Gig duration: </span>{gigInformation.gigDuration}</li>
             <li><span>Guide fee: </span>£{gigInformation.gigFee}</li>
             <li><span>Extra Information: </span>{gigInformation.gigExtraInformation}</li>
           </ul>
           <ul className='gig_confirm_stage_right_flex'>
-            <li className='gig_confirm_stage_right_venue_name'>{gigInformation.userName}</li>
+            <li className='gig_confirm_stage_right_venue_name'>{gigInformation.venue}</li>
+            <li className='gig_confirm_stage_right_venue_name'>{gigAddress}</li>
+            {changeAddress && (
+              <li>
+                <form>
+                  <label htmlFor="address">Address</label>
+                  <input 
+                    type="text" 
+                    id="address" 
+                    name="address" 
+                    onChange={handleInputChange}
+                  />
+                  {addressError && <p className="error_message">{addressError}</p>}
+                </form>
+              </li>
+            )}
+            <li>
+            {gigAddress && (
+              <button onClick={changeAddress ? saveChangedAddress : showChangeAddress}>
+                {changeAddress ? 'Save Gig Address' : 'Edit Gig Address'}
+              </button>
+            )}
+            </li> 
+            
           </ul>
-        {/* </div> */}
       </section>
     )
 }

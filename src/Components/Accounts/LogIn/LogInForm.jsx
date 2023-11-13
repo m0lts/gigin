@@ -31,6 +31,7 @@ export default function LogInForm() {
                 sessionStorage.setItem('userType', responseData.account.userType);
                 sessionStorage.setItem('userId', responseData.account._id);
                 sessionStorage.setItem('userName', responseData.account.name);
+                sessionStorage.setItem('userAddress', responseData.account.address);
 
                 if (responseData.account.userType === 'musician') {
                     navigate('/');

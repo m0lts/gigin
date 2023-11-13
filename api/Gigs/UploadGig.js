@@ -12,57 +12,17 @@ export default async function handler(request, response) {
 
     try {
         mongoClient = await (new MongoClient(uri, options)).connect();
-        const db = mongoClient.db("gigin_test_accounts");
+        const db = mongoClient.db("gigin");
         const dbCollection = db.collection("gigs");
 
         if (request.method === "POST") {
-            const formData = request.body;
+            const dataReceived = request.body;
 
-            const gigInformation = {
-                dateSelected: formData.dateSelected,
-                musicGenres: formData.musicGenres,
-                musicianArrivalTime: formData.musicianArrivalTime,
-                gigStartTime: formData.gigStartTime,
-                gigDuration: formData.gigDuration,
-                guideFee: formData.guideFee,
-                description: formData.description
-            }
+            dataReceived.gigCreatedAt = new Date();
 
-            const existingGigProfile = await dbCollection.findOne({
-                venueName: formData.venueName,
-                venueAddress: formData.venueAddress
-            });
+            const uploadGig = await dbCollection.insertOne(dataReceived);
 
-            // If user has already uploaded a gig, append the 'gigs' array with the new gig. Else, create a new gig profile for the venue.
-            if (existingGigProfile) {
-                const uploadGigData = await dbCollection.updateOne(
-                    {
-                        venueName: formData.venueName,
-                        venueAddress: formData.venueAddress
-                    },
-                    {
-                        $push: {
-                            gigs: {
-                                information: gigInformation,
-                                applications: {},
-                                confirmedMusician: {}
-                            }
-                        }
-                    }
-                );
-                response.status(200).json({ message: "Gig data uploaded successfully", uploadGigData });
-            } else {
-                const createNewGigProfile = await dbCollection.insertOne({
-                    venueName: formData.venueName,
-                    venueAddress: formData.venueAddress,
-                    gigs: [{
-                        information: gigInformation,
-                        applications: {},
-                        confirmedMusician: {}
-                    }]
-                });
-                response.status(200).json({ message: "Gig data uploaded successfully", createNewGigProfile });
-            }
+            response.status(200).json({ uploadGig });
         
             
             } else {

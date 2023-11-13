@@ -13,9 +13,11 @@ export default function GigBuilder() {
     // State for data collected
     const userID = sessionStorage.getItem('userId');
     const userName = sessionStorage.getItem('userName');
+    const userAddress = sessionStorage.getItem('userAddress');
     const [gigInformation, setGigInformation] = useState({
         userID: userID,
-        userName: userName,
+        venue: userName,
+        gigAddress: userAddress,
     });
 
     // State for stage outlet logic
@@ -56,6 +58,7 @@ export default function GigBuilder() {
         />,
         <ViewConfirmStage
             gigInformation={gigInformation}
+            updateGigInfo={updateGigInfo}
         />
     ];
 
@@ -68,7 +71,7 @@ export default function GigBuilder() {
                     setNextButtonAvailable(false);
                 }
             } else if (buildStage === 1) {
-                if (gigInformation.musicGenres && gigInformation.selectedValue && gigInformation.gigStartTime && gigInformation.gigDuration && gigInformation.guideFee) {
+                if (gigInformation.gigGenres && gigInformation.gigMusicType && gigInformation.gigStartTime && gigInformation.gigDuration && gigInformation.gigFee) {
                     setNextButtonAvailable(true);
                     setBuildStage(buildStage + 1);
                 }
@@ -91,7 +94,7 @@ export default function GigBuilder() {
                     setSubmissionMessage('Gig successfully posted! You are being redirected...');
                     setTimeout(() => {
                         setFormSubmitted(false);
-                        navigate('/controlcentre');
+                        navigate('/venue-controlcentre');
                     }, 3000)
                   } else if (response.status === 400) {
                     setSubmissionLoader(false);

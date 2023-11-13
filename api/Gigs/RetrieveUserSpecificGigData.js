@@ -20,18 +20,15 @@ export default async function handler(request, response) {
             const userID = receivedData.userID;
 
             const query = { userID };
-            const userDocument = await dbCollection.findOne(query);
+            const userDocuments = await dbCollection.find(query).toArray();
 
-            if (userDocument) {
-                // EDIT WHEN GIGS ARE BUILT AND ENTERED INTO DATABASE
-                // Extract the gigs array from the document
-                const gigsArray = userDocument.gigs || [];
-                const profileObject = userDocument.profileInfo;
-
-                // Send the gigs array back to the front end
-                response.json({ gigs: gigsArray, profile: profileObject });
+            if (userDocuments.length === 0) {
+              response.json({ gigs: [] });
+            } else if (userDocuments.length === 1) {
+              const gigs = userDocuments[0];
+              response.json({ gigs: [gigs] });
             } else {
-                response.json({ gigs: [] });
+              response.json({ gigs: userDocuments });
             }
 
         } else {

@@ -75,10 +75,8 @@ export default function VenueControlCentre() {
 
 
     // Check if user has created a profile previously.
-    // If not, set userCreatedProfile to false.
-
+    // If not, set userCreatedProfile to false. Else set the user's profile picture to their picture.
     const [userCreatedProfile, setUserCreatedProfile] = useState(true);
-
     useEffect(() => {
         fetch('/api/Profiles/VenueProfiles/FindVenueProfile', {
             method: 'POST',
@@ -93,11 +91,10 @@ export default function VenueControlCentre() {
             if (response.status === 201) {
                 setUserCreatedProfile(false);
               }
-              return response.json();
+            return response.json();
         })
         .then(responseData => {
-            console.log(responseData)
-
+            setUserProfilePicture(responseData.venueProfile.profilePicture);
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -123,10 +120,7 @@ export default function VenueControlCentre() {
         })
         .then(response => response.json())
         .then(responseData => {
-            console.log(responseData)
-            
             setUpcomingGigs(responseData.gigs);
-
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -140,7 +134,11 @@ export default function VenueControlCentre() {
         <Header />
         <main className="controlcentre_main">
             <section className="controlcentre_header">
-                <h1 className="controlcentre_heading">Welcome back, {userName}.</h1>
+                {userCreatedProfile ? (
+                    <h1 className="controlcentre_heading">Welcome back, {userName}.</h1>
+                ) : (
+                    <h1 className="controlcentre_heading">Welcome, {userName}.</h1>
+                )}
                 <nav className="controlcentre_nav">
                 {userCreatedProfile ? (
                     <ul className="controlcentre_ul">

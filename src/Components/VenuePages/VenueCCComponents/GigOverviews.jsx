@@ -6,6 +6,23 @@ import './gig_overviews.css'
 
 
 export default function GigOverviews({ upcomingGigs, profilePicture }) {
+
+    const [sortedUpcomingGigs, setSortedUpcomingGigs] = useState([]);
+
+    useEffect(() => {
+        if (upcomingGigs && upcomingGigs.length > 0) {
+          const sortedGigs = upcomingGigs.slice().sort((a, b) => {
+            const dateA = new Date(a.gigDate.short);
+            const dateB = new Date(b.gigDate.short);
+      
+            return dateA - dateB;
+          });
+      
+          setSortedUpcomingGigs(sortedGigs);
+        }
+      }, [upcomingGigs]);
+
+
     return (
         <>
         <h1 className="controlcentre_section_header">Gigs you've built</h1>
@@ -20,13 +37,13 @@ export default function GigOverviews({ upcomingGigs, profilePicture }) {
                 </li>
                 {upcomingGigs.length > 0 ? (
                     <>
-                        {upcomingGigs.map((gig, index) => (
+                        {sortedUpcomingGigs.map((gig, index) => (
                             <li key={index} className="controlcentre_cards">
                                 <img src={profilePicture} alt="" className="controlcentre_cards_img" />
-                                <h2>{gig.information.dateSelected.dateLong}</h2>
-                                <p>{gig.information.gigStartTime.hour} : {gig.information.gigStartTime.minute}</p>
-                                <p>{gig.information.gigDuration.hour}hrs {gig.information.gigDuration.minute}mins</p>
-                                <p>{gig.information.guideFee}</p>
+                                <h2>{gig.gigDate.long}</h2>
+                                <p>{gig.gigStartTime}</p>
+                                <p>{gig.gigDuration} minutes</p>
+                                <p>{gig.gigFee}</p>
                             </li>
                         ))}
                     </>

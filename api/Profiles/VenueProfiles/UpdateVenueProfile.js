@@ -7,56 +7,46 @@ if (!process.env.MONGODB_URI) {
     throw new Error("Please add your Mongo URI to env.local");
 }
 
+
+
 export default async function handler(request, response) {
     let mongoClient;
 
     try {
         mongoClient = await (new MongoClient(uri, options)).connect();
-        const db = mongoClient.db("gigin_test_accounts");
-        const dbCollection = db.collection("gigs");
+        const db = mongoClient.db("gigin");
+        const dbCollection = db.collection("venue_profiles");
 
         if (request.method === "POST") {
-            const formData = request.body;
+            const dataReceived = request.body;
 
-            const profileInformation = {
-                summary: formData.summary,
-                keyFeatures: formData.keyFeatures,
-                venueDescription: formData.venueDescription,
-                profilePictures: formData.profilePictures,
-            }
+            const userID = dataReceived.userID;
 
-            const existingGigProfile = await dbCollection.findOne({
-                venueName: formData.venueName,
-                venueAddress: formData.venueAddress
-            });
+            const existingVenueProfile = await dbCollection.findOne({ userID });
 
-            // If user already has a gig profile, update the profile. Else, create a new gig profile for the venue.
-            if (existingGigProfile) {
-                const uploadProfileData = await dbCollection.updateOne(
-                    {
-                        venueName: formData.venueName,
-                        venueAddress: formData.venueAddress,
-                    },
-                    {
-                        $set: {
-                            profileInfo: profileInformation,
-                        },
-                    }
-                );
-                response.status(200).json({ message: "Profile data uploaded successfully", uploadProfileData });
-            }
-             else {
-                const createNewGigProfile = await dbCollection.insertOne({
-                    venueName: formData.venueName,
-                    venueAddress: formData.venueAddress,
-                    profileInfo: profileInformation
-                });
-                response.status(200).json({ message: "Profile data uploaded successfully", createNewGigProfile });
-            }
+            if (existingVenueProfile) {
+                // Construct the update object based on the modified fields in dataReceived
+                // const updateObject = {};
+                // for (const key in dataReceived) {
+                //   // Only include fields that have been modified in the form
+                //   if (dataReceived[key] !== existingVenueProfile[key]) {
+                //     updateObject[key] = dataReceived[key];
+                //   }
+                // }
+              
+                // Update existing document with only the modified fields
+                await dbCollection.updateOne({ userID }, { $set: dataReceived });
+                response.status(201).json({ message: "Profile data updated successfully" });
+              } else {
+                // Insert new document
+                await dbCollection.insertOne(dataReceived);
+                response.status(200).json({ message: "Profile data uploaded successfully" });
+              }
+
             
-            } else {
-                response.status(405).json({ error: "Method Not Allowed" });
-            }
+        } else {
+            response.status(405).json({ error: "Method Not Allowed" });
+        }
 
     } catch (error) {
         console.error(error);
