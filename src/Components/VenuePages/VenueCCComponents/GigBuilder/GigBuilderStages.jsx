@@ -15,7 +15,7 @@ export function CalendarStage({ updateButtonAvailability, dateSelected, setDateS
             // Unselect the date if it's already selected
             setDateSelected(null);
             // Update gig info with the removed dateSelected
-            updateGigInfo({ dateSelected: null });
+            updateGigInfo({ gigDate: null });
             updateButtonAvailability(false);
             arg.dayEl.style.color = ''; // Reset text color
             arg.dayEl.style.fontWeight = ''; // Reset font weight
@@ -42,7 +42,7 @@ export function CalendarStage({ updateButtonAvailability, dateSelected, setDateS
             // Select the new date
             setDateSelected(arg);
             // Update gig info with the new dateSelected
-            updateGigInfo({ dateSelected: { dateStr: arg.dateStr, dateLong: formattedDate } });
+            updateGigInfo({ gigDate: { short: arg.dateStr, long: formattedDate } });
             updateButtonAvailability(true);
             arg.dayEl.style.color = 'var(--gigin-orange)';
             arg.dayEl.style.fontWeight = 700;
@@ -76,75 +76,90 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
 
     // Form data state
     const [formData, setFormData] = useState({
-        musicGenres: gigInfo.musicGenres || [''],
-        selectedValue: gigInfo.selectedValue || '',
+        gigGenres: gigInfo.gigGenres || [''],
+        gigMusicType: gigInfo.gigMusicType || '',
         musicianArrivalTime: gigInfo.musicianArrivalTime || { hour: '00', minute: '00' },
         gigStartTime: gigInfo.gigStartTime || { hour: '00', minute: '00' },
         gigDuration: gigInfo.gigDuration || { hour: '00', minute: '00' },
-        guideFee: gigInfo.guideFee || '',
-        description: gigInfo.description || '',
+        gigFee: gigInfo.gigFee || '',
+        gigExtraInformation: gigInfo.gigExtraInformation || '',
     });
 
     // Error states
     const [formError, setFormError] = useState(false);
 
     // Time input code
-    function TimeInput({ label, selectedTime, setSelectedTime, maxHour }) {
-        const hours = Array.from({ length: maxHour + 1 }, (_, i) => String(i).padStart(2, '0'));
-        const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
-      
-        const handleHourChange = (event) => {
-          setSelectedTime({ ...selectedTime, hour: event.target.value });
-        };
-      
-        const handleMinuteChange = (event) => {
-          setSelectedTime({ ...selectedTime, minute: event.target.value });
-        };
-      
-        return (
-          label === 'Gig Duration' ? (
-            <div className='gig_info_stage_form_time_cont'>
-            <label htmlFor="time" className="gig_info_stage_form_label">{label}:</label>
-            <select id="hour" name="hour" value={selectedTime.hour} onChange={handleHourChange} className='gig_info_stage_form_time_hours'>
-              {hours.map((hour) => (
-                <option key={hour} value={hour}>
-                  {hour}
-                </option>
-              ))}
-            </select>
-            <p className='gig_info_stage_form_time_divide_text'>hours</p>
-            <select id="minute" name="minute" value={selectedTime.minute} onChange={handleMinuteChange} className='gig_info_stage_form_time_minutes'>
-              {minutes.map((minute) => (
-                <option key={minute} value={minute}>
-                  {minute}
-                </option>
-              ))}
-            </select>
-            <p className='gig_info_stage_form_time_divide_text'>minutes</p>
-          </div>
+    function TimeInput({ label, selectedTime, setSelectedTime }) {
+      const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
+      const minutes = Array.from({ length: 12 }, (_, i) => String(i * 15).padStart(2, '0'));
+    
+      const handleHourChange = (event) => {
+        const newHour = event.target.value;
+        const newTime = `${newHour}:${selectedTime.split(':')[1]}`;
+        setSelectedTime(newTime);
+      };
+    
+      const handleMinuteChange = (event) => {
+        const newMinute = event.target.value;
+        const newTime = `${newMinute}`;
+        setSelectedTime(newTime);
+      };
+    
+      return (
+        <div className='gig_info_stage_form_time_cont'>
+          <label htmlFor="time" className="gig_info_stage_form_label">{label}:</label>
+          {label === 'Gig Duration' ? (
+            <>
+              <select
+                id="minute"
+                name="minute"
+                value={selectedTime}
+                onChange={handleMinuteChange}
+                className='gig_info_stage_form_time_minutes'
+              >
+                {minutes.map((minute) => (
+                  <option key={minute} value={minute}>
+                    {minute}
+                  </option>
+                ))}
+              </select>
+              <p className='gig_info_stage_form_time_divide_text'>minutes</p>
+            </>
           ) : (
-            <div className='gig_info_stage_form_time_cont'>
-            <label htmlFor="time" className="gig_info_stage_form_label">{label}:</label>
-            <select id="hour" name="hour" value={selectedTime.hour} onChange={handleHourChange} className='gig_info_stage_form_time_hours'>
-              {hours.map((hour) => (
-                <option key={hour} value={hour}>
-                  {hour}
-                </option>
-              ))}
-            </select>
-            <p className='gig_info_stage_form_time_divide'>:</p>
-            <select id="minute" name="minute" value={selectedTime.minute} onChange={handleMinuteChange} className='gig_info_stage_form_time_minutes'>
-              {minutes.map((minute) => (
-                <option key={minute} value={minute}>
-                  {minute}
-                </option>
-              ))}
-            </select>
-          </div>
-        )
-        );
-      }
-
+            <>
+              <select
+                id="hour"
+                name="hour"
+                value={selectedTime.split(':')[0]}
+                onChange={handleHourChange}
+                className='gig_info_stage_form_time_hours'
+              >
+                {hours.map((hour) => (
+                  <option key={hour} value={hour}>
+                    {hour}
+                  </option>
+                ))}
+              </select>
+              <p className='gig_info_stage_form_time_divide'>:</p>
+              <select
+                id="minute"
+                name="minute"
+                value={selectedTime.split(':')[1]}
+                onChange={handleMinuteChange}
+                className='gig_info_stage_form_time_minutes'
+              >
+                {minutes.map((minute) => (
+                  <option key={minute} value={minute}>
+                    {minute}
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
+        </div>
+      );
+    }
+    
     // Update formData with value from form
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -159,12 +174,12 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
               [timeType]: value,
             },
           }));
-        } else if (name.startsWith('musicGenres')) {
+        } else if (name.startsWith('gigGenres')) {
             // Handling for genre select fields
             const genreIndex = Number(name.split('-')[1]);
             setFormData((prevData) => ({
                 ...prevData,
-                musicGenres: prevData.musicGenres.map((genre, index) => 
+                gigGenres: prevData.gigGenres.map((genre, index) => 
                     index === genreIndex ? value : genre
                 ),
             }));
@@ -182,17 +197,17 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
         event.preventDefault();
         setFormData((prevData) => ({
           ...prevData,
-          musicGenres: [...prevData.musicGenres, ""],
+          gigGenres: [...prevData.gigGenres, ""],
         }));
     };
     const removeSelectField = (event, index) => {
     event.preventDefault();
     setFormData((prevData) => {
-        const updatedGenres = [...prevData.musicGenres];
+        const updatedGenres = [...prevData.gigGenres];
         updatedGenres.splice(index, 1);
         return {
         ...prevData,
-        musicGenres: updatedGenres,
+        gigGenres: updatedGenres,
         };
     });
     };
@@ -201,7 +216,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
     const handleRadioChange = (event) => {
         setFormData({
           ...formData,
-          selectedValue: event.target.value,
+          gigMusicType: event.target.value,
         });
     };
 
@@ -211,7 +226,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (formData.musicGenres.length < 1 || formData.musicGenres[0] === '' || !formData.selectedValue || !formData.musicianArrivalTime || !formData.gigStartTime || !formData.gigDuration || !formData.guideFee) {
+    if (formData.gigGenres.length < 1 || formData.gigGenres[0] === '' || !formData.gigMusicType || !formData.musicianArrivalTime || !formData.gigStartTime || !formData.gigDuration || !formData.guideFee) {
       setFormError(true);
     } else {
       setFormError(false);
@@ -229,26 +244,26 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                     <label htmlFor="genre" className="gig_info_stage_form_label">
                         Genre:
                     </label>
-                    {formData.musicGenres.map((genre, index) => (
+                    {formData.gigGenres.map((genre, index) => (
                         <div key={index} className='gig_info_stage_form_genre_cont'>
                         <select
                             id={`genre-${index}`}
-                            name={`musicGenres-${index}`}
+                            name={`gigGenres-${index}`}
                             className="gig_info_stage_form_select_genre"
                             value={genre}
                             onChange={handleInputChange}
                         >
                             <option value="" disabled>Select a Genre</option>
-                            <option value="pop" disabled={formData.musicGenres.includes("pop") && index !== formData.musicGenres.indexOf("pop")}>
+                            <option value="pop" disabled={formData.gigGenres.includes("pop") && index !== formData.gigGenres.indexOf("pop")}>
                                 Pop
                             </option>
-                            <option value="rock" disabled={formData.musicGenres.includes("rock") && index !== formData.musicGenres.indexOf("rock")}>
+                            <option value="rock" disabled={formData.gigGenres.includes("rock") && index !== formData.gigGenres.indexOf("rock")}>
                                 Rock
                             </option>
-                            <option value="hip-hop" disabled={formData.musicGenres.includes("hip-hop") && index !== formData.musicGenres.indexOf("hip-hop")}>
+                            <option value="hip-hop" disabled={formData.gigGenres.includes("hip-hop") && index !== formData.gigGenres.indexOf("hip-hop")}>
                                 Hip-Hop
                             </option>
-                            <option value="jazz" disabled={formData.musicGenres.includes("jazz") && index !== formData.musicGenres.indexOf("jazz")}>
+                            <option value="jazz" disabled={formData.gigGenres.includes("jazz") && index !== formData.gigGenres.indexOf("jazz")}>
                                 Jazz
                             </option>
                             {/* Add more options for other genres as needed */}
@@ -260,7 +275,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                         )}
                         </div>
                     ))}
-                    {formData.musicGenres.length < 6 && (
+                    {formData.gigGenres.length < 6 && (
                       <button onClick={addSelectField} className="gig_info_stage_form_add_button">
                         <FontAwesomeIcon icon={faPlusCircle} />
                       </button>
@@ -268,7 +283,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                 </div>
                 <div className="gig_info_stage_form_cont">
                     <p className="gig_info_stage_form_label">Preferred music type:</p>
-                    <label htmlFor="covers" className={`gig_info_stage_form_radio_input_label gig_info_radio_option_1 ${formData.selectedValue === 'covers' ? 'radio_clicked' : ''}`}>
+                    <label htmlFor="covers" className={`gig_info_stage_form_radio_input_label gig_info_radio_option_1 ${formData.gigMusicType === 'covers' ? 'radio_clicked' : ''}`}>
                         <input 
                         type="radio" 
                         id="covers" 
@@ -276,11 +291,11 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                         value="covers" 
                         className="gig_info_stage_form_radio_input"
                         onChange={handleRadioChange}
-                        checked={formData.selectedValue === "covers"}
+                        checked={formData.gigMusicType === "covers"}
                         />
                         Covers
                     </label>
-                    <label htmlFor="originals" className={`gig_info_stage_form_radio_input_label gig_info_radio_option_2 ${formData.selectedValue === 'originals' ? 'radio_clicked' : ''}`}>
+                    <label htmlFor="originals" className={`gig_info_stage_form_radio_input_label gig_info_radio_option_2 ${formData.gigMusicType === 'originals' ? 'radio_clicked' : ''}`}>
                         <input 
                         type="radio" 
                         id="originals" 
@@ -288,11 +303,11 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                         value="originals" 
                         className="gig_info_stage_form_radio_input" 
                         onChange={handleRadioChange}
-                        checked={formData.selectedValue === "originals"} 
+                        checked={formData.gigMusicType === "originals"} 
                         />
                         Originals
                     </label>
-                    <label htmlFor="both" className={`gig_info_stage_form_radio_input_label gig_info_radio_option_3 ${formData.selectedValue === 'both' ? 'radio_clicked' : ''}`}>
+                    <label htmlFor="both" className={`gig_info_stage_form_radio_input_label gig_info_radio_option_3 ${formData.gigMusicType === 'both' ? 'radio_clicked' : ''}`}>
                         <input 
                         type="radio" 
                         id="both" 
@@ -300,7 +315,7 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                         value="both" 
                         className="gig_info_stage_form_radio_input" 
                         onChange={handleRadioChange}
-                        checked={formData.selectedValue === "both"} 
+                        checked={formData.gigMusicType === "both"} 
                         />
                         Both
                     </label>
@@ -321,21 +336,21 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
                       <input
                       type="number"
                       id="guide_fee"
-                      name="guideFee"
+                      name="gigFee"
                       className="gig_info_stage_form_input"
-                      value={formData.guideFee}
+                      value={formData.gigFee}
                       onChange={handleInputChange}
                       pattern="[0-9]*"
                       />
                     </div>
                 </div>
                 <div className="gig_info_stage_form_cont">
-                    <label htmlFor="description" className='gig_info_stage_form_label'>Description:</label>
+                    <label htmlFor="extraInformation" className='gig_info_stage_form_label'>Extra Information:</label>
                     <textarea
-                        id="description"
-                        name="description"
+                        id="extraInformation"
+                        name="gigExtraInformation"
                         className="gig_info_stage_form_input gig_info_description"
-                        value={formData.description}
+                        value={formData.gigExtraInformation}
                         onChange={handleInputChange}
                         placeholder={
                           "Write any extra detail about the gig such as:\n" +
@@ -357,33 +372,29 @@ export function GigInfoStage({ updateGigInfo, updateButtonAvailability, gigInfo 
 
 export function ViewConfirmStage({ gigInformation }) {
 
-  const venueName = sessionStorage.getItem('Alias');
-  const venueAddress = sessionStorage.getItem('Address');
-
     return (
         <section className='gig_confirm_stage'>
           {/* <h2>Confirm Your Gig Information</h2> */}
         {/* <div className='gig_confirm_stage_flex_cont'> */}
           <ul className='gig_confirm_stage_left_flex'>
-            <li>{gigInformation.dateSelected ? gigInformation.dateSelected.dateLong : 'N/A'}</li>
+            <li>{gigInformation.gigDate ? gigInformation.gigDate.long : 'N/A'}</li>
             <li>
-              <span>{gigInformation.musicGenres.length > 1 ? 'Genres:' : 'Genre:'} </span>
-              {gigInformation.musicGenres[0] ? (<span className='gig_confirm_stage_genres'>{gigInformation.musicGenres[0]}</span>) : ('')}
-              {gigInformation.musicGenres[1] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.musicGenres[1]}</span>) : ('')}
-              {gigInformation.musicGenres[2] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.musicGenres[2]}</span>) : ('')}
-              {gigInformation.musicGenres[3] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.musicGenres[3]}</span>) : ('')}
-              {gigInformation.musicGenres[4] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.musicGenres[4]}</span>) : ('')}              
+              <span>{gigInformation.gigGenres.length > 1 ? 'Genres:' : 'Genre:'} </span>
+              {gigInformation.gigGenres[0] ? (<span className='gig_confirm_stage_genres'>{gigInformation.gigGenres[0]}</span>) : ('')}
+              {gigInformation.gigGenres[1] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.gigGenres[1]}</span>) : ('')}
+              {gigInformation.gigGenres[2] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.gigGenres[2]}</span>) : ('')}
+              {gigInformation.gigGenres[3] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.gigGenres[3]}</span>) : ('')}
+              {gigInformation.gigGenres[4] ? (<span className='gig_confirm_stage_genres'>, {gigInformation.gigGenres[4]}</span>) : ('')}              
             </li>
-            <li><span>Preferred music type: </span>{gigInformation.selectedValue}</li>
+            <li><span>Preferred music type: </span>{gigInformation.gigMusicType}</li>
             <li><span>Musician arrival time: </span>{gigInformation.musicianArrivalTime.hour}:{gigInformation.musicianArrivalTime.minute}</li>
             <li><span>Gig start time: </span>{gigInformation.gigStartTime.hour}:{gigInformation.gigStartTime.minute}</li>
             <li><span>Gig duration: </span>{gigInformation.gigDuration.hour}:{gigInformation.gigDuration.minute}</li>
-            <li><span>Guide fee: </span>£{gigInformation.guideFee}</li>
-            <li><span>Description: </span>{gigInformation.description}</li>
+            <li><span>Guide fee: </span>£{gigInformation.gigFee}</li>
+            <li><span>Extra Information: </span>{gigInformation.gigExtraInformation}</li>
           </ul>
           <ul className='gig_confirm_stage_right_flex'>
-            <li className='gig_confirm_stage_right_venue_name'>{venueName}</li>
-            <li className='gig_confirm_stage_right_venue_address'>{venueAddress}</li>
+            <li className='gig_confirm_stage_right_venue_name'>{gigInformation.userName}</li>
           </ul>
         {/* </div> */}
       </section>

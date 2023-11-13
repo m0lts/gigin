@@ -11,11 +11,11 @@ export default function GigBuilder() {
     const navigate = useNavigate();
 
     // State for data collected
-    const venueName = sessionStorage.getItem('Alias');
-    const venueAddress = sessionStorage.getItem('Address');
+    const userID = sessionStorage.getItem('userId');
+    const userName = sessionStorage.getItem('userName');
     const [gigInformation, setGigInformation] = useState({
-        venueName: venueName,
-        venueAddress: venueAddress,
+        userID: userID,
+        userName: userName,
     });
 
     // State for stage outlet logic

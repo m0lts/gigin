@@ -1,4 +1,4 @@
-import { LogInButton, ImAVenueButton, ControlCentreLink } from "../Features/Buttons"
+import { LogInButton, ImAVenueButton, ControlCentreLink } from "./Buttons"
 import { Link } from "react-router-dom";
 import './header.css'
 

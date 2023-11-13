@@ -1,20 +1,18 @@
 import { useState, useRef, useEffect } from "react";
-import Header from "../Header"
-import NotificationCentre from "./Sections/NotificationCentre";
-import GigOverviews from "./Sections/GigOverviews";
-import PastGigs from "./Sections/PastGigs";
-import QuickRating from "./Sections/QuickRating";
-import ProfileEditor from "./Sections/ProfileEditor";
-import SavedArtists from "./Sections/SavedArtists";
-import './controlcentre.css'
+import Header from "../Other/Header"
+import NotificationCentre from "./VenueCCComponents/NotificationCentre";
+import GigOverviews from "./VenueCCComponents/GigOverviews";
+import PastGigs from "./VenueCCComponents/PastGigs";
+import QuickRating from "./VenueCCComponents/QuickRating";
+import ProfileEditor from "./VenueCCComponents/ProfileEditor";
+import SavedArtists from "./VenueCCComponents/SavedArtists";
+import './venue_control_centre.css'
 
 
 
-export default function ControlCentre() {
+export default function VenueControlCentre() {
 
-    // User data from sessionStorage
-    const userName = sessionStorage.getItem('userName');
-
+    // ********************* //
     // Page scroll behaviour
     const notificationRef = useRef(null);
     const gigOverviewsRef = useRef(null);
@@ -25,7 +23,6 @@ export default function ControlCentre() {
 
     const [activeNavItem, setActiveNavItem] = useState(null);
 
-  
     const scrollToSection = (ref) => {
       const headerHeight = document.querySelector('.controlcentre_header').offsetHeight;
       const headerHeightBuffer = headerHeight + 10;
@@ -70,6 +67,43 @@ export default function ControlCentre() {
     }, []);
 
 
+    // **************** //
+    // Component rendering logic
+
+    const userName = sessionStorage.getItem('userName');
+    const userID = sessionStorage.getItem('userId');
+
+
+    // Check if user has created a profile previously.
+    // If not, set userCreatedProfile to false.
+
+    const [userCreatedProfile, setUserCreatedProfile] = useState(true);
+
+    useEffect(() => {
+        fetch('/api/Profiles/VenueProfiles/FindVenueProfile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userID
+            }),
+        })
+        .then(response => {
+            if (response.status === 201) {
+                setUserCreatedProfile(false);
+              }
+              return response.json();
+        })
+        .then(responseData => {
+            console.log(responseData)
+
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }, [])
+
     // User's gig data
     const [upcomingGigs, setUpcomingGigs] = useState();
     const [pastGigs, setPastGigs] = useState();
@@ -77,55 +111,27 @@ export default function ControlCentre() {
     // User's profile data
     const [userProfilePicture, setUserProfilePicture] = useState('');
 
-    // useEffect(() => {
-
-    //     fetch('/api/Gigs/RetrieveUserSpecificGigData', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //             venueName,
-    //             venueAddress,
-    //         }),
-    //     })
-    //     .then(response => response.json())
-    //     .then(responseData => {
-    //         console.log(responseData)
-    //         const gigs = responseData.gigs || [];
-
-    //         const upcomingGigs = [];
-    //         const pastGigs = [];
-
-    //         const currentDate = new Date();
+    useEffect(() => {
+        fetch('/api/Gigs/RetrieveUserSpecificGigData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userID
+            }),
+        })
+        .then(response => response.json())
+        .then(responseData => {
+            console.log(responseData)
             
-    //         gigs.forEach(gig => {
-    //             const gigDate = new Date(gig.information.dateSelected.dateStr);
-    //             const gigStartTime = new Date(gig.information.gigStartTime.hour, gig.information.gigStartTime.minute);
-    //             const gigEndTime = new Date(gigDate);
-    //             gigEndTime.setHours(gigEndTime.getHours() + parseInt(gig.information.gigDuration.hour));
-    //             gigEndTime.setMinutes(gigEndTime.getMinutes() + parseInt(gig.information.gigDuration.minute));
+            setUpcomingGigs(responseData.gigs);
 
-    //             if (gigDate > currentDate || (gigDate.getTime() === currentDate.getTime() && gigEndTime > currentDate)) {
-    //                 upcomingGigs.push(gig);
-    //             } else {
-    //                 pastGigs.push(gig);
-    //             }
-    //         });
-
-    //         // Do something with the categorized gigs (e.g., set state variables)
-    //         setUpcomingGigs(upcomingGigs);
-    //         setPastGigs(pastGigs);
-
-    //         const profile = responseData.profile;
-    //         setUserProfilePicture(profile.profilePictures[0]);
-
-
-    //     })
-    //     .catch(error => {
-    //         console.error('Error fetching data:', error);
-    //     });
-    // }, []);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }, []);
 
 
 
@@ -136,92 +142,195 @@ export default function ControlCentre() {
             <section className="controlcentre_header">
                 <h1 className="controlcentre_heading">Welcome back, {userName}.</h1>
                 <nav className="controlcentre_nav">
+                {userCreatedProfile ? (
                     <ul className="controlcentre_ul">
-                        <li className={`controlcentre_li_text ${activeNavItem === 'notification_centre' ? 'active' : ''}`}
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'notification_centre' ? 'active' : ''}`}
                         onClick={() => scrollToSection(notificationRef)}
                         >
                             Notifications
                         </li>
-                        <li className={`controlcentre_li_text ${activeNavItem === 'gig_overviews' ? 'active' : ''}`} 
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'gig_overviews' ? 'active' : ''}`} 
                         onClick={() => scrollToSection(gigOverviewsRef)}
                         >
                             Gigs
                         </li>
-                        <li className={`controlcentre_li_text ${activeNavItem === 'past_gigs' ? 'active' : ''}`}
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'past_gigs' ? 'active' : ''}`}
                         onClick={() => scrollToSection(pastGigsRef)}
                         >
                             Past Gigs 
                         </li>
-                        <li className={`controlcentre_li_text ${activeNavItem === 'quick_rating' ? 'active' : ''}`}
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'quick_rating' ? 'active' : ''}`}
                         onClick={() => scrollToSection(quickRatingRef)}
                         >
                             Ratings
                         </li>
-                        <li className={`controlcentre_li_text ${activeNavItem === 'saved_artists' ? 'active' : ''}`}
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'saved_artists' ? 'active' : ''}`}
                         onClick={() => scrollToSection(savedArtistsRef)}
                         >
                             Saved Artists
                         </li>
-                        <li className={`controlcentre_li_text ${activeNavItem === 'profile_editor' ? 'active' : ''}`}
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'profile_editor' ? 'active' : ''}`}
                         onClick={() => scrollToSection(profileEditorRef)}
                         >
                             Profile
                         </li>
                     </ul>
+                ) : (
+                    <ul className="controlcentre_ul">
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'profile_editor' ? 'active' : ''}`}
+                        onClick={() => scrollToSection(profileEditorRef)}
+                        >
+                            Profile
+                        </li>
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'notification_centre' ? 'active' : ''}`}
+                        onClick={() => scrollToSection(notificationRef)}
+                        >
+                            Notifications
+                        </li>
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'gig_overviews' ? 'active' : ''}`} 
+                        onClick={() => scrollToSection(gigOverviewsRef)}
+                        >
+                            Gigs
+                        </li>
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'past_gigs' ? 'active' : ''}`}
+                        onClick={() => scrollToSection(pastGigsRef)}
+                        >
+                            Past Gigs 
+                        </li>
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'quick_rating' ? 'active' : ''}`}
+                        onClick={() => scrollToSection(quickRatingRef)}
+                        >
+                            Ratings
+                        </li>
+                        <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'saved_artists' ? 'active' : ''}`}
+                        onClick={() => scrollToSection(savedArtistsRef)}
+                        >
+                            Saved Artists
+                        </li>
+                    </ul>
+                )}
                 </nav>
             </section>
-            <section className="controlcentre_body">
-                <div 
-                className="controlcentre_sections"
-                ref={notificationRef}
-                id="notification_centre"
-                >
-                    <NotificationCentre />
-                </div>
-                <div 
-                className="controlcentre_sections"
-                ref={gigOverviewsRef}
-                id="gig_overviews"
-                >
-                    <GigOverviews
-                    upcomingGigs={upcomingGigs}
-                    profilePicture={userProfilePicture}
-                    />
-                </div>
-                <div 
-                className="controlcentre_sections"
-                ref={pastGigsRef}
-                id="past_gigs"
-                >
-                    <PastGigs 
-                    pastGigs={pastGigs}
-                    />
-                </div>
-                <div 
-                className="controlcentre_sections"
-                ref={quickRatingRef}
-                id="quick_rating"
-                >
-                    <QuickRating 
-                    pastGigs={pastGigs}
-                    />
-                </div>
-                <div 
-                className="controlcentre_sections"
-                ref={savedArtistsRef}
-                id="saved_artists"
-                >
-                    <SavedArtists />
-                </div>
-                {/* <div 
-                className="controlcentre_sections"
-                ref={profileEditorRef}
-                id="profile_editor"
-                >
-                    <ProfileEditor 
-                    />
-                </div> */}
-            </section>
+            {userCreatedProfile ? (
+                <section className="controlcentre_body">
+                    <div 
+                        className="controlcentre_sections"
+                        ref={notificationRef}
+                        id="notification_centre"
+                    >
+                        <NotificationCentre />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={gigOverviewsRef}
+                        id="gig_overviews"
+                    >
+                        <GigOverviews
+                            upcomingGigs={upcomingGigs}
+                            profilePicture={userProfilePicture}
+                        />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={pastGigsRef}
+                        id="past_gigs"
+                    >
+                        <PastGigs 
+                            pastGigs={pastGigs}
+                        />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={quickRatingRef}
+                        id="quick_rating"
+                    >
+                        <QuickRating 
+                            pastGigs={pastGigs}
+                        />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={savedArtistsRef}
+                        id="saved_artists"
+                    >
+                        <SavedArtists />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={profileEditorRef}
+                        id="profile_editor"
+                    >
+                        <ProfileEditor 
+                        />
+                    </div>
+                </section>
+            ) : (
+                <section className="controlcentre_body">
+                    <div 
+                        className="controlcentre_sections"
+                        ref={profileEditorRef}
+                        id="profile_editor"
+                    >
+                        <ProfileEditor 
+                        />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={notificationRef}
+                        id="notification_centre"
+                    >
+                        <NotificationCentre />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={gigOverviewsRef}
+                        id="gig_overviews"
+                    >
+                        <GigOverviews
+                            upcomingGigs={upcomingGigs}
+                            profilePicture={userProfilePicture}
+                        />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={pastGigsRef}
+                        id="past_gigs"
+                    >
+                        <PastGigs 
+                            pastGigs={pastGigs}
+                        />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={quickRatingRef}
+                        id="quick_rating"
+                    >
+                        <QuickRating 
+                            pastGigs={pastGigs}
+                        />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
+                        ref={savedArtistsRef}
+                        id="saved_artists"
+                    >
+                        <SavedArtists />
+                    </div>
+                </section>
+            )}
+            
         </main>
 
         </>

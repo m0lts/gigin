@@ -1,5 +1,4 @@
-import Header from "../Sections/Header"
-import SignUpForm from "./SignUp/SignUpForm"
+import Header from "../Other/Header"
 import { Outlet } from "react-router-dom"
 import './accounts.css'
 

@@ -13,25 +13,24 @@ export default async function handler(request, response) {
     try {
         mongoClient = await (new MongoClient(uri, options)).connect();
         const db = mongoClient.db("gigin");
-        const dbCollection = db.collection("gigs");
+        const dbCollection = db.collection("venue_profiles");
 
         if (request.method === 'POST') {
             const receivedData = request.body;
             const userID = receivedData.userID;
 
             const query = { userID };
-            const userDocument = await dbCollection.findOne(query);
+            const venueProfile = await dbCollection.findOne(query);
 
-            if (userDocument) {
-                // EDIT WHEN GIGS ARE BUILT AND ENTERED INTO DATABASE
+            if (venueProfile) {
+                // EDIT WHEN PROFILES ARE BUILT AND ENTERED INTO DATABASE
                 // Extract the gigs array from the document
-                const gigsArray = userDocument.gigs || [];
-                const profileObject = userDocument.profileInfo;
+
 
                 // Send the gigs array back to the front end
-                response.json({ gigs: gigsArray, profile: profileObject });
+
             } else {
-                response.json({ gigs: [] });
+                response.status(201).json({ message: "User hasn't created a profile yet."});
             }
 
         } else {

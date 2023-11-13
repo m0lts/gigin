@@ -1,6 +1,6 @@
-import Header from "../Universal/Sections/Header"
+import Header from "../Other/Header"
 
-export default function VenueHomePage() {
+export default function ImAVenue() {
 
     const userAlias = sessionStorage.getItem('Alias');
 

@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons"
 import { Loader } from "@googlemaps/js-api-loader"
 import axios from 'axios'
-import Header from "../Universal/Sections/Header"
-import './musician_home_page.css'
+import Header from "./Other/Header"
+import './landing_page.css'
 
 
-export default function MusicianHomePage() {
+export default function LandingPage() {
 
     const [data, setData] = useState([]);
 
