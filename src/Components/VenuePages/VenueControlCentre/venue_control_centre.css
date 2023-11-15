@@ -13,7 +13,7 @@
     padding:15px 0;
     position: sticky;
     top:0;
-    z-index: 1;
+    z-index: 1000;
 }
 .controlcentre_ul {
     display: flex;
@@ -46,26 +46,32 @@
     margin-top:10px;
 }
 .controlcentre_section_header {
+    display: flex;
+    justify-content: space-between;
     padding-bottom: 10px;
 }
 .controlcentre_section_body {
-    min-height:100px;
+    min-height:200px;
     background-color: var(--off-white);
     border-radius: 10px;
     padding:25px;
     display: flex;
-    gap:25px;
     align-items: center;
-    overflow: scroll;
-}
-.controlcentre_section_body.loading {
-    justify-content: center;
+    position: relative;
 }
 
 
 /* CARDS FOR SECTIONS */
+.control_centre_horizontal_list {
+    display: flex;
+    width:100%;
+    overflow: scroll;
+    justify-content: flex-start;
+    align-items: center;
+    gap:2%;
+    padding: 10px;
+}
 .controlcentre_cards {
-    border: 1px solid var(--true-white);
     width:250px;
     height:350px;
     list-style-type: none;
@@ -78,9 +84,53 @@
     justify-content: flex-start;
     transition: all 200ms linear;
 }
+.controlcentre_cards_top {
+    height: 60%;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.controlcentre_cards_img {
+    width:100%;
+    height:60%;
+}
+.controlcentre_cards_date {
+    background-color: var(--off-black);
+    color: var(--true-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 400;
+    font-size: 1.2rem;
+    padding:5px 10px;
+    height:40%;
+}
+.controlcentre_cards_middle {
+    height: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.controlcentre_cards_bottom {
+    height: 15%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:10px;
+}
+.controlcentre_cards_bottom p {
+    font-size: 0.9rem;
+    font-weight: 300;
+}
 .controlcentre_cards:hover {
-    border: 1px solid var(--light-grey);
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3);
     transition: all 200ms linear;
+    cursor: pointer;
 }
 .controlcentre_cards_link {
     text-decoration: none;
@@ -90,13 +140,15 @@
     display: flex;
     flex-direction: column;
 }
-.controlcentre_no_gigs_card {
-    opacity: 0.3;
+.controlcentre_no_gigs {
+    width: 100%;
+    color: var(--dark-grey);
     font-weight: 300;
-    cursor: auto;
+    text-align: center;
 }
-.controlcentre_cards_img {
-    width:100%;
-    height:35%;
-    border-radius: 10px 10px 0 0;
+
+/* Notification dot */
+.notification_icon {
+    font-size: 0.5rem;
+    color: var(--gigin-orange);
 }

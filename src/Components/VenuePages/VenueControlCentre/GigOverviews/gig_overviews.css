@@ -1,0 +1,15 @@
+.build_a_gig_link {
+    text-decoration: none;
+    color: var(--true-black);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap:25px;
+}
+.build_a_gig_card_icon {
+    font-size: 1.2rem;
+}
+.build_a_gig_link h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}

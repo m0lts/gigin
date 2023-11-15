@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import Header from "../Other/Header"
-import NotificationCentre from "./VenueCCComponents/NotificationCentre";
-import GigOverviews from "./VenueCCComponents/GigOverviews";
-import PastGigs from "./VenueCCComponents/PastGigs";
-import QuickRating from "./VenueCCComponents/QuickRating";
-import ProfileEditor from "./VenueCCComponents/ProfileEditor";
-import SavedArtists from "./VenueCCComponents/SavedArtists";
+import Header from "../../Other/Header"
+import NotificationCentre from "./NotificationCentre/NotificationCentre";
+import GigOverviews from "./GigOverviews/GigOverviews";
+import PastGigs from "./PastGigs/PastGigs";
+import QuickRating from "./QuickRating/QuickRating";
+import ProfileEditor from "./ProfileEditor/ProfileEditor";
+import SavedArtists from "./SavedArtists/SavedArtists";
 import './venue_control_centre.css'
 
 
@@ -120,7 +120,22 @@ export default function VenueControlCentre() {
         })
         .then(response => response.json())
         .then(responseData => {
-            setUpcomingGigs(responseData.gigs);
+
+            const currentDateTime = new Date();
+            const pastGigs = [];
+            const upcomingGigs = [];
+
+            for (let index = 0; index < responseData.gigs.length; index++) {
+                const gigDate = new Date(responseData.gigs[index].gigDate.short + ' ' + responseData.gigs[index].gigStartTime);
+
+                if (gigDate < currentDateTime) {
+                    pastGigs.push(responseData.gigs[index]);
+                } else {
+                    upcomingGigs.push(responseData.gigs[index]);
+                }
+            }
+            setPastGigs(pastGigs);
+            setUpcomingGigs(upcomingGigs);
         })
         .catch(error => {
             console.error('Error fetching data:', error);

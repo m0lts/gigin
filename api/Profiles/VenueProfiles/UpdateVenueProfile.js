@@ -25,16 +25,6 @@ export default async function handler(request, response) {
             const existingVenueProfile = await dbCollection.findOne({ userID });
 
             if (existingVenueProfile) {
-                // Construct the update object based on the modified fields in dataReceived
-                // const updateObject = {};
-                // for (const key in dataReceived) {
-                //   // Only include fields that have been modified in the form
-                //   if (dataReceived[key] !== existingVenueProfile[key]) {
-                //     updateObject[key] = dataReceived[key];
-                //   }
-                // }
-              
-                // Update existing document with only the modified fields
                 await dbCollection.updateOne({ userID }, { $set: dataReceived });
                 response.status(201).json({ message: "Profile data updated successfully" });
               } else {

@@ -15,6 +15,7 @@
     --medium-grey:#c7c7c7;
     --dark-grey:#727272;
     --trans-grey:#efefefa0;
+    --trans-grey-dark:#252525a0;
     --true-black:#000000;
     --true-white:#ffffff;
     --off-black:#282828;
@@ -26,8 +27,8 @@
 /* COMMON CLASSES */
 /* Loading spinner */
 .loader {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid var(--gigin-orange);
+    border: 5px solid var(--gigin-orange);
+    border-top: 5px solid var(--true-white);
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -38,6 +39,28 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Loading modal */
+.loading_modal {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: var(--trans-grey-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    gap:15px;
+    border-radius: 10px;
+}
+.loading_modal_message {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--true-white);
+}
   
 /* Form error messages */
 .error_message {
@@ -45,6 +68,34 @@
     font-size: 0.7rem;
     margin-top:5px;
 }
+
+/* Common btn styling */ 
+.btn {
+    text-align: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 10px 25px;
+    position: relative;
+    background: var(--gigin-orange);
+    border-radius: 5px;
+    margin:0 5px;
+    transition: all 100ms linear;
+    color: var(--true-white);
+    border: none;
+}
+.btn:hover {
+    background-color: var(--light-grey);
+    color: var(--true-black);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    transition: all 100ms linear;
+}
+.btn:active {
+    background: var(--gigin-orange-trans);
+    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    transition: all 100ms linear;
+}
+
+
 
 
 

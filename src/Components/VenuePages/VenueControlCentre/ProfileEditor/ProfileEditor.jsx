@@ -57,8 +57,8 @@ export default function ProfileEditor() {
     }
   };
 
-  // HANDLE FORM VALUES AND SEND TO UPDATE VENUE PROFILE
 
+  // Handle form values and fillings
   const handleInputChange = (event) => {
       const { name, value } = event.target;
       if (name.startsWith('feature')) {
@@ -77,9 +77,14 @@ export default function ProfileEditor() {
         }
   }
 
+  // Handle form submission
+  const [submitting, setSubmitting] = useState(false);
+  const [submissionMessage, setSubmissionMessage] = useState('');
+
   const handleFormSubmission = async (event) => {
       event.preventDefault();
-
+      setSubmitting(true);
+      setSubmissionMessage('Updating profile...');
       try {
           const response = await fetch('/api/Profiles/VenueProfiles/UpdateVenueProfile', {
             method: 'POST',
@@ -90,26 +95,36 @@ export default function ProfileEditor() {
           });
 
           if (response.status === 200) {
-            console.log(response.message);
+            setSubmissionMessage('Successfully uploaded new profile.')
+            setTimeout(() => {
+              setSubmitting(false);
+              setSubmissionMessage('');
+            }, 2000)
           } else if (response.status === 201) {
-            console.log(response.message);
+            setSubmissionMessage('Profile updated successfully.')
+            setTimeout(() => {
+              setSubmitting(false);
+              setSubmissionMessage('');
+            }, 2000)
           } else {
-            alert('Error submitting profile.')
+            setSubmissionMessage('Error uploading profile.')
+            setTimeout(() => {
+              setSubmitting(false);
+              setSubmissionMessage('');
+            }, 2000)
           }
         } catch (error) {
           console.error('Error submitting form:', error);
         }
   }
 
-  // ON PAGE LOAD, RETRIEVE THE USER'S PROFILE DATA AND ASSIGN IT TO THE PROFILE STATE
-  // SO THAT THE USER CAN SEE WHAT THEY HAVE PREVIOUSLY ENTERED INTO THEIR PROFILE
-
-    useEffect(() => {
-      fetchUserProfile();
-    }, [])
-
-    // FETCH USER PROFILE AND UPDATE profileData WITH THE VALUES
+  // Retrieve the user's profile data (if already created a profile), and fill profileData values in with database values
+  useEffect(() => {
+    fetchUserProfile();
+  }, [])
   const fetchUserProfile = async () => {
+    setSubmitting(true);
+    setSubmissionMessage('Loading...');
     try {
       const response = await fetch('/api/Profiles/VenueProfiles/FindVenueProfile', {
         method: 'POST',
@@ -123,31 +138,43 @@ export default function ProfileEditor() {
 
       if (response.status === 200) {
         const userData = await response.json();
-
         const updatedProfileData = {
           userID: userData.venueProfile.userID,
           profileTitle: userData.venueProfile.profileTitle || '',
           profileFeatures: userData.venueProfile.profileFeatures || Array(3).fill(''),
           profileDescription: userData.venueProfile.profileDescription || '',
         };
-
         setProfileData(updatedProfileData);
-
         if (userData.venueProfile.profilePicture) {
           setPreviews(userData.venueProfile.profilePicture);
         }
+        setSubmitting(false);
+        setSubmissionMessage('');
       } else {
-        console.error('Failed to fetch user profile data:', response.statusText);
+        setSubmissionMessage('Error retrieving profile data.')
+        setTimeout(() => {
+          setSubmitting(false);
+          setSubmissionMessage('');
+        }, 2000)
       }
     } catch (error) {
       console.error('Error fetching user profile data:', error);
     }
   };
 
+
 return (
     <>
     <h1 className="controlcentre_section_header">Profile Editor</h1>
     <div className="controlcentre_section_body profile_editor">
+      {submitting && 
+      <div className='loading_modal'>
+        <div className="loader"></div>
+        <div className="loading_modal_message">
+          <p>{submissionMessage}</p>
+        </div>
+      </div>
+      }
       <div className="profile_editor_top">
         <h1>{userName}</h1>
       </div>
@@ -191,10 +218,10 @@ return (
           />
         </div>
           <div className="profile_editor_key_features profile_editor_input_cont">
-            <FontAwesomeIcon icon={faEdit} className='edit_icons' />
             {profileData.profileFeatures.map((feature, index) => (
+              <div className='profile_editor_input_cont' key={index} >
+              <FontAwesomeIcon icon={faEdit} className='edit_icons' />
               <input
-                key={index}
                 type="text"
                 name={`feature${index + 1}`}
                 id={`feature${index + 1}`}
@@ -202,6 +229,7 @@ return (
                 value={feature}
                 onChange={handleInputChange}
               />
+              </div>
             ))}
           </div>
           <div className='profile_editor_input_cont'>
@@ -214,7 +242,7 @@ return (
                 onChange={handleInputChange}
             />
           </div>
-          <button onClick={handleFormSubmission}>Save</button>
+          <button className='btn' onClick={handleFormSubmission}>Save</button>
         </form>
       </div>
     </>
