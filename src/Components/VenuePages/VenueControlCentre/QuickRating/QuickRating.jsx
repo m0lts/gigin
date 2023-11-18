@@ -19,7 +19,7 @@ export default function QuickRating({ pastGigs }) {
                     </ul>
                 ) : (
                     <div className="controlcentre_no_gigs">
-                        Your previous gigs will appear here.
+                        Your previous gigs will appear here for you to rate and review.
                     </div>
                 )}
             </>

@@ -27,7 +27,7 @@ export default function GigOverviews({ upcomingGigs, profilePicture }) {
         <>
         <div className="controlcentre_section_header">
             <h1>Gigs you've built</h1>
-            <Link to={'/build-a-gig'} className="build_a_gig_link btn">
+            <Link to={'/venue/gig-builder'} className="build_a_gig_link btn">
                 <FontAwesomeIcon icon={faPlusCircle} className="build_a_gig_card_icon" />
                 <h2>Build a Gig</h2>
             </Link>
@@ -36,11 +36,17 @@ export default function GigOverviews({ upcomingGigs, profilePicture }) {
         {upcomingGigs ? (
             <>
                 {upcomingGigs.length > 0 ? (
-                    <ul className='control_centre_horizontal_list'>
+                    <div className='control_centre_horizontal_list'>
                         {sortedUpcomingGigs.map((gig, index) => (
-                            <li key={index} className="controlcentre_cards">
+                            <Link to={`/venue/${gig._id}`} state={gig} key={index} className="controlcentre_cards">
                                 <div className="controlcentre_cards_top">
-                                    <img src={profilePicture} alt={gig.venue} className="controlcentre_cards_img" />
+                                    {profilePicture ? (
+                                        <img src={profilePicture} alt={gig.venue} className="controlcentre_cards_img" />
+                                    ) : (
+                                        <div className='loading_img'>
+                                            <div className="loader"></div>
+                                        </div>
+                                    )}
                                     <h2 className="controlcentre_cards_date">{gig.gigDate.long}</h2>
                                 </div>
                                 <div className="controlcentre_cards_middle">
@@ -52,10 +58,9 @@ export default function GigOverviews({ upcomingGigs, profilePicture }) {
                                         <FontAwesomeIcon icon={faCircle} className="notification_icon" />
                                         <p>5 musician applications.</p>
                                 </div>
-
-                            </li>
+                            </Link>
                         ))}
-                    </ul>
+                    </div>
                 ) : (
                     <div className="controlcentre_no_gigs">
                         Built gigs will appear here.

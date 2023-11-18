@@ -7,20 +7,26 @@ import VenueControlCentre from "./Components/VenuePages/VenueControlCentre/Venue
 import GigBuilder from "./Components/VenuePages/VenueControlCentre/GigBuilder/GigBuilder"
 import SignUpForm from "./Components/Accounts/SignUp/SignUpForm"
 import LogInForm from "./Components/Accounts/LogIn/LogInForm"
+import VenueGigPreview from "./Components/VenuePages/GigPreview/VenueGigPreview"
+import NotFound from "./Components/Other/NotFound"
+import VenuePage from "./Components/VenuePages/VenuePage"
 
 
 export default function App() {
   return (
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="/venue" element={<ImAVenue />} />
+        <Route path="/venue" element={<VenuePage />}>
+          <Route index element={<VenueControlCentre />} />
+          <Route path="gig-builder" element={<GigBuilder />} />
+          <Route path=":id" element={<VenueGigPreview />} />
+        </Route>
         <Route path="/account" element={<AccountsPage />} >
           <Route index element={<LogInForm />} />
           <Route path="signup" element={<SignUpForm />} />
           <Route path="forgotpassword" element={<ForgotPasswordForm />} />
         </Route>
-        <Route path="/venue-controlcentre" element={<VenueControlCentre />} />
-        <Route path="/build-a-gig" element={<GigBuilder />} />
       </Routes>
   )
 }

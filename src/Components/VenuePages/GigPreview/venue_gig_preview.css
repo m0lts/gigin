@@ -1,0 +1,16 @@
+.venue_gig_preview {
+    padding:25px 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:15px;
+}
+.venue_gig_preview ul {
+    list-style: none;
+    display: flex;
+    gap:5px;
+}
+.venue_gig_preview p {
+    text-align: center;
+}

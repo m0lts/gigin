@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { CalendarStage, GigInfoStage, ViewConfirmStage } from './GigBuilderStages'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRightLong, faArrowRight } from '@fortawesome/free-solid-svg-icons'
@@ -7,17 +7,15 @@ import './gig_builder.css'
 
 export default function GigBuilder() {
 
-    // Set up navigate
+    // Set up navigation
     const navigate = useNavigate();
 
     // State for data collected
-    const userID = sessionStorage.getItem('userId');
-    const userName = sessionStorage.getItem('userName');
-    const userAddress = sessionStorage.getItem('userAddress');
+    const outletContext = useOutletContext();
     const [gigInformation, setGigInformation] = useState({
-        userID: userID,
-        venue: userName,
-        gigAddress: userAddress,
+        userID: outletContext.userID,
+        venue: outletContext.userName,
+        gigAddress: outletContext.userAddress,
     });
 
     // State for stage outlet logic

@@ -7,6 +7,7 @@ import QuickRating from "./QuickRating/QuickRating";
 import ProfileEditor from "./ProfileEditor/ProfileEditor";
 import SavedArtists from "./SavedArtists/SavedArtists";
 import './venue_control_centre.css'
+import { useOutletContext } from "react-router-dom";
 
 
 
@@ -70,9 +71,9 @@ export default function VenueControlCentre() {
     // **************** //
     // Component rendering logic
 
-    const userName = sessionStorage.getItem('userName');
-    const userID = sessionStorage.getItem('userId');
-
+    const outletContext = useOutletContext();
+    const userID = outletContext.userID;
+    const userName = outletContext.userName;
 
     // Check if user has created a profile previously.
     // If not, set userCreatedProfile to false. Else set the user's profile picture to their picture.
@@ -108,6 +109,7 @@ export default function VenueControlCentre() {
     // User's profile data
     const [userProfilePicture, setUserProfilePicture] = useState('');
 
+    // Fetch user's gig information
     useEffect(() => {
         fetch('/api/Gigs/RetrieveUserSpecificGigData', {
             method: 'POST',
@@ -145,8 +147,6 @@ export default function VenueControlCentre() {
 
 
     return (
-        <>
-        <Header />
         <main className="controlcentre_main">
             <section className="controlcentre_header">
                 {userCreatedProfile ? (
@@ -343,10 +343,7 @@ export default function VenueControlCentre() {
                     </div>
                 </section>
             )}
-            
         </main>
-
-        </>
     )
 }
 // const userName = sessionStorage.getItem('Alias');

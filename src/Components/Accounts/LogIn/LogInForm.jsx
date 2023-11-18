@@ -36,7 +36,7 @@ export default function LogInForm() {
                 if (responseData.account.userType === 'musician') {
                     navigate('/');
                 } else if (responseData.account.userType === 'venue') {
-                    navigate('/venue-controlcentre')
+                    navigate('/venue')
                 }
                 
               } else if (response.status === 400) {

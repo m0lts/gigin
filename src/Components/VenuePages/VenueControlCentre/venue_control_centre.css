@@ -74,7 +74,8 @@
 .controlcentre_cards {
     width:250px;
     height:350px;
-    list-style-type: none;
+    text-decoration: none;
+    color: var(--off-black);
     border-radius: 10px;
     background-color: var(--true-white);
     box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
@@ -94,6 +95,13 @@
 .controlcentre_cards_img {
     width:100%;
     height:60%;
+}
+.loading_img {
+    height:60%;
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .controlcentre_cards_date {
     background-color: var(--off-black);
