@@ -112,4 +112,21 @@
     height: 90vh;
     width:85%;
     justify-items: flex-end;
+    border-radius: 25px 0 0 0;
+}
+
+
+/* custom marker */
+.mapboxgl-marker {
+    display: none; /* Hide the default marker */
+}
+.custom_marker {
+    display: block;
+    background-color: var(--gigin-orange);
+    padding:5px 10px;
+    border-radius: 25px;
+    box-shadow: 2px 2px 5px var(--medium-grey);
+    color: var(--true-white);
+    font-weight: 500;
+    font-family: var(--font-family);
 }

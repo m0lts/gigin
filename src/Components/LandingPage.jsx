@@ -1,134 +1,72 @@
-import { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons"
-import { Loader } from "@googlemaps/js-api-loader"
-import axios from 'axios'
+import mapboxgl from "mapbox-gl"
+import React, { useRef, useEffect, useState } from 'react';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import Header from "./Other/Header"
 import './landing_page.css'
+
 
 
 export default function LandingPage() {
 
     const [data, setData] = useState([]);
 
+    // Gather gig data
     useEffect(() => {
-      // Make a GET request to your backend API
-      fetch('/api/Gigs/GatherGigData')
-        .then(response => response.json())
-        .then(responseData => {
-            const geocodeAddress = async (address) => {
-                const apiKey = ""; //REPLACE WITH API KEY WHEN ENV.LOCAL SORTED
-                const addressString = `${address.addressLine1}, ${address.addressCity}, ${address.addressPostCode}, ${address.addressCountry}`;
-                const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addressString)}&key=${apiKey}`);
-                const result = await response.json();
-                if (result.status === 'OK' && result.results.length > 0) {
-                  const location = result.results[0].geometry.location;
-                  return {
-                    showName: address.showName,
-                    location: { lat: location.lat, lng: location.lng }
-                  };
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/Gigs/PrintAllGigs'); // Replace '/your-api-endpoint' with your actual API endpoint
+                if (response.ok) {
+                    const data = await response.json();
+                    setData(data);
                 } else {
-                  return null;
+                    console.error('Failed to fetch data:', response.statusText);
                 }
-              };
-      
-              // Map over the data array and geocode each address
-                Promise.all(responseData.map(geocodeAddress))
-                .then(geocodedData => {
-                // Filter out addresses that couldn't be geocoded
-                const filteredData = geocodedData.filter(location => location);
-                setData(filteredData); // Store the geocoded data in the component's state
-                })
-                .catch(error => {
-                console.error('Error geocoding addresses:', error);
-                });
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    }, []);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
 
+        fetchData();
+    }, [])
 
-// Google maps window
-// Default location: Cambridge
-    const [mapLocation, setMapLocation] = useState({
-        lat: 52.2,
-        lng: 0.1
-    })
+    // Map box
+    const mapContainer = useRef(null);
+    const map = useRef(null);
+    const [lng, setLng] = useState(0.1);
+    const [lat, setLat] = useState(52.2);
+    const [zoom, setZoom] = useState(10);
 
     useEffect(() => {
-        // Create and render the map with markers and info windows when the data changes
-        const initializeMap = (location) => {
-          const loader = new Loader({
-            apiKey: "", //REPLACE WITH API KEY WHEN ENV.LOCAL SORTED
-            version: "weekly"
-          });
-    
-          loader.load().then(async () => {
-            const { Map } = await google.maps.importLibrary("maps");
-            const map = new Map(document.getElementById("map"), {
-              center: location,
-              zoom: 10,
+        if (!map.current) {
+            map.current = new mapboxgl.Map({
+                container: mapContainer.current,
+                style: 'mapbox://styles/mapbox/streets-v12',
+                center: [lng, lat],
+                zoom: zoom
             });
-    
-            // Create InfoWindow to display showName on marker hover
-            const infoWindow = new google.maps.InfoWindow();
-    
-            // Add markers for each location in the data
-            data.forEach(item => {
-              const marker = new google.maps.Marker({
-                position: item.location,
-                map: map,
-                title: item.showName, // Display the showName as the marker title
-              });
-    
-              // Add event listener for marker hover
-              marker.addListener("mouseover", () => {
-                infoWindow.setContent(item.showName);
-                infoWindow.open(map, marker);
-              });
-    
-              // Close the info window when the mouse leaves the marker
-              marker.addListener("mouseout", () => {
-                infoWindow.close();
-              });
-            });
-          });
-        };
-    
-        if (data.length > 0) {
-          initializeMap(mapLocation);
         }
-      }, [data]);
+    
+        // Assuming `data` contains the fetched array of gig data
+        if (data && data.length > 0) {
+            data.forEach((gig) => {
+                const coordinates = gig.gigAddress.coordinates;
 
-    // Get the user's location when they click my location button TO BE USED AFTER PROTOTYPE PHASE
-    // const [location, setLocation] = useState('Cambridge');
-    // const [error, setError] = useState('');
+                // Create a marker element
+                const markerElement = document.createElement('div');
+                markerElement.className = 'custom_marker';
+                markerElement.textContent = `£${gig.gigFee}`; // Display gigFee
 
-    // const handleGetLocation = (e) => {
-    //     e.preventDefault();
-    //     if ("geolocation" in navigator) {
-    //       navigator.geolocation.getCurrentPosition(
-    //         (position) => {
-    //           const latitude = position.coords.latitude;
-    //           const longitude = position.coords.longitude;
-    //           setMapLocation({
-    //             lat: latitude,
-    //             lng: longitude
-    //           })
-    //           setLocation('Your Location');
-    //           setError('');
-    //         },
-    //         (err) => {
-    //           setError(`Error: ${err.message}`);
-    //           setLocation('');
-    //         }
-    //       );
-    //     } else {
-    //       setError('Please enable location services on your browser.');
-    //     }
-    //   };
+                // Create a marker and set its HTML content
+                const marker = new mapboxgl.Marker(markerElement)
+                    .setLngLat([coordinates[0], coordinates[1]]) // Set the marker's coordinates: [longitude, latitude]
+                    .addTo(map.current);
+                });
+        }
+    }, [data]);
 
+    mapboxgl.accessToken = '***';
 
     // Radio button logic
     const [selectedValue, setSelectedValue] = useState('upcoming');
@@ -146,7 +84,6 @@ export default function LandingPage() {
                     <h2>Find your next gig</h2>
                     <form action="" className="find_gig_form">
                         <div className="find_gig_form_location_container">
-                            {/* <label htmlFor="location" className="fing_gig_form_label">Location</label> */}
                             <input 
                             type="text"
                             id="location"
@@ -155,9 +92,6 @@ export default function LandingPage() {
                             placeholder="Location"
                             className="find_gig_form_input"
                             />
-                            {/* TO BE ADDED AFTER PROTOTYPE PHASE */}
-                            {/* <button onClick={handleGetLocation} className="location_button"><FontAwesomeIcon icon={faLocationArrow} /></button>
-                            {error && <p className="error_message">{error}</p>} */}
                         </div>
                         <div className="find_gig_form_radio_container">
                         <p className="find_gig_form_radio_question">When?</p>
@@ -190,8 +124,7 @@ export default function LandingPage() {
                     </div>
                     </form>
                 </div>
-                <div id="map" className="map_container">
-                    
+                <div ref={mapContainer} className="map_container">
                 </div>
             </main>
             

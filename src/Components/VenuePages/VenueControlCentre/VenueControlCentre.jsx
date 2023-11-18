@@ -3,9 +3,9 @@ import Header from "../../Other/Header"
 import NotificationCentre from "./NotificationCentre/NotificationCentre";
 import GigOverviews from "./GigOverviews/GigOverviews";
 import PastGigs from "./PastGigs/PastGigs";
-import QuickRating from "./QuickRating/QuickRating";
 import ProfileEditor from "./ProfileEditor/ProfileEditor";
 import SavedArtists from "./SavedArtists/SavedArtists";
+import ConfirmedGigs from "./ConfimedGigs/ConfirmedGigs";
 import './venue_control_centre.css'
 import { useOutletContext } from "react-router-dom";
 
@@ -18,7 +18,6 @@ export default function VenueControlCentre() {
     const notificationRef = useRef(null);
     const gigOverviewsRef = useRef(null);
     const pastGigsRef = useRef(null);
-    const quickRatingRef = useRef(null);
     const savedArtistsRef = useRef(null);
     const profileEditorRef = useRef(null);
 
@@ -43,7 +42,6 @@ export default function VenueControlCentre() {
           { ref: notificationRef, id: 'notification_centre' },
           { ref: gigOverviewsRef, id: 'gig_overviews' },
           { ref: pastGigsRef, id: 'past_gigs' },
-          { ref: quickRatingRef, id: 'quick_rating' },
           { ref: savedArtistsRef, id: 'saved_artists' },
           { ref: profileEditorRef, id: 'profile_editor' }
         ];
@@ -74,6 +72,7 @@ export default function VenueControlCentre() {
     const outletContext = useOutletContext();
     const userID = outletContext.userID;
     const userName = outletContext.userName;
+    
 
     // Check if user has created a profile previously.
     // If not, set userCreatedProfile to false. Else set the user's profile picture to their picture.
@@ -176,12 +175,6 @@ export default function VenueControlCentre() {
                             Past Gigs 
                         </li>
                         <li 
-                        className={`controlcentre_li_text ${activeNavItem === 'quick_rating' ? 'active' : ''}`}
-                        onClick={() => scrollToSection(quickRatingRef)}
-                        >
-                            Ratings
-                        </li>
-                        <li 
                         className={`controlcentre_li_text ${activeNavItem === 'saved_artists' ? 'active' : ''}`}
                         onClick={() => scrollToSection(savedArtistsRef)}
                         >
@@ -221,12 +214,6 @@ export default function VenueControlCentre() {
                             Past Gigs 
                         </li>
                         <li 
-                        className={`controlcentre_li_text ${activeNavItem === 'quick_rating' ? 'active' : ''}`}
-                        onClick={() => scrollToSection(quickRatingRef)}
-                        >
-                            Ratings
-                        </li>
-                        <li 
                         className={`controlcentre_li_text ${activeNavItem === 'saved_artists' ? 'active' : ''}`}
                         onClick={() => scrollToSection(savedArtistsRef)}
                         >
@@ -247,6 +234,13 @@ export default function VenueControlCentre() {
                     </div>
                     <div 
                         className="controlcentre_sections"
+                        // ref={savedArtistsRef}
+                        id="saved_artists"
+                    >
+                        <ConfirmedGigs />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
                         ref={gigOverviewsRef}
                         id="gig_overviews"
                     >
@@ -261,15 +255,6 @@ export default function VenueControlCentre() {
                         id="past_gigs"
                     >
                         <PastGigs 
-                            pastGigs={pastGigs}
-                        />
-                    </div>
-                    <div 
-                        className="controlcentre_sections"
-                        ref={quickRatingRef}
-                        id="quick_rating"
-                    >
-                        <QuickRating 
                             pastGigs={pastGigs}
                         />
                     </div>
@@ -322,15 +307,6 @@ export default function VenueControlCentre() {
                         id="past_gigs"
                     >
                         <PastGigs 
-                            pastGigs={pastGigs}
-                        />
-                    </div>
-                    <div 
-                        className="controlcentre_sections"
-                        ref={quickRatingRef}
-                        id="quick_rating"
-                    >
-                        <QuickRating 
                             pastGigs={pastGigs}
                         />
                     </div>

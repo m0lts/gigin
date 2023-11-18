@@ -5,7 +5,12 @@ export default function VenuePage() {
 
     const userID = sessionStorage.getItem('userId');
     const userName = sessionStorage.getItem('userName');
-    const userAddress = sessionStorage.getItem('userAddress');
+    const userAddress = {
+        address1: sessionStorage.getItem('userAddress1'),
+        city: sessionStorage.getItem('userCity'),
+        country: sessionStorage.getItem('userCountry'),
+        postCode: sessionStorage.getItem('userPostCode'),
+    };
 
     return (
         <>

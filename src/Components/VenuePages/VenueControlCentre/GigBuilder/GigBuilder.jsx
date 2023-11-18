@@ -77,41 +77,64 @@ export default function GigBuilder() {
         } else {
             setFormSubmitted(true);
             setSubmissionLoader(true);
+
+            // Perform geocoding to get coordinates, and then post data to database
+            const postcode = gigInformation.gigAddress.postCode; 
+
             try {
-                const response = await fetch('/api/Gigs/UploadGig.js', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(gigInformation),
-                });
-          
-                // Handle relative responses and edit modal message.
+                const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${postcode}.json?access_token=***`);
                 if (response.ok) {
-                    setSubmissionLoader(false);
-                    setSubmissionMessage('Gig successfully posted! You are being redirected...');
-                    setTimeout(() => {
-                        setFormSubmitted(false);
-                        navigate('/venue-controlcentre');
-                    }, 3000)
-                  } else if (response.status === 400) {
-                    setSubmissionLoader(false);
-                    setSubmissionMessage('You have already built a gig at this date and time. Please select a different date or time. You are being redirected...');
-                    setTimeout(() => {
-                        setFormSubmitted(false);
-                        setSubmissionMessage('');
-                    }, 5000)
-                  } else {
-                    setSubmissionLoader(false);
-                    setSubmissionMessage('Error posting gig, please try again. You are being redirected...')
-                    setTimeout(() => {
-                        setFormSubmitted(false);
-                        setSubmissionMessage('');
-                    }, 3000)
-                  }
-              } catch (error) {
-                console.error('Error submitting form:', error);
-              }
+                    const data = await response.json();
+                    if (data.features && data.features.length > 0) {
+                        const coordinates = data.features[0].center; 
+                        const updatedGigInformation = {
+                            ...gigInformation,
+                            gigAddress: {
+                                ...gigInformation.gigAddress,
+                                coordinates: coordinates,
+                            },
+                        };
+                        try {
+                            const response = await fetch('/api/Gigs/UploadGig.js', {
+                                method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(updatedGigInformation),
+                              });
+                        
+                              // Handle relative responses and edit modal message.
+                              if (response.ok) {
+                                  setSubmissionLoader(false);
+                                  setSubmissionMessage('Gig successfully posted! You are being redirected...');
+                                  setTimeout(() => {
+                                      setFormSubmitted(false);
+                                      navigate('/venue');
+                                  }, 3000)
+                                } else if (response.status === 400) {
+                                  setSubmissionLoader(false);
+                                  setSubmissionMessage('You have already built a gig at this date and time. Please select a different date or time. You are being redirected...');
+                                  setTimeout(() => {
+                                      setFormSubmitted(false);
+                                      setSubmissionMessage('');
+                                  }, 5000)
+                                } else {
+                                  setSubmissionLoader(false);
+                                  setSubmissionMessage('Error posting gig, please try again. You are being redirected...')
+                                  setTimeout(() => {
+                                      setFormSubmitted(false);
+                                      setSubmissionMessage('');
+                                  }, 3000)
+                                }
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error geocoding address:', error);
+            }
         }
     };
 

@@ -44,7 +44,10 @@ export default function VenueGigPreview() {
                 <h2>{gigData.gigStartTime}</h2>
                 <h3>{gigData.gigDuration} minutes</h3>
                 <h4>£{gigData.gigFee}</h4>
-                <h5>{gigData.gigAddress}</h5>
+                <h5>{gigData.gigAddress.address1}</h5>
+                <h5>{gigData.gigAddress.city}</h5>
+                <h5>{gigData.gigAddress.country}</h5>
+                <h5>{gigData.gigAddress.postCode}</h5>
                 <ul>
                     <li>Genres:</li>
                     {gigData.gigGenres.map((genre, index) => (

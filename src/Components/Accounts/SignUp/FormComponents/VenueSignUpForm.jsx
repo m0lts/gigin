@@ -13,11 +13,25 @@ export default function VenueSignUpForm({ signUpData, setSignUpData}) {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setVenueSignUpData({
-            ...venueSignUpData,
-            [name]: value,
-        });
-    };
+
+        // Create a copy of the existing venueSignUpData
+        const updatedVenueSignUpData = { ...venueSignUpData };
+
+        // Check if the input is part of the address fields
+        if (['address1', 'city', 'country', 'postCode'].includes(name)) {
+            // If the input is an address field, create/update the 'address' object
+            updatedVenueSignUpData.address = {
+                ...updatedVenueSignUpData.address,
+                [name]: value,
+            };
+        } else {
+            // If it's not an address field, update normally
+            updatedVenueSignUpData[name] = value;
+        }
+
+        // Set the updated data back to state
+        setVenueSignUpData(updatedVenueSignUpData);
+     };
 
     const handleNextStage = (event) => {
         event.preventDefault();
@@ -80,11 +94,32 @@ export default function VenueSignUpForm({ signUpData, setSignUpData}) {
                 {phoneError && <p className="error_message">{phoneError}</p>}
             </div>
             <div>
-                <label htmlFor="address">Address</label>
+                <label htmlFor="address1">Address Line 1</label>
                 <input 
                 type="text" 
-                id="address" 
-                name="address" 
+                id="address1" 
+                name="address1" 
+                onChange={handleInputChange}
+                />
+                <label htmlFor="city">City</label>
+                <input 
+                type="text" 
+                id="city" 
+                name="city" 
+                onChange={handleInputChange}
+                />
+                <label htmlFor="country">Country</label>
+                <input 
+                type="text" 
+                id="country" 
+                name="country" 
+                onChange={handleInputChange}
+                />
+                <label htmlFor="postCode">Post Code</label>
+                <input 
+                type="text" 
+                id="postCode" 
+                name="postCode" 
                 onChange={handleInputChange}
                 />
                 {addressError && <p className="error_message">{addressError}</p>}

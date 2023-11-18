@@ -393,12 +393,16 @@ export function ViewConfirmStage({ gigInformation, updateGigInfo }) {
   }
 
   const handleInputChange = (event) => {
-    const value = event.target.value;
-        updateGigInfo({
-            ...gigInformation,
-            gigAddress: value,
-        });
-  }
+    const { name, value } = event.target;
+
+    updateGigInfo({
+      ...gigInformation,
+      gigAddress: {
+          ...gigInformation.gigAddress,
+          [name]: value,
+      },
+  });
+  };
 
   const saveChangedAddress = (event) => {
     event.preventDefault();
@@ -425,16 +429,40 @@ export function ViewConfirmStage({ gigInformation, updateGigInfo }) {
           </ul>
           <ul className='gig_confirm_stage_right_flex'>
             <li className='gig_confirm_stage_right_venue_name'>{gigInformation.venue}</li>
-            <li className='gig_confirm_stage_right_venue_name'>{gigAddress}</li>
+            <li className='gig_confirm_stage_right_venue_name'>{gigAddress.address1}</li>
+            <li className='gig_confirm_stage_right_venue_name'>{gigAddress.city}</li>
+            <li className='gig_confirm_stage_right_venue_name'>{gigAddress.country}</li>
+            <li className='gig_confirm_stage_right_venue_name'>{gigAddress.postCode}</li>
             {changeAddress && (
               <li>
                 <form>
-                  <label htmlFor="address">Address</label>
+                  <label htmlFor="address1">Address Line 1</label>
                   <input 
-                    type="text" 
-                    id="address" 
-                    name="address" 
-                    onChange={handleInputChange}
+                  type="text" 
+                  id="address1" 
+                  name="address1" 
+                  onChange={handleInputChange}
+                  />
+                  <label htmlFor="city">City</label>
+                  <input 
+                  type="text" 
+                  id="city" 
+                  name="city" 
+                  onChange={handleInputChange}
+                  />
+                  <label htmlFor="country">Country</label>
+                  <input 
+                  type="text" 
+                  id="country" 
+                  name="country" 
+                  onChange={handleInputChange}
+                  />
+                  <label htmlFor="postCode">Post Code</label>
+                  <input 
+                  type="text" 
+                  id="postCode" 
+                  name="postCode" 
+                  onChange={handleInputChange}
                   />
                   {addressError && <p className="error_message">{addressError}</p>}
                 </form>

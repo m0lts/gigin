@@ -28,10 +28,14 @@ export default function LogInForm() {
       
             if (response.ok) {
                 const responseData = await response.json();
+
                 sessionStorage.setItem('userType', responseData.account.userType);
                 sessionStorage.setItem('userId', responseData.account._id);
                 sessionStorage.setItem('userName', responseData.account.name);
-                sessionStorage.setItem('userAddress', responseData.account.address);
+                sessionStorage.setItem('userAddress1', responseData.account.address.address1);
+                sessionStorage.setItem('userCity', responseData.account.address.city);
+                sessionStorage.setItem('userCountry', responseData.account.address.country);
+                sessionStorage.setItem('userPostCode', responseData.account.address.postCode);
 
                 if (responseData.account.userType === 'musician') {
                     navigate('/');

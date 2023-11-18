@@ -5,6 +5,7 @@ import VenueSignUpForm from "./FormComponents/VenueSignUpForm";
 import PromoterSignUpForm from "./FormComponents/PromoterSignUpForm";
 import GigGoerSignUpForm from "./FormComponents/Gig-GoerSignUpForm";
 import SignUpPasswordSection from "./FormComponents/SignUpPasswordSection";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpForm() {
 
@@ -13,6 +14,8 @@ export default function SignUpForm() {
     })
 
     const [formError, setFormError] = useState('');
+
+    const navigate = useNavigate();
 
 
     // Check if signUpData has more than just userType
@@ -35,8 +38,7 @@ export default function SignUpForm() {
                 });
           
                 if (response.ok) {
-
-                    console.log('success')
+                    navigate('/account')
                   } else if (response.status === 400) {
                     setFormError('Email already in use.');
                   } else if (response.status === 401) {
@@ -62,8 +64,7 @@ export default function SignUpForm() {
                 });
           
                 if (response.ok) {
-
-                    console.log('success')
+                  navigate('/account')
                   } else if (response.status === 400) {
                     setFormError('Email already in use.');
                   } else if (response.status === 401) {
@@ -89,8 +90,7 @@ export default function SignUpForm() {
                 });
           
                 if (response.ok) {
-
-                    console.log('success')
+                  navigate('/account')
                   } else if (response.status === 400) {
                     setFormError('Email already in use.');
                   } else if (response.status === 401) {
@@ -116,8 +116,7 @@ export default function SignUpForm() {
                 });
           
                 if (response.ok) {
-
-                    console.log('success')
+                  navigate('/account')
                   } else if (response.status === 400) {
                     setFormError('Email already in use.');
                   } else if (response.status === 401) {
