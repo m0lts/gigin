@@ -16,6 +16,7 @@ export default function VenueControlCentre() {
     // ********************* //
     // Page scroll behaviour
     const notificationRef = useRef(null);
+    const confirmedGigsRef = useRef(null);
     const gigOverviewsRef = useRef(null);
     const pastGigsRef = useRef(null);
     const savedArtistsRef = useRef(null);
@@ -40,6 +41,7 @@ export default function VenueControlCentre() {
     
         const sections = [
           { ref: notificationRef, id: 'notification_centre' },
+          { ref: confirmedGigsRef, id: 'confirmed_gigs' },
           { ref: gigOverviewsRef, id: 'gig_overviews' },
           { ref: pastGigsRef, id: 'past_gigs' },
           { ref: savedArtistsRef, id: 'saved_artists' },
@@ -163,10 +165,16 @@ export default function VenueControlCentre() {
                             Notifications
                         </li>
                         <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'confirmed_gigs' ? 'active' : ''}`} 
+                        onClick={() => scrollToSection(confirmedGigsRef)}
+                        >
+                            Confirmed Gigs
+                        </li>
+                        <li 
                         className={`controlcentre_li_text ${activeNavItem === 'gig_overviews' ? 'active' : ''}`} 
                         onClick={() => scrollToSection(gigOverviewsRef)}
                         >
-                            Gigs
+                            Built Gigs
                         </li>
                         <li 
                         className={`controlcentre_li_text ${activeNavItem === 'past_gigs' ? 'active' : ''}`}
@@ -202,10 +210,16 @@ export default function VenueControlCentre() {
                             Notifications
                         </li>
                         <li 
+                        className={`controlcentre_li_text ${activeNavItem === 'confirmed_gigs' ? 'active' : ''}`} 
+                        onClick={() => scrollToSection(confirmedGigsRef)}
+                        >
+                            Confirmed Gigs
+                        </li>
+                        <li 
                         className={`controlcentre_li_text ${activeNavItem === 'gig_overviews' ? 'active' : ''}`} 
                         onClick={() => scrollToSection(gigOverviewsRef)}
                         >
-                            Gigs
+                            Built Gigs
                         </li>
                         <li 
                         className={`controlcentre_li_text ${activeNavItem === 'past_gigs' ? 'active' : ''}`}
@@ -234,8 +248,8 @@ export default function VenueControlCentre() {
                     </div>
                     <div 
                         className="controlcentre_sections"
-                        // ref={savedArtistsRef}
-                        id="saved_artists"
+                        ref={confirmedGigsRef}
+                        id="confirmed_gigs"
                     >
                         <ConfirmedGigs />
                     </div>
@@ -293,6 +307,13 @@ export default function VenueControlCentre() {
                     </div>
                     <div 
                         className="controlcentre_sections"
+                        ref={confirmedGigsRef}
+                        id="confirmed_gigs"
+                    >
+                        <ConfirmedGigs />
+                    </div>
+                    <div 
+                        className="controlcentre_sections"
                         ref={gigOverviewsRef}
                         id="gig_overviews"
                     >
@@ -322,164 +343,3 @@ export default function VenueControlCentre() {
         </main>
     )
 }
-// const userName = sessionStorage.getItem('Alias');
-// const userType = sessionStorage.getItem('Type');
-
-
-    // const [selectedOptionText, setSelectedOptionText] = useState('Profile');
-    // const [activeLink, setActiveLink] = useState('/controlcentre');
-
-    // const handleLinkClick = (text, path) => {
-    //     setSelectedOptionText(text);
-    //     setActiveLink(path);
-    // }
-
-                {/* <div className="controlcentre_options">
-                    <h2 className="controlcentre_username">{userName}</h2>
-                        {userType === 'venue' ? (
-                            <ul className="controlcentre_list">
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/profile'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/profile' || activeLink === '/controlcentre' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Profile', '/controlcentre/profile')}
-                                    >
-                                        Profile
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/gig-builder'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/gig-builder' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Build a gig', '/controlcentre/gig-builder')}
-                                    >
-                                        Build a gig
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/gig-responses'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/gig-responses' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Gig responses', '/controlcentre/gig-responses')}
-                                    >
-                                        Gig responses
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/confirmed-gigs'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/confirmed-gigs' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Upcoming confirmed gigs', '/controlcentre/confirmed-gigs')}
-                                    >
-                                        Upcoming confirmed gigs
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/previous-gigs'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/previous-gigs' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Previous gigs', '/controlcentre/previous-gigs')}
-                                    >
-                                        Previous gigs
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/ratings'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/ratings' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Ratings', '/controlcentre/ratings')}
-                                    >
-                                        Ratings
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/saved-artists'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/saved-artists' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Saved artists', '/controlcentre/saved-artists')}
-                                    >
-                                        Saved artists
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/finances'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/finances' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Finances', '/controlcentre/finances')}
-                                    >
-                                        Finances
-                                    </Link>
-                                </li>
-                            </ul>
-                        ) : (
-                            <ul className="controlcentre_list">
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/profile'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/profile' || activeLink === '/controlcentre' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Profile', '/controlcentre/profile')}
-                                    >
-                                        Profile
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/available-dates'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/available-dates' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Available dates', '/controlcentre/available-dates')}
-                                    >
-                                        Available Dates
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/gig-applications'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/gig-applications' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Gig applications', '/controlcentre/gig-applications')}
-                                    >
-                                        Gig Applications
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/confirmed-gigs'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/confirmed-gigs' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Upcoming confirmed gigs', '/controlcentre/confirmed-gigs')}
-                                    >
-                                        Upcoming confirmed gigs
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/previous-gigs'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/previous-gigs' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Previous gigs', '/controlcentre/previous-gigs')}
-                                    >
-                                        Previous gigs
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/ratings'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/ratings' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Ratings', '/controlcentre/ratings')}
-                                    >
-                                        Ratings
-                                    </Link>
-                                </li>
-                                <li className="controlcentre_list_item">
-                                    <Link 
-                                    to={'/controlcentre/finances'} 
-                                    className={`controlcentre_link ${activeLink === '/controlcentre/finances' ? 'active' : ''}`}
-                                    onClick={() => handleLinkClick('Finances', '/controlcentre/finances')}
-                                    >
-                                        Finances
-                                    </Link>
-                                </li>
-                            </ul>
-                        )}
-                        
-                </div>
-                <div className="controlcentre_window">
-                    <Outlet />
-                </div> */}
