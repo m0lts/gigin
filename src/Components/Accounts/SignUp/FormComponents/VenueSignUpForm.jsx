@@ -3,6 +3,7 @@ import { useState } from "react";
 export default function VenueSignUpForm({ signUpData, setSignUpData}) {
 
     const [venueSignUpData, setVenueSignUpData] = useState({});
+    const [nextButtonVisible, setNextButtonVisible] = useState(true);
 
     // Errors
     const [nameError, setNameError] = useState('');
@@ -35,7 +36,7 @@ export default function VenueSignUpForm({ signUpData, setSignUpData}) {
 
     const handleNextStage = (event) => {
         event.preventDefault();
-
+        setNextButtonVisible(false);
         // Reset error messages
         setNameError('');
         setEmailError('');
@@ -63,68 +64,79 @@ export default function VenueSignUpForm({ signUpData, setSignUpData}) {
     
     return (
         <>
-            <div>
-                <label htmlFor="name">Venue Name</label>
+            <div className="accounts_form_input_cont">
+                <label htmlFor="name" className="accounts_form_label">Venue Name:</label>
                 <input 
                 type="text" 
                 id="name" 
                 name="name" 
                 onChange={handleInputChange}
+                className="accounts_form_input"
                 />
                 {nameError && <p className="error_message">{nameError}</p>}
             </div>
-            <div>
-                <label htmlFor="email">Email Address</label>
+            <div className="accounts_form_input_cont">
+                <label htmlFor="email" className="accounts_form_label">Email Address:</label>
                 <input 
                 type="text" 
                 id="email" 
                 name="email" 
                 onChange={handleInputChange}
+                className="accounts_form_input"
                 />
                 {emailError && <p className="error_message">{emailError}</p>}
             </div>
-            <div>
-                <label htmlFor="phoneNumber">Phone Number</label>
+            <div className="accounts_form_input_cont">
+                <label htmlFor="phoneNumber" className="accounts_form_label">Phone Number:</label>
                 <input 
                 type="text" 
                 id="phoneNumber" 
                 name="phoneNumber" 
                 onChange={handleInputChange}
+                className="accounts_form_input"
                 />
                 {phoneError && <p className="error_message">{phoneError}</p>}
             </div>
-            <div>
-                <label htmlFor="address1">Address Line 1</label>
+            <div className="accounts_form_input_cont">
+                <label htmlFor="address1" className="accounts_form_label">Address Line 1:</label>
                 <input 
                 type="text" 
                 id="address1" 
                 name="address1" 
                 onChange={handleInputChange}
+                className="accounts_form_input"
                 />
-                <label htmlFor="city">City</label>
+                <label htmlFor="city" className="accounts_form_label">City:</label>
                 <input 
                 type="text" 
                 id="city" 
                 name="city" 
+                className="accounts_form_input"
                 onChange={handleInputChange}
                 />
-                <label htmlFor="country">Country</label>
+                <label htmlFor="country" className="accounts_form_label">Country:</label>
                 <input 
                 type="text" 
                 id="country" 
                 name="country" 
                 onChange={handleInputChange}
+                className="accounts_form_input"
                 />
-                <label htmlFor="postCode">Post Code</label>
+                <label htmlFor="postCode" className="accounts_form_label">Post Code:</label>
                 <input 
                 type="text" 
                 id="postCode" 
                 name="postCode" 
                 onChange={handleInputChange}
+                className="accounts_form_input"
                 />
                 {addressError && <p className="error_message">{addressError}</p>}
             </div>
-            <button onClick={handleNextStage}>Next</button>
+            {nextButtonVisible && (
+                <button className="orange_buttons btn" onClick={handleNextStage} disabled={!venueSignUpData.email && !venueSignUpData.phoneNumber && !venueSignUpData.name && !venueSignUpData.postCode && true}>
+                    Next
+                </button>
+            )}        
         </>
     )
 }

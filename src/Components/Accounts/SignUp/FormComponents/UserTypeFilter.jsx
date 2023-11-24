@@ -9,7 +9,7 @@ export default function UserTypeFilter({ signUpData, setSignUpData }) {
 
     return (
         <div className="signup_page_filter_cont">
-            <p className="signup_page_filter_question">Are you a:</p>
+            <p className="signup_page_filter_question">I'm a:</p>
             <div className="signup_page_flex_cont">
                 <label htmlFor="musician" className={`signup_page_radio_labels ${signUpData.userType === 'musician' ? 'radio_clicked' : ''}`}>
                     <input 
@@ -22,7 +22,7 @@ export default function UserTypeFilter({ signUpData, setSignUpData }) {
                     // checked={userType === 'musician'} 
                     onChange={handleRadioChange} 
                     />
-                    Musician?
+                    Musician
                 </label>
                 <label htmlFor="venue" className={`signup_page_radio_labels ${signUpData.userType === 'venue' ? 'radio_clicked' : ''}`}>
                     <input 
@@ -35,7 +35,7 @@ export default function UserTypeFilter({ signUpData, setSignUpData }) {
                     // checked={userType === 'venue'} 
                     onChange={handleRadioChange} 
                     />
-                    Venue?
+                    Venue
                 </label>
                 <label htmlFor="promoter" className={`signup_page_radio_labels ${signUpData.userType === 'promoter' ? 'radio_clicked' : ''}`}>
                     <input 
@@ -48,7 +48,7 @@ export default function UserTypeFilter({ signUpData, setSignUpData }) {
                     // checked={userType === 'promoter'} 
                     onChange={handleRadioChange} 
                     />
-                    Promoter?
+                    Promoter
                 </label>
                 <label htmlFor="gig-goer" className={`signup_page_radio_labels ${signUpData.userType === 'gig-goer' ? 'radio_clicked' : ''}`}>
                     <input 
@@ -61,7 +61,7 @@ export default function UserTypeFilter({ signUpData, setSignUpData }) {
                     // checked={userType === 'gig-goer'} 
                     onChange={handleRadioChange} 
                     />
-                    Gig-goer?
+                    Gig-goer
                 </label>
             </div>
         </div>

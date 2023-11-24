@@ -167,7 +167,7 @@ export default function SignUpForm() {
                         signUpData={signUpData}
                         setSignUpData={setSignUpData}
                     />
-                    <button onClick={handleSignUp}>Sign Up</button>
+                    <button className="orange_buttons btn" onClick={handleSignUp} disabled={!signUpData.password && !signUpData.verifyPassword && true}>Sign Up</button>
                     {formError && <p className="error_message">{formError}</p>}
                 </>
             }            

@@ -1,136 +1,56 @@
-/* *** ACCOUNTS PAGES *** */
-
-
-/* Form styling */
-.gateway_page_body {
-    padding:50px;
-    width:100%;
-    min-height:100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.gateway_page_header {
-    width:150px;
-    margin-bottom:25px;
-}
-.gateway_page_logo {
-    width:100%;
-    height:auto;
-}
-.gateway_page_main {
-    background-color: var(--off-white);
-    border-radius: 25px;
-    padding:25px;
-    width:250px;
-}
-.gateway_page_title {
-    text-align: center;
-    margin-bottom:25px;
-}
-.gateway_page_message {
-    font-size: 0.7rem;
-    text-align: center;
-    margin-bottom: 25px;
-}
-.gateway_page_form {
-    display: flex;
-    flex-direction: column;
-    gap:25px;
-}
-.gateway_page_form_input {
-    width:100%;
-    height:40px;
-    padding:10px;
-    border:none;
-    border-radius: 5px;
-    font-family: var(--font-family);
-}
-.gateway_page_venue_name_input {
-    display: flex;
-    flex-direction: column;
-    gap:25px;
-}
-
-
-
-
-
-/* Sign up page specifics */
-.signup_page_radio_question {
-    font-size: 14px;
-    text-align: center;
-}
-.signup_page_radio_input div {
-    font-size: 14px;
-    margin-top:10px;
-    display: flex;
-    justify-content: space-evenly;
-}
-.signup_page_form_radio {
-    margin-right: 5px;
-    cursor: pointer;
-}
-.hidden {
-    display: none;
-}
-
-
-/* Forgot password page specifics */
-.forgot_password_message {
-    font-size: 0.8rem;
-    text-align: center;
-}
-.forgot_password_link {
-    color:var(--true-black);
-    text-decoration: none;
-}
-.forgot_password_link:hover {
-    text-decoration: underline;
-}
-
-
-/* Submission processing box */
-.submission_processing {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding:50px;
-}
-
-
-/* New layout */
 .accounts_body {
-    border:1px solid red;
     width:100%;
-    min-height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 45% 55%;
 }
 .accounts_left_side {
-    border:1px solid var(--gigin-orange);
-    width:50%;
+    background-image: url('../../assets/Interface/Logos/gigin_logo.svg');
+    background-position: center;
+    background-size: 70%;
+    width:100%;
+    position: relative;
+}
+.accounts_left_side_text {
+    position: absolute;
+    top:0;
+    left: 0;
+    width:100%;
+    height:100%;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.1); 
 }
 .accounts_right_side {
-    border:1px solid black;
-    width:50%;
+    width:100%;
+    height:100%;
+    padding:5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:25px;
+}
+.accounts_title_cont {
+    text-align: center;
 }
 .accounts_title {
     padding:15px 0;
     text-align: center;
 }
+.accounts_complementary_text {
+    font-size: 1rem;
+}
 
 
 /* Sign Up Page */
 .signup_page_filter_cont {
-    border: 1px solid red;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--off-white);
 }
 .signup_page_flex_cont {
     display: flex;
     justify-content: space-evenly;
-    padding:10px;
 }
 .signup_page_filter_question {
     text-align: center;
@@ -144,35 +64,58 @@
     text-align: center;
     font-size: 0.8rem;
     cursor: pointer;
-    padding: 10px 25px;
+    padding: 10px ;
     position: relative;
     background-color: var(--light-grey);
     border-radius: 5px;
-    margin:0 5px;
     transition: all 100ms linear;
     color: var(--off-black);
 }
 .signup_page_radio_labels:hover {
-    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    font-weight: 700;
     transition: all 100ms linear;
 }
 .signup_page_radio_labels.radio_clicked {
-    background: var(--gigin-orange);
+    background: var(--off-black);
+    font-weight: 700;
     box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
     color: var(--true-white);
     transition: all 100ms linear;
 }
-.signup_page_radio_labels.radio_clicked {
-    background: var(--gigin-orange);
-    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
-    color: var(--true-white);
-    transition: all 100ms linear;
+.coming_soon_message {
+    text-align: center;
+    margin:25px 0;
 }
-.signup_page_radio_labels.radio_clicked {
-    background: var(--gigin-orange);
-    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
-    color: var(--true-white);
-    transition: all 100ms linear;
+
+
+/* Form inputs */
+.accounts_form {
+    width:100%;
+    background-color: var(--light-grey);
+    border-radius: 5px;
+    padding:10px;
 }
+.accounts_form_input_cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap:5px;
+    margin-bottom:10px;
+}
+.accounts_form_label {
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.accounts_form_input {
+    padding:5px;
+    border:none;
+    border-radius: 5px;
+    width: 100%;
+}
+.accounts_form_input:focus {
+    outline-color: var(--gigin-orange);
+}
+
 
 

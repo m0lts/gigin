@@ -4,7 +4,9 @@ export default function LogInEmail({ logInData, setLogInData, setPasswordVisible
 
     const [nextButtonVisible, setNextButtonVisible] = useState(true);
 
-    const [emailError, setEmailError] = useState('');
+    const [emailError, setEmailError] = useState(true);
+
+    const [loading, setLoading] = useState(false);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -47,19 +49,22 @@ export default function LogInEmail({ logInData, setLogInData, setPasswordVisible
 
     return (
         <>
-            <div>
-                <label htmlFor="email">Email Address</label>
+            <div className="accounts_form_input_cont">
+                <label htmlFor="email" className="accounts_form_label">Email Address:</label>
                 <input 
                 type="text" 
                 id="email" 
                 name="email" 
                 required 
                 onChange={handleInputChange}
+                className="accounts_form_input"
                     />
                 {emailError && <p className="error_message">{emailError}</p>}
             </div>
             {nextButtonVisible && (
-                <button onClick={handleNextClick}>Next</button>
+                <button className="orange_buttons btn" onClick={handleNextClick} disabled={emailError && true}>
+                    Next
+                </button>
             )}
         </>
     )

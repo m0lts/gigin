@@ -26,25 +26,27 @@ export default function SignUpPasswordSection({ signUpData, setSignUpData }) {
 
     return (
         <>
-            <div className="gateway_page_password_input">
-                <label htmlFor="password">Password</label>
+            <div className="accounts_form_input_cont">
+                <label htmlFor="password" className="accounts_form_label">Password:</label>
                 <input 
                 type="password" 
                 id="password" 
                 name="password" 
                 required={true}
                 onChange={handleInputChange}
+                className="accounts_form_input"
                 />
                 {passwordError && <p className="error_message">{passwordError}</p>}
             </div>
-            <div className="gateway_page_verify_password_input">
-                <label htmlFor="verifyPassword">Repeat Password</label>
+            <div className="accounts_form_input_cont">
+                <label htmlFor="verifyPassword" className="accounts_form_label">Repeat Password:</label>
                 <input 
                 type="password" 
                 id="verifyPassword" 
                 name="verifyPassword" 
                 required={true}
                 onChange={handleInputChange}
+                className="accounts_form_input"
                 />
                 {verifyPasswordError && <p className="error_message">{verifyPasswordError}</p>}
             </div>

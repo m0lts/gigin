@@ -1,40 +1,12 @@
 /* BUTTONS */
-.btn {
-    font-family: var(--font-family);
-}
-
 
 /* Login Button */
 .log_in_button {
-    border:1px solid var(--off-black);
-    border-radius: 25px;
-    padding:10px;
-    background:none;
-    font-family: var(--font-family);
-    transition: all 250ms linear;
+    font-family: var(--quicksand);
 }
-.log_in_link {
-    color: var(--true-black);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap:8px;
-    font-size: 14px;
-}
-.log_in_icon {
-    font-size: 20px;
-}
-.log_in_button:hover {
-    background-color: var(--off-white) ;
-    cursor: pointer;
-    border-color: var(--true-white);
-    transition: all 250ms linear;
-}
-.log_in_button:active {
-    opacity: 0.5;
-    transition: all 50ms linear;
-}
+
+/* Sign up button */
+
 
 
 /* Im a Venue Button */

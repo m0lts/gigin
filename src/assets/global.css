@@ -1,4 +1,6 @@
 /* *** PAGE SETUP *** */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
 *,
 *::after,
 *::before {
@@ -6,10 +8,12 @@
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
+    font-family: var(--quicksand);
 }
 
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --quicksand: 'Quicksand', sans-serif;
     --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     --light-grey: #e4e4e4;
     --medium-grey:#c7c7c7;
@@ -38,6 +42,25 @@
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Logo */
+.gigin_logo {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap:5px;
+    text-decoration: none;
+    color: var(--true-black);
+}
+.logo_img {
+    width:35px;
+}
+.logo_text {
+    font-family: var(--quicksand);
+    color: var(--gigin-orange);
+    font-weight: 600;
+    font-size: 2rem;
 }
 
 /* Loading modal */
@@ -71,27 +94,52 @@
 
 /* Common btn styling */ 
 .btn {
-    text-align: center;
-    font-size: 0.8rem;
-    cursor: pointer;
-    padding: 10px 25px;
-    position: relative;
-    background: var(--gigin-orange);
-    border-radius: 5px;
-    margin:0 5px;
+    font-family: var(--quicksand);
+    border:none;
+    background-color: var(--true-white);
+    padding:5px;
+    font-size: 1rem;
     transition: all 100ms linear;
-    color: var(--true-white);
-    border: none;
 }
 .btn:hover {
-    background-color: var(--light-grey);
-    color: var(--true-black);
-    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--dark-grey);
     transition: all 100ms linear;
+    cursor: pointer;
 }
 .btn:active {
-    background: var(--gigin-orange-trans);
-    box-shadow: inset 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--gigin-orange);
+    transition: all 100ms linear;
+}
+.btn:disabled {
+    cursor: not-allowed;
+}
+.orange_buttons {
+    font-family: var(--quicksand);
+    color: var(--true-white) !important;
+    padding:5px 15px;
+    border-radius: 5px;
+    background-color: var(--gigin-orange);
+}
+.orange_buttons:hover {
+    background-color: var(--gigin-orange-trans);
+}
+.orange_buttons:disabled {
+    background-color: var(--gigin-orange-trans);
+}
+
+/* Common link styling */
+.link {
+    text-decoration: none;
+    color: var(--true-black);
+    font-size: 1rem;
+}
+.link:hover {
+    color: var(--dark-grey);
+    transition: all 100ms linear;
+    cursor: pointer;
+}
+.link:active {
+    color: var(--gigin-orange);
     transition: all 100ms linear;
 }
 

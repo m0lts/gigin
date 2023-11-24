@@ -11,32 +11,45 @@ export function LogInButton() {
     const userLoggedIn = sessionStorage.getItem('userId');
 
     const handleLogOut = () => {
+        navigate('/');
+        window.location.reload();
         sessionStorage.removeItem('userName');
         sessionStorage.removeItem('userId');
         sessionStorage.removeItem('userType');
         sessionStorage.removeItem('userAddress');
-        navigate('/');
-        window.location.reload();
+
 
     }
 
     if (userLoggedIn) {
         return (
-            <button className="log_in_button btn">
-                <Link className="log_in_link" onClick={handleLogOut}>
-                    <FontAwesomeIcon icon={faArrowRightFromBracket} size="1x" className="log_in_icon" /> Logout
+            <button className="btn">
+                <Link className="log_in_button link" onClick={handleLogOut}>
+                    {/* <FontAwesomeIcon icon={faArrowRightFromBracket} size="1x" className="log_in_icon" /> Logout */}
+                    Log Out
                 </Link>
             </button>
         )
     } else {
         return (
-            <button className="log_in_button btn">
-                <Link to="/account" className="log_in_link">
-                    <FontAwesomeIcon icon={faCircleUser} size="1x" className="log_in_icon" /> Login
+            <button className="btn">
+                <Link to="/account" className="log_in_button link">
+                    {/* <FontAwesomeIcon icon={faCircleUser} size="1x" className="log_in_icon" /> Login */}
+                    Login
                 </Link>
             </button>
         )
     }
+}
+
+export function SignUpButton() {
+    return (
+        <button className="btn">
+            <Link className="orange_buttons sign_up_button link" to="/account/signup">
+                Sign Up
+            </Link>
+        </button>
+    )
 }
 
 export function ImAVenueButton() {
@@ -69,8 +82,8 @@ export function RedirectToLogin() {
 
 export function ControlCentreLink() {
     return (
-        <button className="im_a_venue_button btn">
-            <Link to="/controlcentre" className="header_link">
+        <button className="btn">
+            <Link to="/venue" className="orange_buttons link">
                 Control Centre
             </Link>
         </button>

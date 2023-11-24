@@ -70,7 +70,7 @@ export default function LogInForm() {
                     logInData={logInData}
                     setLogInData={setLogInData}
                 />
-                <button onClick={handleLogIn}>Log In</button>
+                <button className="orange_buttons btn" onClick={handleLogIn}>Log In</button>
                 </>
             )}
             {logInError && <p className="error_message">{logInError}</p>}

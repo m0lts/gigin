@@ -6,7 +6,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Header from "./Other/Header"
 import './landing_page.css'
 
-
+// Change with env.process.MAPBOX_KEY
+mapboxgl.accessToken = 'pk.eyJ1IjoiZ2lnaW4iLCJhIjoiY2xwNDQ5bjE1MDg2dDJrcW5yOHV1Z2t6bSJ9.Sk502nZET2-W6vLvCDwSEg';
 
 export default function LandingPage() {
 
@@ -16,7 +17,7 @@ export default function LandingPage() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch('/api/Gigs/PrintAllGigs'); // Replace '/your-api-endpoint' with your actual API endpoint
+                const response = await fetch('/api/Gigs/PrintAllGigs');
                 if (response.ok) {
                     const data = await response.json();
                     setData(data);
@@ -38,7 +39,9 @@ export default function LandingPage() {
     const [lat, setLat] = useState(52.2);
     const [zoom, setZoom] = useState(10);
 
+
     useEffect(() => {
+        
         if (!map.current) {
             map.current = new mapboxgl.Map({
                 container: mapContainer.current,
@@ -66,7 +69,6 @@ export default function LandingPage() {
         }
     }, [data]);
 
-    mapboxgl.accessToken = '***';
 
     // Radio button logic
     const [selectedValue, setSelectedValue] = useState('upcoming');

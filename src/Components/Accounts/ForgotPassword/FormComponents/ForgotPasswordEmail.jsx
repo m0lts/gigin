@@ -50,19 +50,20 @@ export default function ForgotPasswordEmail({ forgotPasswordData, setForgotPassw
 
     return (
         <>
-            <div>
-                <label htmlFor="email">Email Address</label>
+            <div className="accounts_form_input_cont">
+                <label htmlFor="email" className="accounts_form_label">Email Address:</label>
                 <input 
                 type="text" 
                 id="email" 
                 name="email" 
                 required 
                 onChange={handleInputChange}
+                className="accounts_form_input"
                     />
                 {emailError && <p className="error_message">{emailError}</p>}
             </div>
             {nextButtonVisible && (
-                <button onClick={handleNextClick}>Next</button>
+                <button className="orange_buttons btn" onClick={handleNextClick}>Next</button>
             )}
         </>
     )

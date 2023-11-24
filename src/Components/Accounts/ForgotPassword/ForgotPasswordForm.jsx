@@ -56,7 +56,7 @@ export default function ForgotPasswordForm() {
                     forgotPasswordData={forgotPasswordData}
                     setForgotPasswordData={setForgotPasswordData}
                 />
-                <button onClick={handleResetPassword}>Reset Password</button>
+                <button className="orange_buttons btn" onClick={handleResetPassword}>Reset Password</button>
                 </>
             )}
             {resetPasswordError && <p className="error_message">{resetPasswordError}</p>}
