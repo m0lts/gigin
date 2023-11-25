@@ -1,4 +1,4 @@
-.musician_homepage_main {
+.musician_homepage_main_map {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -14,7 +14,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 1;
+    z-index: 100;
+}
+.find_gig_box.hide {
+    display: none;
 }
 .find_gig_form {
     display: flex;
@@ -109,10 +112,49 @@
 
 
 .map_container {
-    height: 90vh;
+    height: 95vh;
     width:85%;
     justify-items: flex-end;
-    border-radius: 25px 0 0 0;
+    border-radius: 25px 0 0 25px;
+    position: relative;
+    z-index: 1;
+    transition: 250ms linear;
+}
+.map_container.fullscreen {
+    width:100%;
+    border-radius: 0px;
+    transition: 250ms linear;
+}
+.map_fullscreen_icon {
+    position: absolute;
+    top:25px;
+    left:25px;
+    z-index: 2;
+    cursor: pointer;
+}
+.fullscreen_icon {
+    font-size: 3rem;
+}
+.fullscreen_icon:hover {
+    color:var(--medium-grey);
+}
+.toggle_list_view {
+    position: absolute;
+    bottom:25px;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    margin: 0 auto;
+    box-shadow: 5px 5px 5px var(--dark-grey);
+    z-index: 2;
+}
+.toggle_list_view_button {
+    border-radius: 5px;
+    padding:10px !important;
+    cursor: pointer;
+}
+.list_view_icon {
+    padding-left: 10px;
 }
 
 
@@ -125,8 +167,18 @@
     background-color: var(--gigin-orange);
     padding:5px 10px;
     border-radius: 25px;
-    box-shadow: 2px 2px 5px var(--medium-grey);
     color: var(--true-white);
     font-weight: 500;
-    font-family: var(--font-family);
+    font-family: var(--quicksand);
+}
+.custom_marker:hover {
+    background-color: var(--light-grey);
+    color:var(--true-black);
+    cursor: pointer;
+}
+.custom_marker_big {
+    font-weight: 700;
+    height:300px;
+    width:200px;
+    border:1px solid red;
 }
