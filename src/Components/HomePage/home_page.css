@@ -1,0 +1,26 @@
+.home_page_body {
+    position: relative;
+}
+.view_change_button {
+    position: absolute;
+    bottom:40px;
+    left: 0;
+    right:0;
+    margin: 0 auto;
+    width:fit-content;
+    z-index: 100;
+    padding:15px;
+    border: none;
+    background-color: var(--true-white);
+    border-radius: 25px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px var(--dark-grey);
+}
+.view_change_button:hover {
+    background-color: var(--gigin-orange);
+    color: var(--true-white);
+}
+.view_change_icon {
+    padding-right: 10px;
+}

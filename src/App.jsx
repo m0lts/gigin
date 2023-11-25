@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import LandingPage from "./Components/LandingPage"
+import HomePage from "./Components/HomePage/HomePage"
 import ImAVenue from "./Components/VenuePages/ImAVenue"
 import AccountsPage from "./Components/Accounts/AccountsPage"
 import ForgotPasswordForm from "./Components/Accounts/ForgotPassword/ForgotPasswordForm"
@@ -16,7 +16,7 @@ export default function App() {
   return (
       <Routes>
         <Route path="*" element={<NotFound />} />
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/venue" element={<VenuePage />}>
           <Route index element={<VenueControlCentre />} />
           <Route path="gig-builder" element={<GigBuilder />} />

@@ -1,8 +1,10 @@
-.musician_homepage_main_map {
+.map_view {
     display: flex;
     justify-content: flex-end;
     align-items: center;
 }
+
+/* Find next gig box */
 .find_gig_box {
     background-color: var(--light-grey);
     border-radius: 25px;
@@ -34,10 +36,6 @@
     height:40px;
     font-family: var(--font-family);
 }
-
-
-
-
 .find_gig_form_radio_container {
     background-color: var(--true-white);
     border-radius: 5px;
@@ -107,10 +105,7 @@
     z-index:1;
 }
 
-
-
-
-
+/* Map */
 .map_container {
     height: 95vh;
     width:85%;
@@ -138,29 +133,10 @@
 .fullscreen_icon:hover {
     color:var(--medium-grey);
 }
-.toggle_list_view {
-    position: absolute;
-    bottom:25px;
-    left: 0;
-    right: 0;
-    width: fit-content;
-    margin: 0 auto;
-    box-shadow: 5px 5px 5px var(--dark-grey);
-    z-index: 2;
-}
-.toggle_list_view_button {
-    border-radius: 5px;
-    padding:10px !important;
-    cursor: pointer;
-}
-.list_view_icon {
-    padding-left: 10px;
-}
 
-
-/* custom marker */
+/* Custom marker */
 .mapboxgl-marker {
-    display: none; /* Hide the default marker */
+    display: none;
 }
 .custom_marker {
     display: block;
@@ -172,13 +148,8 @@
     font-family: var(--quicksand);
 }
 .custom_marker:hover {
-    background-color: var(--light-grey);
-    color:var(--true-black);
+    background-color: var(--dark-grey);
+    color: var(--true-white);
     cursor: pointer;
-}
-.custom_marker_big {
-    font-weight: 700;
-    height:300px;
-    width:200px;
-    border:1px solid red;
+    transition: 150ms linear;
 }
