@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom"
 import './venue_gig_preview.css'
+import DynamicBox from "./DynamicBox";
 
 export default function VenueGigPreview() {
 
@@ -39,27 +40,18 @@ export default function VenueGigPreview() {
     return (
         <>
         {gigData ? (
-            <div className="venue_gig_preview">
-                <h1>{gigData.gigDate.long}</h1>
-                <h2>{gigData.gigStartTime}</h2>
-                <h3>{gigData.gigDuration} minutes</h3>
-                <h4>£{gigData.gigFee}</h4>
-                <h5>{gigData.gigAddress.address1}</h5>
-                <h5>{gigData.gigAddress.city}</h5>
-                <h5>{gigData.gigAddress.country}</h5>
-                <h5>{gigData.gigAddress.postCode}</h5>
-                <ul>
-                    <li>Genres:</li>
-                    {gigData.gigGenres.map((genre, index) => (
-                        <li key={index}>
-                            {genre}
-                        </li>
-                    ))}
-                </ul>
-                <p>Music Type: {gigData.gigMusicType}</p>
-                <p>Musician arrival time: {gigData.gigArrivalTime}</p>
-                <p>Extra Information: {gigData.gigExtraInformation}</p>
-            </div>
+            <>
+                <div className="venue_gig_preview">
+                    <h1>{gigData.gigDate.long}</h1>
+                    <h2>{gigData.gigStartTime}</h2>
+                    <h4>£{gigData.gigFee}</h4>
+                </div>
+                <div className="venue_gig_preview_dynamic_box">
+                    <DynamicBox
+                        gigData={gigData}
+                    />
+                </div>
+            </>
         ) : (
             <div className='loading_modal'>
                     <div className="loader"></div>
@@ -71,3 +63,4 @@ export default function VenueGigPreview() {
         </>
     )
 }
+

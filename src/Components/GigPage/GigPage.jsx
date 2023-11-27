@@ -8,9 +8,11 @@ import './gig_page.css'
 
 export default function GigPage() {
 
-    // Define gigData state
+    // Define states
     const [gigData, setGigData] = useState();
     const [dataFetched, setDataFetched] = useState(false);
+    const [gigApplicationMessage, setGigApplicationMessage] = useState('');
+    const [gigApplicationLoading, setGigApplicationLoading] = useState(false);
 
     // Get gig ID from URL
     const { id } = useParams();
@@ -72,13 +74,38 @@ export default function GigPage() {
 
 
     // Redirect to login if not logged in
-    const userLoggedIn = sessionStorage.getItem('UserID');
+    const userLoggedIn = sessionStorage.getItem('userId');
 
     const navigate = useNavigate();
 
-    const handleApplyToGig = () => {
+    const handleApplyToGig = async () => {
+        setGigApplicationLoading(true);
+        setGigApplicationMessage('');
         if (userLoggedIn) {
-
+            const payload = {
+                userID: userLoggedIn,
+                gigID: gigData._id,
+            }
+            try {
+                const response = await fetch('/api/Gigs/GigApplications.js', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                  });
+            
+                  // Handle relative responses and edit modal message.
+                  if (response.ok) {
+                    setGigApplicationLoading(false);
+                    setGigApplicationMessage('Gig application recieved.')
+                  } else if (response.status === 400) {
+                    setGigApplicationLoading(false);
+                    setGigApplicationMessage('You have already applied to this gig.')
+                  }
+            } catch (error) {
+                console.error(error);
+            }
         } else {
             sessionStorage.setItem('prevLocation', window.location.pathname);
             navigate('/account')
@@ -166,7 +193,18 @@ export default function GigPage() {
                                 {/* <div className="gig_page_booking_calendar">
                                     <MiniCalendar />
                                 </div> */}
-                                <button className="btn apply_to_gig_button" onClick={handleApplyToGig}>Apply to Gig</button>
+                                <button className="btn apply_to_gig_button" onClick={handleApplyToGig}>
+                                    {gigApplicationLoading ? (
+                                        <div className="loader"></div>
+                                    ) : (
+                                        <>Apply to Gig</>
+                                    )}
+                                </button>
+                                {gigApplicationMessage && 
+                                    <div className="gig_application_message">
+                                        {gigApplicationMessage}
+                                    </div>
+                                }
                             </div>
                         </aside>
                     </section>

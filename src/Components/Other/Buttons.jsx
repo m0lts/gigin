@@ -17,7 +17,7 @@ export function LogInButton() {
         sessionStorage.removeItem('userId');
         sessionStorage.removeItem('userType');
         sessionStorage.removeItem('userAddress');
-
+        sessionStorage.removeItem('prevLocation');
 
     }
 
@@ -81,11 +81,18 @@ export function RedirectToLogin() {
 }
 
 export function ControlCentreLink() {
+    const userType = sessionStorage.getItem('userType');
     return (
         <button className="btn">
-            <Link to="/venue" className="orange_buttons link">
-                Control Centre
-            </Link>
+            {userType === 'musician' ? (
+                <Link to="/musician" className="orange_buttons link">
+                    Control Centre
+                </Link>
+            ) : (
+                <Link to="/venue" className="orange_buttons link">
+                    Control Centre
+                </Link>
+            )}
         </button>
     )
 }

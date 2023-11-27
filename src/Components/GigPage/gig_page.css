@@ -120,3 +120,10 @@
 .apply_to_gig_button:active {
     box-shadow: inset 1px 1px 3px var(--medium-grey)  !important;
 }
+
+/* Application message */
+.gig_application_message {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}

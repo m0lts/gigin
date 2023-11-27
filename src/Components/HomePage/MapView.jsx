@@ -13,7 +13,6 @@ mapboxgl.accessToken = "pk.eyJ1IjoiZ2lnaW4iLCJhIjoiY2xwNDQ2ajFwMWRuNzJxczZqNHlvb
 export default function MapView({ gigData }) {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const markers = useRef([]);
     const [lng, setLng] = useState(0.1);
     const [lat, setLat] = useState(52.2);
     const [zoom, setZoom] = useState(10);
@@ -45,58 +44,53 @@ export default function MapView({ gigData }) {
 
     // Function to render markers
     const renderMarkers = (data) => {
-        // Remove existing markers from the map
-        markers.current.forEach(marker => marker.remove());
-        // Clear the array of markers
-        markers.current = [];
-
         data.forEach((gig) => {
-            const coordinates = gig.gigAddress.coordinates;
 
-            // Create marker element
-            const markerElement = document.createElement('div');
-            markerElement.className = 'custom_marker';
-
-            // Show gig fee by default
-            const gigFeeElement = document.createElement('p');
-            gigFeeElement.textContent = `£${gig.gigFee}`;
-            markerElement.appendChild(gigFeeElement);
-
-            // Elements to show when marker hovered over
-            const gigVenue = document.createElement('h2');
-            gigVenue.textContent = `${gig.venue}`;
-            const gigDate = document.createElement('p');
-            gigDate.textContent = `${gig.gigDate.long}`;
-            const gigStartTime = document.createElement('p');
-            gigStartTime.textContent = `${gig.gigStartTime}`;
-        
-
-            // Mouse hover additions
-            markerElement.addEventListener('mouseenter', () => {
-                markerElement.classList.add('active');
-                markerElement.removeChild(gigFeeElement);
-                markerElement.appendChild(gigVenue);
-                markerElement.appendChild(gigDate);
-                markerElement.appendChild(gigStartTime);
-            })
-            // Mouse leave subtractions
-            markerElement.addEventListener('mouseleave', () => {
-                markerElement.classList.remove('active');
-                markerElement.removeChild(gigVenue);
-                markerElement.removeChild(gigDate);
-                markerElement.removeChild(gigStartTime);
+                const coordinates = gig.gigAddress.coordinates;
+    
+                // Create marker element
+                const markerElement = document.createElement('div');
+                markerElement.className = 'custom_marker';
+    
+                // Show gig fee by default
+                const gigFeeElement = document.createElement('p');
+                gigFeeElement.textContent = `£${gig.gigFee}`;
                 markerElement.appendChild(gigFeeElement);
-            })
-            // Marker click actions
-            markerElement.addEventListener('click', () => {
-                window.location.href = `/${gig._id}`
-            })
-
-            // Render marker
-            const newMarker = new mapboxgl.Marker(markerElement)
+    
+                // Elements to show when marker hovered over
+                const gigVenue = document.createElement('h2');
+                gigVenue.textContent = `${gig.venue}`;
+                const gigDate = document.createElement('p');
+                gigDate.textContent = `${gig.gigDate.long}`;
+                const gigStartTime = document.createElement('p');
+                gigStartTime.textContent = `${gig.gigStartTime}`;
+            
+    
+                // Mouse hover additions
+                markerElement.addEventListener('mouseenter', () => {
+                    markerElement.classList.add('active');
+                    markerElement.removeChild(gigFeeElement);
+                    markerElement.appendChild(gigVenue);
+                    markerElement.appendChild(gigDate);
+                    markerElement.appendChild(gigStartTime);
+                })
+                // Mouse leave subtractions
+                markerElement.addEventListener('mouseleave', () => {
+                    markerElement.classList.remove('active');
+                    markerElement.removeChild(gigVenue);
+                    markerElement.removeChild(gigDate);
+                    markerElement.removeChild(gigStartTime);
+                    markerElement.appendChild(gigFeeElement);
+                })
+                // Marker click actions
+                markerElement.addEventListener('click', () => {
+                    window.location.href = `/${gig._id}`
+                })
+    
+                // Render marker
+                new mapboxgl.Marker(markerElement)
                     .setLngLat([coordinates[0], coordinates[1]])
                     .addTo(map.current);
-            markers.current.push(newMarker);
         });
     }
 

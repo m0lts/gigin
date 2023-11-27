@@ -17,7 +17,12 @@ export default function HomePage() {
                 const response = await fetch('/api/Gigs/PrintAllGigs');
                 if (response.ok) {
                     const data = await response.json();
-                    setData(data);
+                    const currentTime = new Date();
+                    const upcomingGigs = data.filter((gig) => {
+                        const gigDateAndTime = new Date(`${gig.gigDate.short}T${gig.gigStartTime}:00`);
+                        return gigDateAndTime > currentTime;
+                    });
+                    setData(upcomingGigs);
                 } else {
                     console.error('Failed to fetch data:', response.statusText);
                 }
