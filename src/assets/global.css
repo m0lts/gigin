@@ -30,6 +30,13 @@
 
 /* COMMON CLASSES */
 /* Loading spinner */
+.loader_cont {
+    width:100%;
+    min-height:300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .loader {
     border: 5px solid var(--gigin-orange);
     border-top: 5px solid var(--true-white);

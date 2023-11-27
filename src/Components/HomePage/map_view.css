@@ -9,8 +9,8 @@
     background-color: var(--light-grey);
     border-radius: 25px;
     padding-top:25px;
-    height:300px;
-    width:300px;
+    height:fit-content;
+    width:350px;
     position: absolute;
     left:25px;
     display: flex;
@@ -26,7 +26,7 @@
     flex-direction: column;
     gap:15px;
     margin:25px 0;
-    width:75%;
+    width:90%;
 }
 .find_gig_form_input {
     padding:10px;
@@ -34,7 +34,7 @@
     border-radius: 5px;
     width:100%;
     height:40px;
-    font-family: var(--font-family);
+    font-family: var(--quicksand);
 }
 .find_gig_form_radio_container {
     background-color: var(--true-white);
@@ -74,7 +74,7 @@
     text-align: center;
     font-size: 0.8rem;
     cursor: pointer;
-    padding: 10px 25px;
+    padding: 10px 35px;
     position: relative;
     background-color: var(--light-grey);
 }
@@ -96,6 +96,7 @@
     border-radius: 50px;
     margin-right:-25px;
     z-index:1;
+    font-weight: 600;
 }
 .radio_option_2.radio_clicked {
     background: var(--true-white);
@@ -103,6 +104,7 @@
     border-radius: 50px;
     margin-left:-25px;
     z-index:1;
+    font-weight: 600;
 }
 
 /* Map */
@@ -139,7 +141,10 @@
     display: none;
 }
 .custom_marker {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: var(--gigin-orange);
     padding:5px 10px;
     border-radius: 25px;
@@ -148,7 +153,6 @@
     font-family: var(--quicksand);
 }
 .custom_marker:hover {
-    background-color: var(--dark-grey);
     color: var(--true-white);
     cursor: pointer;
     transition: 150ms linear;

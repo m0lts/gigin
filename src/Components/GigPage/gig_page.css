@@ -1,0 +1,122 @@
+.gig_page {
+    margin:10px 2.5%;
+}
+.gig_page_subtitles {
+    font-size: 1.1rem;
+    color: var(--dark-grey);
+    margin-bottom: 10px;
+}
+.line_break {
+    margin:25px 5%;
+}
+
+/* Header */
+.gig_page_heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:10px 0;
+}
+.gig_page_heading_left {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Photo */
+.gig_page_profile_picture {
+    width:100%;
+    overflow: hidden;
+}
+.gig_page_profile_picture_img {
+    width:100%;
+    border-radius: 25px;
+}
+
+/* Main */
+.gig_page_main {
+    margin:15px 0;
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
+
+/* Profile details */
+.gig_page_details_features {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap:25px;
+    list-style: none;
+    margin:10px 0;
+}
+.dot_icon {
+    font-size: 0.25rem;
+    color: var(--medium-grey);
+}
+
+/* Gig details */
+.gig_page_details_info_flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.gig_page_details_gig_info {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.gig_page_details_info_item {
+    display: flex;
+    gap:1rem;
+    margin-bottom: 5px;
+}
+.gig_page_details_info_item strong {
+    font-weight: 600;
+}
+.gig_page_details_info_item_genre,
+.gig_page_details_info_item_type {
+    text-transform: capitalize;
+}
+.gig_page_details_gig_extra_info {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Booking area */
+.gig_page_booking_box {
+    box-shadow: 2px 2px 10px var(--medium-grey);
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.gig_page_booking_fee {
+    padding:25px 0;
+    display: flex;
+    align-items: flex-end;
+    gap:5px;
+}
+.gig_page_booking_fee p {
+    font-size: 0.8rem;
+}
+.gig_page_booking_calendar {
+    padding:0 15px;
+    height:250px;
+    overflow: hidden;
+    width:100%;
+}
+.apply_to_gig_button {
+    background-color: var(--gigin-orange) !important;
+    border-radius: 25px;
+    color: var(--true-white);
+    font-weight: 500 !important;
+    padding:10px 25px !important;
+    margin:15px 0 !important;
+}
+.apply_to_gig_button:hover {
+    background-color: var(--light-grey)  !important;
+    color: var(--true-black)  !important;
+}
+.apply_to_gig_button:active {
+    box-shadow: inset 1px 1px 3px var(--medium-grey)  !important;
+}

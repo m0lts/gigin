@@ -1,54 +1,58 @@
 import { useEffect, useState } from 'react';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import './list_view.css'
 
 export default function ListView({ gigData }) {
 
     // Get venue's profile picture
-    const [profilePictures, setProfilePictures] = useState();
+    const [gigDataIncProfile, setGigDataIncProfile] = useState([]);
 
-    const fetchProfilePicture = async (userID) => {
+    const fetchProfiles = async () => {
         try {
-            const payload = {
-                userID: userID
+            if (gigData && gigData.length > 0) {
+                const profilePromises = gigData.map(async (gig) => {
+                    try {
+                        const payload = {
+                            userID: gig.userID
+                        };
+                        const response = await fetch('/api/Profiles/VenueProfiles/FindVenueProfile.js', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(payload),
+                        });
+
+                        if (response.ok) {
+                            const responseData = await response.json();
+                            const venueProfile = responseData.venueProfile;
+                            return { ...gig, venueProfile: venueProfile };
+                        }
+                    } catch (error) {
+                        console.error('Error fetching profile picture:', error);
+                    }
+                    return gig;
+                });
+
+                const profiles = await Promise.all(profilePromises);
+                setGigDataIncProfile(profiles);
             }
-            const response = await fetch('/api/Profiles/VenueProfiles/FindVenueProfile.js', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(payload),
-            });
-      
-            if (response.ok) {
-                const responseData = await response.json();
-                const venueProfilePicture = responseData.venueProfile.profilePicture;
-                return venueProfilePicture;
-            }
-          } catch (error) {
-            console.error('Error submitting form:', error);
-          }
-        return null;
-    }
+        } catch (error) {
+            console.error('Error loading profile pictures:', error);
+        }
+    };
 
     useEffect(() => {
-        const loadProfilePictures = async () => {
-            if (gigData && gigData.length > 0) {
-                const picturePromises = gigData.map((gig) => fetchProfilePicture(gig.userID));
-                const pictures = await Promise.all(picturePromises);
-                setProfilePictures(pictures);
-            }
-        };
-
-        loadProfilePictures();
+        fetchProfiles();
     }, [gigData]);
 
     return (
         <div className="list_view">
-            {gigData && (
-                gigData.map((gig, index) => (
-                    <div key={index} className="gig_card">
-                        {profilePictures ? (
-                            <img className='gig_card_img' src={profilePictures[index]} alt="" />
+            {gigDataIncProfile.length > 0 && (
+                gigDataIncProfile.map((gig, index) => (
+                    <Link to={`/${gig._id}`} state={gig} key={index} className="gig_card">
+                        {gig.venueProfile.profilePicture ? (
+                            <img className='gig_card_img' src={gig.venueProfile.profilePicture} alt="" />
                         ) : (
                             <div className='gig_card_img'>
                                 <div className='loader'></div>
@@ -60,7 +64,7 @@ export default function ListView({ gigData }) {
                             <p className='gig_card_genres'>{gig.gigGenres[0]} {gig.gigGenres[1]}</p>
                             <p className='gig_card_date'>{gig.gigDate.short}</p>
                         </div>
-                    </div>
+                    </Link>
                 ))
             )}
         </div>

@@ -37,7 +37,11 @@ export default function LogInForm() {
                 sessionStorage.setItem('userCountry', responseData.account.address.country);
                 sessionStorage.setItem('userPostCode', responseData.account.address.postCode);
 
-                if (responseData.account.userType === 'musician') {
+                const prevLocation = sessionStorage.getItem('prevLocation');
+
+                if (prevLocation) {
+                    navigate(prevLocation);
+                } else if (responseData.account.userType === 'musician') {
                     navigate('/');
                 } else if (responseData.account.userType === 'venue') {
                     navigate('/venue')

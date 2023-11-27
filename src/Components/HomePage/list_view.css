@@ -14,6 +14,8 @@
     height: 250px;
     cursor: pointer;
     transition: all 200ms linear;
+    color: var(--true-black);
+    text-decoration: none;
 }
 .gig_card:hover > .gig_card_img {
     padding:0;
