@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { CalendarStage, GigInfoStage, ViewConfirmStage } from './GigBuilderStages'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRightLong, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import './gig_builder.css'
 
-export default function GigBuilder() {
+export default function GigBuilder({ userType, userID, userName, userAddress }) {
 
     // Set up navigation
     const navigate = useNavigate();
 
     // State for data collected
-    const outletContext = useOutletContext();
     const [gigInformation, setGigInformation] = useState({
-        userID: outletContext.userID,
-        venue: outletContext.userName,
-        gigAddress: outletContext.userAddress,
+        userID: userID,
+        venue: userName,
+        gigAddress: userAddress,
     });
 
     // State for stage outlet logic
@@ -109,7 +108,7 @@ export default function GigBuilder() {
                                   setSubmissionMessage('Gig successfully posted! You are being redirected...');
                                   setTimeout(() => {
                                       setFormSubmitted(false);
-                                      navigate('/venue');
+                                      navigate('/control-centre');
                                   }, 3000)
                                 } else if (response.status === 400) {
                                   setSubmissionLoader(false);
@@ -130,6 +129,13 @@ export default function GigBuilder() {
                             console.error(error);
                         }
                     }
+                } else {
+                    setSubmissionLoader(false);
+                    setSubmissionMessage('Error posting gig, please try again. You are being redirected...')
+                    setTimeout(() => {
+                        setFormSubmitted(false);
+                        setSubmissionMessage('');
+                    }, 3000)
                 }
                 
             } catch (error) {
@@ -147,6 +153,7 @@ export default function GigBuilder() {
 
 
     return (
+        <>
         <section className="gig_builder">
             <ul className="gig_builder_progress">
                 <li onClick={() => handlePreviousStageClick(0)} className={`gig_builder_progress_item ${buildStage === 0 ? 'active' : ''}`}>
@@ -179,15 +186,15 @@ export default function GigBuilder() {
                         <div className='gig_builder_stages_next_button'>
                             {buildStage < maxStage ? (
                                 <button 
-                                    onClick={handleNextButtonClick} 
-                                    className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
+                                onClick={handleNextButtonClick} 
+                                className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
                                 >
                                     Next <FontAwesomeIcon icon={faArrowRightLong} />
                                 </button>
                             ) : (
                                 <button 
-                                    onClick={handleNextButtonClick} 
-                                    className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
+                                onClick={handleNextButtonClick} 
+                                className={`next_button ${nextButtonAvailable === false && 'disabled'}`} 
                                 >
                                     Post gig
                                 </button>
@@ -197,5 +204,6 @@ export default function GigBuilder() {
                 )}
             </div>
         </section>
+        </>
     )
 }

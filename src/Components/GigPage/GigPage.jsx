@@ -87,22 +87,40 @@ export default function GigPage() {
                 gigID: gigData._id,
             }
             try {
-                const response = await fetch('/api/Gigs/GigApplications.js', {
+                const response = await fetch('/api/Profiles/MusicianProfiles/FindMusicianProfile.js', {
                     method: 'POST',
                     headers: {
-                      'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(payload),
-                  });
+                });
             
-                  // Handle relative responses and edit modal message.
-                  if (response.ok) {
+                // Handle relative responses and edit modal message.
+                if (response.status === 200) {
+                    try {
+                        const response = await fetch('/api/Gigs/GigApplications.js', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(payload),
+                          });
+                    
+                          // Handle relative responses and edit modal message.
+                          if (response.ok) {
+                            setGigApplicationLoading(false);
+                            setGigApplicationMessage('Gig application recieved.')
+                          } else if (response.status === 400) {
+                            setGigApplicationLoading(false);
+                            setGigApplicationMessage('You have already applied to this gig.')
+                          }
+                    } catch (error) {
+                        console.error(error);
+                    }
+                } else if (response.status === 201) {
                     setGigApplicationLoading(false);
-                    setGigApplicationMessage('Gig application recieved.')
-                  } else if (response.status === 400) {
-                    setGigApplicationLoading(false);
-                    setGigApplicationMessage('You have already applied to this gig.')
-                  }
+                    setGigApplicationMessage('You must create a profile before applying to gigs. Please visit the control centre to create your profile.')
+                }
             } catch (error) {
                 console.error(error);
             }

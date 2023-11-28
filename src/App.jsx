@@ -7,11 +7,12 @@ import VenueControlCentre from "./Components/VenuePages/VenueControlCentre/Venue
 import GigBuilder from "./Components/VenuePages/VenueControlCentre/GigBuilder/GigBuilder"
 import SignUpForm from "./Components/Accounts/SignUp/SignUpForm"
 import LogInForm from "./Components/Accounts/LogIn/LogInForm"
-import VenueGigPreview from "./Components/VenuePages/GigPreview/VenueGigPreview"
+import VenueGigPreview from "./Components/VenuePages/VenueControlCentre/GigPreview/VenueGigPreview"
 import NotFound from "./Components/Other/NotFound"
 import VenuePage from "./Components/VenuePages/VenuePage"
 import GigPage from "./Components/GigPage/GigPage"
-import MusicianControlCentre from "./Components/MusicianPages/MusicianControlCentre"
+import MusicianControlCentre from "./Components/MusicianPages/MusicianControlCentre/MusicianControlCentre"
+import MusicianPage from "./Components/MusicianPages/MusicianPage"
 
 
 export default function App() {
@@ -25,8 +26,8 @@ export default function App() {
           <Route path="gig-builder" element={<GigBuilder />} />
           <Route path=":id" element={<VenueGigPreview />} />
         </Route>
-        <Route path="/musician" element={<MusicianControlCentre />}>
-
+        <Route path="/musician" element={<MusicianPage />}>
+          <Route index element={<MusicianControlCentre />} />
         </Route>
         <Route path="/account" element={<AccountsPage />} >
           <Route index element={<LogInForm />} />

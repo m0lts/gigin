@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import Details from './Tabs/Details';
+import Applications from './Tabs/Applications';
+import Payment from './Tabs/Payment';
+import RatingsAndReviews from './Tabs/Ratings&Reviews';
 import './dynamic_box.css'
 
 export default function DynamicBox({ gigData }) {
@@ -20,36 +24,20 @@ export default function DynamicBox({ gigData }) {
             </nav>
             <div className="outlet">
                 {selectedTab === 'Gig Details' && (
-                    <>
-                        <h5>{gigData.gigAddress.address1}</h5>
-                        <h5>{gigData.gigAddress.city}</h5>
-                        <h5>{gigData.gigAddress.country}</h5>
-                        <h5>{gigData.gigAddress.postCode}</h5>
-                        <ul>
-                            <li>Genres:</li>
-                            {gigData.gigGenres.map((genre, index) => (
-                                <li key={index}>
-                                    {genre}
-                                </li>
-                            ))}
-                        </ul>
-                        <p>Music Type: {gigData.gigMusicType}</p>
-                        <p>Musician arrival time: {gigData.gigArrivalTime}</p>
-                        <p>Extra Information: {gigData.gigExtraInformation}</p>
-                    </>
+                    <Details 
+                        gigData={gigData}
+                    />
                 )}
                 {selectedTab === 'Applications' && (
-                    <>
-                        {gigData.gigApplications.map((musician, index) => (
-                            <p key={index}>{musician}</p>
-                        ))}
-                    </>
+                    <Applications 
+                        gigApplications={gigData.gigApplications}
+                    />
                 )}
                 {selectedTab === 'Payment' && (
-                    <h1>Payment content goes here</h1>
+                    <Payment />
                 )}
                 {selectedTab === 'Ratings and Reviews' && (
-                    <h1>Ratings and Reviews content goes here</h1>
+                    <RatingsAndReviews />
                 )}
             </div>
         </section>

@@ -1,0 +1,108 @@
+.profile_editor {
+    flex-direction: column;
+}
+.profile_editor_top {
+    width:100%;
+}
+.profile_editor_middle {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    width:100%;
+    gap:15px;
+}
+
+/* Image */
+.profile_editor_image_container {
+    position: relative;
+    width: 50%;
+    height:400px;
+    overflow: hidden;
+}
+.profile_editor_insert_image_label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #777;
+    cursor: pointer;
+    height:100%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:15px;
+}
+.profile_editor_insert_image_label:hover {
+    border:1px solid var(--light-grey);
+}
+.image_icon {
+    font-size: 2.5rem;
+}
+.profile_editor_preview_image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+#profilePictureInput {
+    display: none;
+}
+
+/* Title, features and description */
+#profileTitle,
+#profileDescription {
+    width:100%;
+    background-color: transparent;
+    border:none;
+    padding:10px;
+    font-family: var(--font-family);
+    border:1px solid var(--off-white);
+}
+#profileTitle {
+    font-weight: 600;
+    font-size: 1.5rem;
+    width:500px;
+}
+#profileDescription {
+    min-height:100px;
+    min-width:300px;
+}
+#feature1, 
+#feature2,
+#feature3 {
+    background-color: transparent;
+    border:none;
+    padding:10px;
+    font-family: var(--font-family);
+    border:1px solid var(--off-white);
+}
+#feature1:hover, 
+#feature2:hover,
+#feature3:hover,
+#profileTitle:hover,
+#profileDescription:hover {
+    border:1px solid var(--light-grey);
+}
+.profile_editor_key_features {
+    width:50%;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* Edit icons */
+.profile_editor_input_cont {
+    margin:10px 0;
+    position: relative;
+}
+.edit_icons {
+    position: absolute;
+    right:5px;
+    top:5px;
+    color: var(--dark-grey);
+}
+
+

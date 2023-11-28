@@ -1,25 +1,21 @@
-import { useState, useRef, useEffect } from "react";
-import Header from "../../Other/Header"
+import { useState, useEffect, useRef } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import NotificationCentre from "./NotificationCentre/NotificationCentre";
-import GigOverviews from "./GigOverviews/GigOverviews";
 import PastGigs from "./PastGigs/PastGigs";
 import ProfileEditor from "./ProfileEditor/ProfileEditor";
-import SavedArtists from "./SavedArtists/SavedArtists";
 import ConfirmedGigs from "./ConfirmedGigs/ConfirmedGigs";
-import './venue_control_centre.css'
-import { useOutletContext } from "react-router-dom";
+import SavedVenues from './SavedVenues/SavedVenues';
+import './musician_control_centre.css'
+import AppliedGigs from './AppliedGigs/AppliedGigs';
 
-
-
-export default function VenueControlCentre() {
-
+export default function MusicianControlCentre() {
     // ********************* //
     // Page scroll behaviour
     const notificationRef = useRef(null);
     const confirmedGigsRef = useRef(null);
-    const gigOverviewsRef = useRef(null);
+    const appliedGigsRef = useRef(null);
     const pastGigsRef = useRef(null);
-    const savedArtistsRef = useRef(null);
+    const savedVenuesRef = useRef(null);
     const profileEditorRef = useRef(null);
 
     const [activeNavItem, setActiveNavItem] = useState(null);
@@ -42,9 +38,9 @@ export default function VenueControlCentre() {
         const sections = [
           { ref: notificationRef, id: 'notification_centre' },
           { ref: confirmedGigsRef, id: 'confirmed_gigs' },
-          { ref: gigOverviewsRef, id: 'gig_overviews' },
+          { ref: appliedGigsRef, id: 'applied_gigs' },
           { ref: pastGigsRef, id: 'past_gigs' },
-          { ref: savedArtistsRef, id: 'saved_artists' },
+          { ref: savedVenuesRef, id: 'saved_venues' },
           { ref: profileEditorRef, id: 'profile_editor' }
         ];
     
@@ -79,8 +75,9 @@ export default function VenueControlCentre() {
     // Check if user has created a profile previously.
     // If not, set userCreatedProfile to false. Else set the user's profile picture to their picture.
     const [userCreatedProfile, setUserCreatedProfile] = useState(true);
+    const [userProfilePicture, setUserProfilePicture] = useState('');
     useEffect(() => {
-        fetch('/api/Profiles/VenueProfiles/FindVenueProfile', {
+        fetch('/api/Profiles/MusicianProfiles/FindMusicianProfile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -96,56 +93,12 @@ export default function VenueControlCentre() {
             return response.json();
         })
         .then(responseData => {
-            setUserProfilePicture(responseData.venueProfile.profilePicture);
+            setUserProfilePicture(responseData.musicianProfile.profilePicture);
         })
         .catch(error => {
             console.error('Error fetching data:', error);
         });
     }, [])
-
-    // User's gig data
-    const [upcomingGigs, setUpcomingGigs] = useState();
-    const [pastGigs, setPastGigs] = useState();
-
-    // User's profile data
-    const [userProfilePicture, setUserProfilePicture] = useState('');
-
-    // Fetch user's gig information
-    useEffect(() => {
-        fetch('/api/Gigs/RetrieveUserSpecificGigData', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userID
-            }),
-        })
-        .then(response => response.json())
-        .then(responseData => {
-
-            const currentDateTime = new Date();
-            const pastGigs = [];
-            const upcomingGigs = [];
-
-            for (let index = 0; index < responseData.gigs.length; index++) {
-                const gigDate = new Date(responseData.gigs[index].gigDate.short + ' ' + responseData.gigs[index].gigStartTime);
-
-                if (gigDate < currentDateTime) {
-                    pastGigs.push(responseData.gigs[index]);
-                } else {
-                    upcomingGigs.push(responseData.gigs[index]);
-                }
-            }
-            setPastGigs(pastGigs);
-            setUpcomingGigs(upcomingGigs);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-    }, []);
-
-
 
     return (
         <main className="controlcentre_main">
@@ -171,10 +124,10 @@ export default function VenueControlCentre() {
                             Confirmed Gigs
                         </li>
                         <li 
-                        className={`controlcentre_li_text ${activeNavItem === 'gig_overviews' ? 'active' : ''}`} 
-                        onClick={() => scrollToSection(gigOverviewsRef)}
+                        className={`controlcentre_li_text ${activeNavItem === 'applied_gigs' ? 'active' : ''}`} 
+                        onClick={() => scrollToSection(appliedGigsRef)}
                         >
-                            Built Gigs
+                            Gig Applications
                         </li>
                         <li 
                         className={`controlcentre_li_text ${activeNavItem === 'past_gigs' ? 'active' : ''}`}
@@ -183,10 +136,10 @@ export default function VenueControlCentre() {
                             Past Gigs 
                         </li>
                         <li 
-                        className={`controlcentre_li_text ${activeNavItem === 'saved_artists' ? 'active' : ''}`}
-                        onClick={() => scrollToSection(savedArtistsRef)}
+                        className={`controlcentre_li_text ${activeNavItem === 'saved_venues' ? 'active' : ''}`}
+                        onClick={() => scrollToSection(savedVenuesRef)}
                         >
-                            Saved Artists
+                            Saved Venues
                         </li>
                         <li 
                         className={`controlcentre_li_text ${activeNavItem === 'profile_editor' ? 'active' : ''}`}
@@ -216,10 +169,10 @@ export default function VenueControlCentre() {
                             Confirmed Gigs
                         </li>
                         <li 
-                        className={`controlcentre_li_text ${activeNavItem === 'gig_overviews' ? 'active' : ''}`} 
-                        onClick={() => scrollToSection(gigOverviewsRef)}
+                        className={`controlcentre_li_text ${activeNavItem === 'applied_gigs' ? 'active' : ''}`} 
+                        onClick={() => scrollToSection(appliedGigsRef)}
                         >
-                            Built Gigs
+                            Gig Applications
                         </li>
                         <li 
                         className={`controlcentre_li_text ${activeNavItem === 'past_gigs' ? 'active' : ''}`}
@@ -228,10 +181,10 @@ export default function VenueControlCentre() {
                             Past Gigs 
                         </li>
                         <li 
-                        className={`controlcentre_li_text ${activeNavItem === 'saved_artists' ? 'active' : ''}`}
-                        onClick={() => scrollToSection(savedArtistsRef)}
+                        className={`controlcentre_li_text ${activeNavItem === 'saved_venues' ? 'active' : ''}`}
+                        onClick={() => scrollToSection(savedVenuesRef)}
                         >
-                            Saved Artists
+                            Saved Venues
                         </li>
                     </ul>
                 )}
@@ -255,13 +208,10 @@ export default function VenueControlCentre() {
                     </div>
                     <div 
                         className="controlcentre_sections"
-                        ref={gigOverviewsRef}
-                        id="gig_overviews"
+                        ref={appliedGigsRef}
+                        id="applied_gigs"
                     >
-                        <GigOverviews
-                            upcomingGigs={upcomingGigs}
-                            profilePicture={userProfilePicture}
-                        />
+                        <AppliedGigs />
                     </div>
                     <div 
                         className="controlcentre_sections"
@@ -269,15 +219,14 @@ export default function VenueControlCentre() {
                         id="past_gigs"
                     >
                         <PastGigs 
-                            pastGigs={pastGigs}
                         />
                     </div>
                     <div 
                         className="controlcentre_sections"
-                        ref={savedArtistsRef}
-                        id="saved_artists"
+                        ref={savedVenuesRef}
+                        id="saved_venues"
                     >
-                        <SavedArtists />
+                        <SavedVenues />
                     </div>
                     <div 
                         className="controlcentre_sections"
@@ -314,13 +263,10 @@ export default function VenueControlCentre() {
                     </div>
                     <div 
                         className="controlcentre_sections"
-                        ref={gigOverviewsRef}
-                        id="gig_overviews"
+                        ref={appliedGigsRef}
+                        id="applied_gigs"
                     >
-                        <GigOverviews
-                            upcomingGigs={upcomingGigs}
-                            profilePicture={userProfilePicture}
-                        />
+                        <AppliedGigs />
                     </div>
                     <div 
                         className="controlcentre_sections"
@@ -328,15 +274,14 @@ export default function VenueControlCentre() {
                         id="past_gigs"
                     >
                         <PastGigs 
-                            pastGigs={pastGigs}
                         />
                     </div>
                     <div 
                         className="controlcentre_sections"
-                        ref={savedArtistsRef}
-                        id="saved_artists"
+                        ref={savedVenuesRef}
+                        id="saved_venues"
                     >
-                        <SavedArtists />
+                        <SavedVenues />
                     </div>
                 </section>
             )}

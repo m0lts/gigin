@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom"
 import './venue_gig_preview.css'
-import DynamicBox from "./DynamicBox";
+import DynamicBox from "./DynamicBox/DynamicBox";
 
 export default function VenueGigPreview() {
 
