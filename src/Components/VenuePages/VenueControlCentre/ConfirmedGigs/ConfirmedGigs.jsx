@@ -1,8 +1,7 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
-export default function ConfirmedGigs() {
-
-    const [confirmedGigs, setConfirmedGigs] = useState([]);
+export default function ConfirmedGigs({ confirmedGigs }) {
 
     return (
         <>
@@ -11,16 +10,22 @@ export default function ConfirmedGigs() {
             {confirmedGigs ? (
                 <>
                 {confirmedGigs.length > 0 ? (
-                    <ul className="control_centre_horizontal_list">
+                    <div className='control_centre_horizontal_list'>
                         {confirmedGigs.map((gig, index) => (
-                            <li key={index} className="controlcentre_cards">
-                                <h2>{gig.gigDate.long}</h2>
-                                <p>{gig.gigStartTime}</p>
-                                <p>{gig.gigDuration}minutes</p>
-                                <p>{gig.gigFee}</p>
-                            </li>
+                            <Link to={`/venue/${gig._id}`} state={gig} key={index} className="controlcentre_cards">
+                                <ul>
+                                    {confirmedGigs.map((gig, index) => (
+                                        <li key={index} className="controlcentre_cards">
+                                            <h2>{gig.gigDate.long}</h2>
+                                            <p>{gig.gigStartTime}</p>
+                                            <p>{gig.gigDuration}minutes</p>
+                                            <p>{gig.gigFee}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </Link>
                         ))}
-                    </ul>
+                    </div>
                 ) : (
                     <div className="controlcentre_no_gigs">
                         Your confirmed gigs will appear here.

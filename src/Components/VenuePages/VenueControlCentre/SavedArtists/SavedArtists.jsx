@@ -1,5 +1,7 @@
 import { useState } from "react"
 
+
+// Print saved artists here from venue profile
 export default function SavedArtists() {
 
     const [savedArtists, setSavedArtists] = useState([]);

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import './applications.css'
 
-export default function Applications({ gigApplications }) {
+export default function Applications({ gigApplications, gigID, setSelectedTab, confirmedMusician, venueID }) {
     const [applyersProfiles, setApplyersProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [buttonTexts, setButtonTexts] = useState([]);
 
     useEffect(() => {
         const fetchProfiles = async () => {
@@ -32,6 +33,95 @@ export default function Applications({ gigApplications }) {
         fetchProfiles();
     }, []);
 
+    // Accept musician application
+    const handleAccept = async (musicianID) => {
+        const payload = {
+            gigID: gigID,
+            musicianID: musicianID,
+        }
+        try {
+            const response = await fetch('/api/Applications/AcceptGigApplication.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                });
+        
+                // Handle relative responses and edit modal message.
+                if (response.ok) {
+                    setSelectedTab('Payment');
+                } else if (response.status === 400) {
+                
+                }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Decline musician application
+    const handleDecline = async (musicianID) => {
+        const payload = {
+            gigID: gigID,
+            musicianID: musicianID,
+        }
+        try {
+            const response = await fetch('/api/Applications/DeclineGigApplication.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                });
+
+                if (response.ok) {
+                    const updatedProfiles = applyersProfiles.filter(profile => profile.musicianProfile.userID !== musicianID);
+                    setApplyersProfiles(updatedProfiles);
+                }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Handle save artist
+    const handleSaveArtist = async (musicianID, index) => {
+        const payload = {
+            venueID: venueID,
+            musicianID: musicianID,
+        }
+        try {
+            const response = await fetch('/api/Profiles/VenueProfiles/SaveMusician.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                });
+
+                if (response.status === 200) {
+                    const updatedButtonTexts = [...buttonTexts];
+                    updatedButtonTexts[index] = 'Artist Saved';
+                    setButtonTexts(updatedButtonTexts);
+                } else if (response.status === 201) {
+                    const updatedButtonTexts = [...buttonTexts];
+                    updatedButtonTexts[index] = 'Artist already saved.';
+                    setButtonTexts(updatedButtonTexts);
+                }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        if (applyersProfiles.length > 0) {
+            const initialTexts = Array(applyersProfiles.length).fill('Save Artist');
+            setButtonTexts(initialTexts);
+        }
+    }, [applyersProfiles]);
+
+
     return (
         <>
             {loading ? (
@@ -51,10 +141,14 @@ export default function Applications({ gigApplications }) {
                                     </div>
                                 </div>
                                 <div className="action_buttons">
-                                    <button className="accept">Accept</button>
-                                    <button className="decline">Decline</button>
+                                    {!confirmedMusician && (
+                                        <>
+                                            <button className="accept" onClick={() => handleAccept(musicianProfile.musicianProfile.userID)}>Accept</button>
+                                            <button className="decline" onClick={() => handleDecline(musicianProfile.musicianProfile.userID)}>Decline</button>
+                                        </>
+                                    )}
+                                    <button className={`save_artist ${index}`} onClick={() => handleSaveArtist(musicianProfile.musicianProfile.userID, index)}>{buttonTexts[index]}</button>
                                 </div>
-                                {/* ... and other profile information */}
                             </li>
                         ))}
                     </ul>

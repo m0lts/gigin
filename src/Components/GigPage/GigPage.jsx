@@ -98,7 +98,7 @@ export default function GigPage() {
                 // Handle relative responses and edit modal message.
                 if (response.status === 200) {
                     try {
-                        const response = await fetch('/api/Gigs/GigApplications.js', {
+                        const response = await fetch('/api/Applications/GigApplications.js', {
                             method: 'POST',
                             headers: {
                               'Content-Type': 'application/json',

@@ -106,6 +106,7 @@ export default function VenueControlCentre() {
     // User's gig data
     const [upcomingGigs, setUpcomingGigs] = useState();
     const [pastGigs, setPastGigs] = useState();
+    const [confirmedGigs, setConfirmedGigs] = useState();
 
     // User's profile data
     const [userProfilePicture, setUserProfilePicture] = useState('');
@@ -127,16 +128,20 @@ export default function VenueControlCentre() {
             const currentDateTime = new Date();
             const pastGigs = [];
             const upcomingGigs = [];
+            const confirmedGigs = [];
 
             for (let index = 0; index < responseData.gigs.length; index++) {
                 const gigDate = new Date(responseData.gigs[index].gigDate.short + ' ' + responseData.gigs[index].gigStartTime);
 
-                if (gigDate < currentDateTime) {
+                if (responseData.gigs[index].confirmedMusician) {
+                    confirmedGigs.push(responseData.gigs[index])
+                } else if (gigDate < currentDateTime) {
                     pastGigs.push(responseData.gigs[index]);
                 } else {
                     upcomingGigs.push(responseData.gigs[index]);
                 }
             }
+            setConfirmedGigs(confirmedGigs);
             setPastGigs(pastGigs);
             setUpcomingGigs(upcomingGigs);
         })
@@ -251,7 +256,9 @@ export default function VenueControlCentre() {
                         ref={confirmedGigsRef}
                         id="confirmed_gigs"
                     >
-                        <ConfirmedGigs />
+                        <ConfirmedGigs
+                            confirmedGigs={confirmedGigs}
+                        />
                     </div>
                     <div 
                         className="controlcentre_sections"

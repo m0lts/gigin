@@ -61,3 +61,21 @@
 .application_card .action_buttons .decline {
     background-color: red;
 }
+
+/* Confirmed Musicians page */
+.contact, .save_artist {
+    border:none;
+    background-color: var(--gigin-orange);
+    padding: 5px 15px;
+    color: var(--true-white);
+    border-radius: 5px;
+    transition: all 200ms linear;
+}
+.contact:hover, .save_artist:hover {
+    box-shadow: 2px 2px 10px var(--medium-grey);
+    cursor: pointer;
+    transition: all 200ms linear;
+}
+.contact:active, .save_artist:active {
+    opacity: 0.8;
+}
