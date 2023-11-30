@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import './applications.css';
+import './musician_profiles.css'
 
-export default function ConfirmedMusician({ confirmedMusician }) {
+export default function ConfirmedMusician({ confirmedMusician, venueID }) {
 
     const [musicianProfile, setMusicianProfile] = useState();
     const [loading, setLoading] = useState(true);
+    const [showMusicianProfile, setShowMusicianProfile] = useState(false);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -54,6 +55,48 @@ export default function ConfirmedMusician({ confirmedMusician }) {
         }
     }
 
+    // Handle save artist
+    const handleSaveArtist = async (musicianID) => {
+        const payload = {
+            venueID: venueID,
+            musicianID: musicianID,
+        }
+        try {
+            const response = await fetch('/api/Profiles/VenueProfiles/SaveMusician.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                });
+
+                if (response.status === 200) {
+                    const saveButton = document.querySelector('.save_artist');
+                    saveButton.textContent = 'Artist Saved'
+                } else if (response.status === 201) {
+                    const saveButton = document.querySelector('.save_artist');
+                    saveButton.textContent = 'Artist Already Saved'
+                }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Show musician's full profile
+    const handleShowMusicianProfile = () => {
+        const applicationCard = document.querySelector('.application_card');
+        if (!showMusicianProfile) {
+            setShowMusicianProfile(true);
+            applicationCard.style.height = '500px';
+            applicationCard.classList.add('full')
+        } else {
+            setShowMusicianProfile(false);
+            applicationCard.style.height = '150px';
+            applicationCard.classList.remove('full')
+        }
+    }
+
     return (
         <>
             {loading ? (
@@ -61,19 +104,40 @@ export default function ConfirmedMusician({ confirmedMusician }) {
             ) : (
                 musicianProfile ? (
                     <ul className="applications">
-                        <li className="application_card">
-                            <div className="user_details">
-                                <figure className="img_cont">
-                                    <img src={musicianProfile.musicianProfile.profilePicture} alt={musicianProfile.musicianProfile.userName} />
-                                </figure>
-                                <div className="text_cont">
-                                    <h2>{musicianProfile.musicianProfile.userName}</h2>
-                                    <p>{musicianProfile.musicianProfile.profileTitle}</p>
-                                </div>
-                            </div>
-                            <div className="contact_button">
-                                <button className="contact" onClick={() => handleContactMusician(musicianProfile.musicianProfile.userID)}>Contact Musician</button>
-                            </div>
+                        <li className="application_card" onClick={handleShowMusicianProfile}>
+                            {showMusicianProfile ? (
+                                <>
+                                    <div className="user_details_full">
+                                        <h1>{musicianProfile.musicianProfile.userName}</h1>
+                                        <figure className="img_cont_full">
+                                            <img src={musicianProfile.musicianProfile.profilePicture} alt={musicianProfile.musicianProfile.userName} />
+                                        </figure>
+                                        <div className="text_cont_full">
+                                            <p>{musicianProfile.musicianProfile.profileTitle}</p>
+                                        </div>
+                                    </div>
+                                    <div className="action_buttons_full">
+                                        <button className="contact" onClick={() => handleContactMusician(musicianProfile.musicianProfile.userID)}>Contact Musician</button>
+                                        <button className={`save_artist`} onClick={() => handleSaveArtist(musicianProfile.musicianProfile.userID)}>Save Artist</button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="user_details">
+                                        <figure className="img_cont">
+                                            <img src={musicianProfile.musicianProfile.profilePicture} alt={musicianProfile.musicianProfile.userName} />
+                                        </figure>
+                                        <div className="text_cont">
+                                            <h2>{musicianProfile.musicianProfile.userName}</h2>
+                                            <p>{musicianProfile.musicianProfile.profileTitle}</p>
+                                        </div>
+                                    </div>
+                                    <div className="action_buttons">
+                                        <button className="contact" onClick={() => handleContactMusician(musicianProfile.musicianProfile.userID)}>Contact Musician</button>
+                                        <button className={`save_artist`} onClick={() => handleSaveArtist(musicianProfile.musicianProfile.userID)}>Save Artist</button>
+                                    </div>
+                                </>
+                            )}
                         </li>
                     </ul>
                 ) : (

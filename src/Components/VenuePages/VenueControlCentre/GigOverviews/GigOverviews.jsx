@@ -56,10 +56,8 @@ export default function GigOverviews({ upcomingGigs, profilePicture }) {
                                 </div>
                                 <div className="controlcentre_cards_bottom">
                                         <FontAwesomeIcon icon={faCircle} className="notification_icon" />
-                                        {gig.gigApplications.length > 1 ? (
+                                        {gig.gigApplications ? (
                                             <p>{gig.gigApplications.length} musician applications.</p>
-                                        ) : gig.gigApplications.length === 1 ? (
-                                            <p>{gig.gigApplications.length} musician application.</p>
                                         ) : (
                                             <p>0 musician applications.</p>
                                         )}

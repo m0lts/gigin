@@ -22,7 +22,10 @@ export default function HomePage() {
                         const gigDateAndTime = new Date(`${gig.gigDate.short}T${gig.gigStartTime}:00`);
                         return gigDateAndTime > currentTime;
                     });
-                    setData(upcomingGigs);
+                    const availableGigs = upcomingGigs.filter((gig) => {
+                        return !gig.confirmedMusician
+                    })
+                    setData(availableGigs);
                 } else {
                     console.error('Failed to fetch data:', response.statusText);
                 }

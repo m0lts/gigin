@@ -16,6 +16,12 @@
     background-color: var(--off-white);
     border-radius: 15px;
     box-shadow: 2px 2px 10px var(--light-grey);
+    cursor: pointer;
+    transition: all 200ms linear;
+    overflow: hidden;
+}
+.application_card:hover {
+    background-color: var(--light-grey);
 }
 .user_details {
     display: flex;
@@ -79,3 +85,6 @@
 .contact:active, .save_artist:active {
     opacity: 0.8;
 }
+
+/* Full musician profile */
+

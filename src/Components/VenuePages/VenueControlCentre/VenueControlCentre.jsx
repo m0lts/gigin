@@ -79,6 +79,10 @@ export default function VenueControlCentre() {
     // Check if user has created a profile previously.
     // If not, set userCreatedProfile to false. Else set the user's profile picture to their picture.
     const [userCreatedProfile, setUserCreatedProfile] = useState(true);
+    const [userProfilePicture, setUserProfilePicture] = useState('');
+    const [userProfileData, setUserProfileData] = useState();
+    const [userSavedArtists, setUserSavedArtists] = useState();
+
     useEffect(() => {
         fetch('/api/Profiles/VenueProfiles/FindVenueProfile', {
             method: 'POST',
@@ -96,6 +100,8 @@ export default function VenueControlCentre() {
             return response.json();
         })
         .then(responseData => {
+            setUserProfileData(responseData.venueProfile);
+            setUserSavedArtists(responseData.venueProfile.savedArtists);
             setUserProfilePicture(responseData.venueProfile.profilePicture);
         })
         .catch(error => {
@@ -108,8 +114,7 @@ export default function VenueControlCentre() {
     const [pastGigs, setPastGigs] = useState();
     const [confirmedGigs, setConfirmedGigs] = useState();
 
-    // User's profile data
-    const [userProfilePicture, setUserProfilePicture] = useState('');
+
 
     // Fetch user's gig information
     useEffect(() => {
@@ -133,10 +138,10 @@ export default function VenueControlCentre() {
             for (let index = 0; index < responseData.gigs.length; index++) {
                 const gigDate = new Date(responseData.gigs[index].gigDate.short + ' ' + responseData.gigs[index].gigStartTime);
 
-                if (responseData.gigs[index].confirmedMusician) {
-                    confirmedGigs.push(responseData.gigs[index])
-                } else if (gigDate < currentDateTime) {
+                if (gigDate < currentDateTime) {
                     pastGigs.push(responseData.gigs[index]);
+                } else if (responseData.gigs[index].confirmedMusician) {
+                    confirmedGigs.push(responseData.gigs[index])
                 } else {
                     upcomingGigs.push(responseData.gigs[index]);
                 }
@@ -149,7 +154,6 @@ export default function VenueControlCentre() {
             console.error('Error fetching data:', error);
         });
     }, []);
-
 
 
     return (
@@ -284,7 +288,10 @@ export default function VenueControlCentre() {
                         ref={savedArtistsRef}
                         id="saved_artists"
                     >
-                        <SavedArtists />
+                        <SavedArtists
+                            savedArtists={userSavedArtists}
+                            venueID={userID}
+                        />
                     </div>
                     <div 
                         className="controlcentre_sections"
@@ -317,7 +324,9 @@ export default function VenueControlCentre() {
                         ref={confirmedGigsRef}
                         id="confirmed_gigs"
                     >
-                        <ConfirmedGigs />
+                        <ConfirmedGigs
+                            confirmedGigs={confirmedGigs}
+                        />
                     </div>
                     <div 
                         className="controlcentre_sections"
@@ -343,7 +352,10 @@ export default function VenueControlCentre() {
                         ref={savedArtistsRef}
                         id="saved_artists"
                     >
-                        <SavedArtists />
+                        <SavedArtists
+                            savedArtists={userSavedArtists}
+                            venueID={userID}
+                        />
                     </div>
                 </section>
             )}

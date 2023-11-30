@@ -13,16 +13,12 @@ export default function ConfirmedGigs({ confirmedGigs }) {
                     <div className='control_centre_horizontal_list'>
                         {confirmedGigs.map((gig, index) => (
                             <Link to={`/venue/${gig._id}`} state={gig} key={index} className="controlcentre_cards">
-                                <ul>
-                                    {confirmedGigs.map((gig, index) => (
-                                        <li key={index} className="controlcentre_cards">
-                                            <h2>{gig.gigDate.long}</h2>
-                                            <p>{gig.gigStartTime}</p>
-                                            <p>{gig.gigDuration}minutes</p>
-                                            <p>{gig.gigFee}</p>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <li key={index} className="controlcentre_cards">
+                                    <h2>{gig.gigDate.long}</h2>
+                                    <p>{gig.gigStartTime}</p>
+                                    <p>{gig.gigDuration}minutes</p>
+                                    <p>{gig.gigFee}</p>
+                                </li>
                             </Link>
                         ))}
                     </div>

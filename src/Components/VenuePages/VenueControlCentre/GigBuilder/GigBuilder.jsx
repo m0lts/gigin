@@ -5,7 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRightLong, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import './gig_builder.css'
 
-export default function GigBuilder({ userType, userID, userName, userAddress }) {
+export default function GigBuilder() {
+
+    const userID = sessionStorage.getItem('userId');
+    const userName = sessionStorage.getItem('userName');
+    const userAddress = {
+        address1: sessionStorage.getItem('userAddress1'),
+        city: sessionStorage.getItem('userCity'),
+        country: sessionStorage.getItem('userCountry'),
+        postCode: sessionStorage.getItem('userPostCode'),
+    }
+    
 
     // Set up navigation
     const navigate = useNavigate();
@@ -81,7 +91,7 @@ export default function GigBuilder({ userType, userID, userName, userAddress }) 
             const postcode = gigInformation.gigAddress.postCode; 
 
             try {
-                const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${postcode}.json?access_token=***`);
+                const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${postcode}.json?access_token=pk.eyJ1IjoiZ2lnaW4iLCJhIjoiY2xwNDQ2ajFwMWRuNzJxczZqNHlvbHg3ZCJ9.nR_HaL-dWRkUhOgBnmbyjg`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.features && data.features.length > 0) {
@@ -108,7 +118,7 @@ export default function GigBuilder({ userType, userID, userName, userAddress }) 
                                   setSubmissionMessage('Gig successfully posted! You are being redirected...');
                                   setTimeout(() => {
                                       setFormSubmitted(false);
-                                      navigate('/control-centre');
+                                      navigate('/venue');
                                   }, 3000)
                                 } else if (response.status === 400) {
                                   setSubmissionLoader(false);

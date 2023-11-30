@@ -383,6 +383,7 @@ export function ViewConfirmStage({ gigInformation, updateGigInfo }) {
 
   const gigAddress = gigInformation.gigAddress;
 
+
   const [changeAddress, setChangeAddress] = useState(false);
   const [addressError, setAddressError] = useState('');
 
