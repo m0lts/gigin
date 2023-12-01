@@ -88,3 +88,39 @@
 
 /* Full musician profile */
 
+
+
+/* Ratings and Reviews */
+.application_card.ratings {
+    cursor: auto;
+}
+.ratings_and_reviews {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height:80%;
+    gap:25px;
+}
+.star_ratings {
+    list-style: none;
+    display: flex;
+    gap:5px;
+}
+.star {
+    cursor: pointer;
+}
+.star.active {
+    color: gold;
+}
+.review_form {
+    display: flex;
+    flex-direction: column;
+}
+#review {
+    min-height: 100px;
+    min-width: 200px;
+}
+.ratings_and_reviews button {
+    border:none;
+    cursor: pointer;
+}

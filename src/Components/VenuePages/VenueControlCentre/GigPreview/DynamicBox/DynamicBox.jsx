@@ -43,6 +43,7 @@ export default function DynamicBox({ gigData }) {
                         {selectedTab === 'Ratings and Reviews' && (
                             <RatingsAndReviews
                                 confirmedMusician={gigData.confirmedMusician}
+                                venueName={gigData.venue}
                             />
                         )}
                         {selectedTab === 'Applications' && (
