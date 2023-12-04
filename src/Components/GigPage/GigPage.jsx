@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faCircle, faStar } from "@fortawesome/free-solid-svg-icons";
 import Header from '../Other/Header'
 import MiniCalendar from "../Other/MiniCalendar";
 import './gig_page.css'
@@ -72,16 +72,12 @@ export default function GigPage() {
         }
     }, [id, location.state]);
 
+    // Fetch musician's profile
+    const [musicianProfile, setMusicianProfile] = useState();
+    const [savedVenues, setSavedVenues] = useState([]);
 
-    // Redirect to login if not logged in
-    const userLoggedIn = sessionStorage.getItem('userId');
-
-    const navigate = useNavigate();
-
-    const handleApplyToGig = async () => {
-        setGigApplicationLoading(true);
-        setGigApplicationMessage('');
-        if (userLoggedIn) {
+    useEffect(() => {
+        const fetchMusicianProfile = async () => {
             const payload = {
                 userID: userLoggedIn,
                 gigID: gigData._id,
@@ -97,32 +93,131 @@ export default function GigPage() {
             
                 // Handle relative responses and edit modal message.
                 if (response.status === 200) {
-                    try {
-                        const response = await fetch('/api/Applications/GigApplications.js', {
-                            method: 'POST',
-                            headers: {
-                              'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(payload),
-                          });
-                    
-                          // Handle relative responses and edit modal message.
-                          if (response.ok) {
-                            setGigApplicationLoading(false);
-                            setGigApplicationMessage('Gig application recieved.')
-                          } else if (response.status === 400) {
-                            setGigApplicationLoading(false);
-                            setGigApplicationMessage('You have already applied to this gig.')
-                          }
-                    } catch (error) {
-                        console.error(error);
-                    }
+                    const data = await response.json();
+                    setMusicianProfile(true);
+                    setSavedVenues(data.musicianProfile.savedVenues);
                 } else if (response.status === 201) {
-                    setGigApplicationLoading(false);
-                    setGigApplicationMessage('You must create a profile before applying to gigs. Please visit the control centre to create your profile.')
+                    setMusicianProfile(false);
                 }
             } catch (error) {
                 console.error(error);
+            }
+        }
+        if (gigData) {
+            fetchMusicianProfile();
+        }
+    }, [gigData || savedVenues])
+
+    // Redirect to login if not logged in
+    const userLoggedIn = sessionStorage.getItem('userId');
+    const navigate = useNavigate();
+
+    // Musician save venue
+    const handleSaveVenue = async () => {
+        if (userLoggedIn) {
+            const payload = {
+                musicianID: userLoggedIn,
+                venueID: gigData.userID,
+            }
+            try {
+                const response = await fetch('/api/Profiles/MusicianProfiles/SaveVenue.js', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                    });
+            
+                    if (response.ok) {
+                        const data = await response.json();
+                        setSavedVenues([data.venueID]);
+                    }
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            sessionStorage.setItem('prevLocation', window.location.pathname);
+            navigate('/account')
+        }
+    }
+
+    // Musician unsave venue
+    const handleUnSaveVenue = async () => {
+        const payload = {
+            musicianID: userLoggedIn,
+            venueID: gigData.userID,
+        }
+        try {
+            const response = await fetch('/api/Profiles/MusicianProfiles/RemoveSavedVenue.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                });
+        
+                if (response.ok) {
+                    const data = await response.json();
+                    setSavedVenues(data);
+                }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Venue average reviews
+    const [averageReviews, setAverageReviews] = useState(0);
+    const [numberOfReviews, setNumberOfReviews] = useState();
+
+    useEffect(() => {
+        if (gigData) {
+            const ratingsAndReviews = gigData.venueProfile.ratingsAndReviews;
+            if (ratingsAndReviews && ratingsAndReviews.length > 0) {
+                const totalRatings = ratingsAndReviews.reduce((accumulator, review) => {
+                  return accumulator + review.rating;
+                }, 0);
+              
+                const averageRating = totalRatings / ratingsAndReviews.length;
+                setAverageReviews(averageRating);
+                setNumberOfReviews(ratingsAndReviews.length);
+            } else {
+                setAverageReviews(0);
+            }
+        }
+    }, [gigData])
+
+    // Apply to gig
+    const handleApplyToGig = async () => {
+        setGigApplicationLoading(true);
+        setGigApplicationMessage('');
+        if (userLoggedIn) {
+            const payload = {
+                userID: userLoggedIn,
+                gigID: gigData._id,
+            }
+            if (musicianProfile) {
+                try {
+                    const response = await fetch('/api/Applications/GigApplications.js', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload),
+                        });
+                
+                        if (response.ok) {
+                        setGigApplicationLoading(false);
+                        setGigApplicationMessage('Gig application recieved.')
+                        } else if (response.status === 400) {
+                        setGigApplicationLoading(false);
+                        setGigApplicationMessage('You have already applied to this gig.')
+                        }
+                } catch (error) {
+                    console.error(error);
+                }
+            } else if (response.status === 201) {
+                setGigApplicationLoading(false);
+                setGigApplicationMessage('You must create a profile before applying to gigs. Please visit the control centre to create your profile.')
             }
         } else {
             sessionStorage.setItem('prevLocation', window.location.pathname);
@@ -141,7 +236,29 @@ export default function GigPage() {
                             <h6>{gigData.gigAddress.city}</h6>
                         </div>
                         <div className="gig_page_heading_right">
-                            <FontAwesomeIcon icon={faHeart} />
+                            <div className="gig_page_venue_ratings">
+                                {averageReviews && (
+                                    <>
+                                        <p>Average Rating:</p>
+                                        {averageReviews === 0 ? (
+                                            <p>No reviews.</p>
+                                        ) : (
+                                            <p>{averageReviews} <FontAwesomeIcon icon={faStar} className="star_icon" /> ({numberOfReviews})</p>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                            {
+                                Array.isArray(savedVenues) && savedVenues.length < 1 ? (
+                                    <FontAwesomeIcon icon={faHeart} onClick={handleSaveVenue} className='heart_icon' />
+                                ) : (
+                                    Array.isArray(savedVenues) && savedVenues.includes(gigData.userID) ? (
+                                    <FontAwesomeIcon icon={faHeart} onClick={handleUnSaveVenue} className='heart_icon active' />
+                                    ) : (
+                                    <FontAwesomeIcon icon={faHeart} onClick={handleSaveVenue} className='heart_icon' />
+                                    )
+                                )
+                            }
                         </div>
                     </header>
                     <figure className="gig_page_profile_picture">

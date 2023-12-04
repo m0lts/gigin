@@ -13,6 +13,7 @@ import VenuePage from "./Components/VenuePages/VenuePage"
 import GigPage from "./Components/GigPage/GigPage"
 import MusicianControlCentre from "./Components/MusicianPages/MusicianControlCentre/MusicianControlCentre"
 import MusicianPage from "./Components/MusicianPages/MusicianPage"
+import MusicianGigPreview from "./Components/MusicianPages/MusicianControlCentre/MusicianGigPreview/MusicianGigPreview"
 
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
         </Route>
         <Route path="/musician" element={<MusicianPage />}>
           <Route index element={<MusicianControlCentre />} />
+          <Route path=":id" element={<MusicianGigPreview />} />
         </Route>
         <Route path="/account" element={<AccountsPage />} >
           <Route index element={<LogInForm />} />

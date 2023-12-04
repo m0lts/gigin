@@ -21,6 +21,24 @@
     display: flex;
     flex-direction: column;
 }
+.gig_page_heading_right {
+    display: flex;
+    align-items: center;
+    gap:2rem;
+}
+.gig_page_venue_ratings {
+    display: flex;
+    gap:0.5rem;
+}
+.star_icon {
+    color: gold;
+}
+.heart_icon {
+    cursor: pointer;
+}
+.heart_icon.active {
+    color: var(--gigin-orange);
+}
 
 /* Photo */
 .gig_page_profile_picture {

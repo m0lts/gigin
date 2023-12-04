@@ -76,6 +76,9 @@ export default function MusicianControlCentre() {
     // If not, set userCreatedProfile to false. Else set the user's profile picture to their picture.
     const [userCreatedProfile, setUserCreatedProfile] = useState(true);
     const [userProfilePicture, setUserProfilePicture] = useState('');
+    const [userProfileData, setUserProfileData] = useState();
+    const [userSavedVenues, setUserSavedVenues] = useState();
+
     useEffect(() => {
         fetch('/api/Profiles/MusicianProfiles/FindMusicianProfile', {
             method: 'POST',
@@ -94,11 +97,43 @@ export default function MusicianControlCentre() {
         })
         .then(responseData => {
             setUserProfilePicture(responseData.musicianProfile.profilePicture);
+            setUserProfileData(responseData.musicianProfile);
+            setUserSavedVenues(responseData.musicianProfile.savedVenues);
         })
         .catch(error => {
             console.error('Error fetching data:', error);
         });
     }, [])
+
+
+    // Musician's gig data
+    const [confirmedGigs, setConfirmedGigs] = useState();
+    const [appliedGigs, setAppliedGigs] = useState();
+    const [pastGigs, setPastGigs] = useState();
+
+
+
+    // Fetch user's gig information
+    useEffect(() => {
+        fetch('/api/Gigs/RetrieveMusicianGigData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userID
+            }),
+        })
+        .then(response => response.json())
+        .then(responseData => {
+            setConfirmedGigs(responseData.confirmedGigs);
+            setAppliedGigs(responseData.appliedGigs);
+            setPastGigs(responseData.pastGigs);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }, []);
 
     return (
         <main className="controlcentre_main">
@@ -204,14 +239,18 @@ export default function MusicianControlCentre() {
                         ref={confirmedGigsRef}
                         id="confirmed_gigs"
                     >
-                        <ConfirmedGigs />
+                        <ConfirmedGigs
+                            confirmedGigs={confirmedGigs}
+                        />
                     </div>
                     <div 
                         className="controlcentre_sections"
                         ref={appliedGigsRef}
                         id="applied_gigs"
                     >
-                        <AppliedGigs />
+                        <AppliedGigs
+                            appliedGigs={appliedGigs}
+                        />
                     </div>
                     <div 
                         className="controlcentre_sections"
@@ -219,6 +258,7 @@ export default function MusicianControlCentre() {
                         id="past_gigs"
                     >
                         <PastGigs 
+                            pastGigs={pastGigs}
                         />
                     </div>
                     <div 
@@ -226,7 +266,10 @@ export default function MusicianControlCentre() {
                         ref={savedVenuesRef}
                         id="saved_venues"
                     >
-                        <SavedVenues />
+                        <SavedVenues
+                            musicianID={userID}
+                            savedVenues={userSavedVenues}
+                        />
                     </div>
                     <div 
                         className="controlcentre_sections"
@@ -259,14 +302,18 @@ export default function MusicianControlCentre() {
                         ref={confirmedGigsRef}
                         id="confirmed_gigs"
                     >
-                        <ConfirmedGigs />
+                        <ConfirmedGigs
+                            confirmedGigs={confirmedGigs}
+                        />
                     </div>
                     <div 
                         className="controlcentre_sections"
                         ref={appliedGigsRef}
                         id="applied_gigs"
                     >
-                        <AppliedGigs />
+                        <AppliedGigs 
+                            appliedGigs={appliedGigs}
+                        />
                     </div>
                     <div 
                         className="controlcentre_sections"
@@ -274,6 +321,7 @@ export default function MusicianControlCentre() {
                         id="past_gigs"
                     >
                         <PastGigs 
+                            pastGigs={pastGigs}
                         />
                     </div>
                     <div 
@@ -281,7 +329,10 @@ export default function MusicianControlCentre() {
                         ref={savedVenuesRef}
                         id="saved_venues"
                     >
-                        <SavedVenues />
+                        <SavedVenues
+                            musicianID={userID}
+                            savedVenues={userSavedVenues}
+                        />
                     </div>
                 </section>
             )}
